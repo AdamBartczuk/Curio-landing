@@ -1,0 +1,253 @@
+import React, { useState, useRef } from 'react';
+import { MapPin, Headphones, WifiOff, Star, Play, Pause, RotateCcw, RotateCw } from 'lucide-react';
+import WaitlistForm from './WaitlistForm';
+import RevealOnScroll from './RevealOnScroll';
+
+const MiniPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
+  // Primary local file
+  const localAudio = "ElevenLabs_NYC_Unveiling_the_Hidden_Gems.mp3";
+  // Fallback stream (Ambient city sounds or music)
+  const fallbackAudio = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+  
+  const [audioSrc, setAudioSrc] = useState(localAudio);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log("Playback prevented:", error);
+            setIsPlaying(false);
+          });
+        }
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const skipForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.min(audioRef.current.duration, audioRef.current.currentTime + 10);
+    }
+  };
+
+  const skipBack = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 15);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      const current = audioRef.current.currentTime;
+      const total = audioRef.current.duration || 1;
+      setProgress((current / total) * 100);
+    }
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setProgress(0);
+  };
+
+  const handleAudioError = () => {
+    if (audioSrc === localAudio) {
+      console.warn("Local audio file not found. Switching to fallback audio.");
+      setAudioSrc(fallbackAudio);
+      setIsPlaying(false);
+    }
+  };
+
+  return (
+    <div className="bg-curio-cream/40 backdrop-blur-[15px] p-5 rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] border border-white/40 select-none ring-1 ring-white/20 transition-all duration-300 hover:bg-curio-cream/50">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-[10px] font-bold text-curio-orange uppercase tracking-wider mb-1">Now Playing</p>
+          <p className="text-curio-green-dark font-display font-bold text-lg leading-tight">Manhattan's Secret</p>
+        </div>
+        <div className="flex gap-1 h-4 items-end">
+          <div className={`w-1 bg-curio-green rounded-full ${isPlaying ? 'animate-[pulse_1s_ease-in-out_infinite]' : 'h-1'}`} style={{ height: isPlaying ? '12px' : '4px' }}></div>
+          <div className={`w-1 bg-curio-green rounded-full ${isPlaying ? 'animate-[pulse_1.2s_ease-in-out_infinite]' : 'h-2'}`} style={{ height: isPlaying ? '16px' : '8px' }}></div>
+          <div className={`w-1 bg-curio-green rounded-full ${isPlaying ? 'animate-[pulse_0.8s_ease-in-out_infinite]' : 'h-1'}`} style={{ height: isPlaying ? '10px' : '4px' }}></div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-4 mb-4 px-2">
+        <button 
+          onClick={skipBack}
+          className="text-curio-green/70 hover:text-curio-green transition-colors flex flex-col items-center gap-1 group relative active:scale-95"
+          title="Back 15s"
+        >
+          <RotateCcw className="w-5 h-5" />
+          <span className="text-[10px] font-bold text-curio-green/50 group-hover:text-curio-green absolute top-full mt-1 transition-colors">15</span>
+        </button>
+
+        <button 
+          onClick={togglePlay}
+          className="w-14 h-14 bg-curio-orange text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md hover:shadow-lg hover:bg-[#FF7D5C]"
+        >
+          {isPlaying ? <Pause className="w-6 h-6 fill-current" /> : <Play className="w-6 h-6 fill-current ml-1" />}
+        </button>
+
+        <button 
+          onClick={skipForward}
+          className="text-curio-green/70 hover:text-curio-green transition-colors flex flex-col items-center gap-1 group relative active:scale-95"
+          title="Forward 10s"
+        >
+          <RotateCw className="w-5 h-5" />
+          <span className="text-[10px] font-bold text-curio-green/50 group-hover:text-curio-green absolute top-full mt-1 transition-colors">10</span>
+        </button>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="relative w-full h-1.5 bg-black/5 rounded-full overflow-hidden mt-6">
+        <div 
+          className="absolute top-0 left-0 h-full bg-curio-green rounded-full transition-all duration-100 ease-linear"
+          style={{ width: `${progress}%` }}
+        ></div>
+      </div>
+      
+      <audio 
+        ref={audioRef} 
+        src={audioSrc} 
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
+        onError={handleAudioError}
+      />
+    </div>
+  );
+};
+
+const Hero: React.FC = () => {
+  return (
+    <section className="pt-28 pb-10 px-4 md:px-6 relative z-10">
+      <div className="container mx-auto">
+        
+        {/* Main Bento Card */}
+        <div className="bg-curio-green rounded-[2.5rem] p-8 md:p-12 lg:p-16 relative overflow-hidden shadow-2xl shadow-curio-green/20 text-curio-cream min-h-[85vh] flex flex-col justify-center">
+          
+          {/* Grain Texture */}
+          <div className="absolute inset-0 texture-grain opacity-20 mix-blend-soft-light pointer-events-none z-0"></div>
+
+          {/* Decorative shapes - Animated */}
+          <div className="absolute top-10 right-10 w-32 h-32 bg-curio-yellow rounded-full blur-[60px] opacity-20 animate-float z-0"></div>
+          <div className="absolute bottom-10 left-10 w-40 h-40 bg-curio-orange rounded-full blur-[80px] opacity-30 animate-float-slow z-0"></div>
+          <div className="absolute top-1/2 left-1/2 w-56 h-56 bg-white rounded-full blur-[100px] opacity-10 animate-pulse z-0 pointer-events-none"></div>
+          
+          {/* Sticker Badge - Hover Effect Added */}
+          <div className="absolute top-6 left-6 md:top-10 md:left-10 z-10 hover:scale-110 transition-transform duration-500 cursor-pointer group">
+            <div className="relative w-24 h-24 md:w-32 md:h-32 animate-[spin_10s_linear_infinite] group-hover:animate-[spin_4s_linear_infinite]">
+               <svg viewBox="0 0 100 100" className="w-full h-full fill-curio-orange">
+                  <path id="curve" d="M 50 50 m -37 0 a 37 37 0 1 1 74 0 a 37 37 0 1 1 -74 0" fill="transparent"/>
+                  <text fontSize="13" fontWeight="bold" fill="#FFF9F0">
+                    <textPath href="#curve" startOffset="0" letterSpacing="2">
+                      • SHAPE YOUR OWN JOURNEY • 
+                    </textPath>
+                  </text>
+               </svg>
+               <div className="absolute inset-0 flex items-center justify-center">
+                 <div className="text-3xl transition-transform duration-300 group-hover:scale-125">☺</div>
+               </div>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
+            
+            {/* Left Content */}
+            <div className="flex flex-col gap-6 md:gap-8 max-w-xl mx-auto lg:mx-0 text-center lg:text-left pt-32 lg:pt-32">
+              <RevealOnScroll delay={100}>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-curio-cream/10 backdrop-blur-md rounded-full w-fit mx-auto lg:mx-0 border border-white/10 hover:bg-curio-cream/20 transition-colors cursor-default">
+                  <span className="w-2 h-2 rounded-full bg-curio-yellow animate-pulse"></span>
+                  <span className="text-sm font-bold uppercase tracking-wider text-curio-yellow">Coming soon 2026</span>
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={200}>
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.9] tracking-tight">
+                  Get <span className="text-curio-yellow inline-block animate-tilt-n-bounce">CURIO</span>us.<br/>
+                  Get lost on <span className="inline-block relative">
+                    purpose.
+                    <span className="absolute -right-6 md:-right-8 top-0 text-curio-orange text-5xl animate-bounce">✶</span>
+                  </span>
+                </h1>
+              </RevealOnScroll>
+              
+              <RevealOnScroll delay={300}>
+                <p className="text-xl md:text-2xl font-light text-curio-cream/90 leading-relaxed">
+                  Leave the hotel without a plan. Curio shapes your walk as you go - <strong className="text-curio-yellow font-medium">spontaneous sightseeing, zero stress.</strong>
+                </p>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={400}>
+                <div className="flex flex-wrap justify-center lg:justify-start gap-3 text-sm font-medium">
+                  {[
+                    { icon: <Headphones className="w-4 h-4" />, text: "Audio-first" },
+                    { icon: <MapPin className="w-4 h-4" />, text: "Spontaneous" },
+                    { icon: <WifiOff className="w-4 h-4" />, text: "Offline" }
+                  ].map((item, i) => (
+                    <span key={i} className="px-4 py-2 bg-curio-cream/10 rounded-full flex items-center gap-2 hover:bg-curio-cream/20 hover:scale-105 transition-all duration-300 cursor-default">
+                      {item.icon} {item.text}
+                    </span>
+                  ))}
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={500}>
+                <div className="mt-4">
+                   <WaitlistForm buttonText="Get early access" />
+                </div>
+              </RevealOnScroll>
+            </div>
+
+            {/* Right Image/Graphic */}
+            <div className="relative lg:h-full min-h-[400px] flex items-center justify-center">
+               <RevealOnScroll delay={400} className="w-full flex justify-center">
+                 <div className="relative w-full max-w-md aspect-[4/5] perspective-1000">
+                    {/* Photo Card */}
+                    <div className="absolute inset-0 bg-curio-cream rounded-[2rem] rotate-3 transform transition-all duration-700 hover:rotate-0 hover:scale-[1.02] overflow-hidden border-4 border-curio-cream shadow-2xl group z-0">
+                       <img 
+                        src="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=2070&auto=format&fit=crop" 
+                        alt="Traveler in New York" 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                       />
+                       
+                       {/* Mini Audio Player Overlay */}
+                       <div className="absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                         <MiniPlayer />
+                       </div>
+                       
+                       {/* Default visible player if not hovering (optional, but let's keep it visible on mobile/default state but enhance on hover) */}
+                       <div className="absolute bottom-6 left-6 right-6 md:hidden">
+                         <MiniPlayer />
+                       </div>
+                    </div>
+
+                    {/* Decorative Elements - Floating */}
+                    <div className="absolute -top-6 -right-6 w-24 h-24 bg-curio-orange text-curio-cream rounded-full flex items-center justify-center font-display font-bold text-xl rotate-12 shadow-lg z-10 animate-float-delayed hover:rotate-45 transition-transform duration-500">
+                      <div>
+                        <span className="block text-xs uppercase opacity-80 text-center">Free</span>
+                        Guide
+                      </div>
+                    </div>
+
+                     <div className="absolute -bottom-8 -left-4 bg-curio-yellow text-curio-green px-6 py-3 rounded-full font-bold shadow-lg -rotate-6 flex items-center gap-2 z-10 animate-float hover:scale-110 transition-transform">
+                       <Star className="w-5 h-5 fill-curio-green" /> Travel Buddy
+                     </div>
+                 </div>
+               </RevealOnScroll>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
