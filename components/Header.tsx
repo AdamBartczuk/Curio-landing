@@ -20,7 +20,7 @@ const Header: React.FC = () => {
       <div className={`container mx-auto px-4 md:px-6 transition-all duration-300 ${isScrolled ? 'max-w-4xl' : ''}`}>
         <div className={`flex items-center justify-between px-6 py-3 rounded-full transition-all duration-300 
           ${isScrolled 
-            ? 'bg-curio-green/70 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] border border-white/20' 
+            ? 'bg-curio-green/70 backdrop-blur-[24px] backdrop-saturate-[180%] shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] border border-white/10' 
             : 'bg-transparent'}`}>
           
           <div className="flex items-center gap-2 group cursor-pointer">

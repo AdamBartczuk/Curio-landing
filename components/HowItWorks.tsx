@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sliders, PlayCircle, Coffee, Music, Mic } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 const HowItWorks: React.FC = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      requestAnimationFrame(() => setScrollY(window.scrollY));
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const steps = [
     {
       id: 1,
@@ -31,8 +41,12 @@ const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 px-4 md:px-6 relative z-10" id="how-it-works">
-      <div className="container mx-auto">
+    <section className="py-20 px-4 md:px-6 relative z-10 overflow-hidden" id="how-it-works">
+      {/* Background Parallax Blobs */}
+      <div className="absolute top-20 -left-20 w-80 h-80 bg-curio-green/5 rounded-full blur-[100px] pointer-events-none z-0" style={{ transform: `translateY(${(scrollY - 800) * 0.15}px)` }}></div>
+      <div className="absolute bottom-40 -right-20 w-96 h-96 bg-curio-orange/5 rounded-full blur-[100px] pointer-events-none z-0" style={{ transform: `translateY(${(scrollY - 800) * 0.1}px)` }}></div>
+
+      <div className="container mx-auto relative z-10">
         <RevealOnScroll className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 text-curio-green">
             Play, walk, <span className="text-curio-orange underline decoration-wavy decoration-4 underline-offset-4">listen.</span>

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Check, Ticket } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 const CitiesAndPricing: React.FC = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      requestAnimationFrame(() => setScrollY(window.scrollY));
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const cities = [
     { name: "Amsterdam", flag: "🇳🇱" },
     { name: "Berlin", flag: "🇩🇪" },
@@ -25,9 +35,14 @@ const CitiesAndPricing: React.FC = () => {
             {/* Grain Texture */}
             <div className="absolute inset-0 texture-grain opacity-20 mix-blend-soft-light pointer-events-none z-0"></div>
 
-            {/* Decorative blurs */}
-            <div className="absolute top-0 left-0 w-64 h-64 bg-curio-green-dark rounded-full blur-[80px] opacity-50 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 group-hover:scale-110 transition-transform duration-1000"></div>
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-curio-orange rounded-full blur-[80px] opacity-20 translate-x-1/2 translate-y-1/2 pointer-events-none z-0 group-hover:scale-125 transition-transform duration-1000"></div>
+            {/* Decorative blurs with Parallax */}
+            <div className="absolute top-0 left-0 z-0 pointer-events-none" style={{ transform: `translate(-50%, -50%) translateY(${(scrollY - 2000) * 0.1}px)` }}>
+              <div className="w-64 h-64 bg-curio-green-dark rounded-full blur-[80px] opacity-50 group-hover:scale-110 transition-transform duration-1000"></div>
+            </div>
+            
+            <div className="absolute bottom-0 right-0 z-0 pointer-events-none" style={{ transform: `translate(50%, 50%) translateY(${(scrollY - 2000) * 0.12}px)` }}>
+               <div className="w-64 h-64 bg-curio-orange rounded-full blur-[80px] opacity-20 group-hover:scale-125 transition-transform duration-1000"></div>
+            </div>
 
             <div className="relative z-10 max-w-3xl mx-auto">
               <span className="bg-curio-orange text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6 inline-block animate-pulse">Global Launch</span>
