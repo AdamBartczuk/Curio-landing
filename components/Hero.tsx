@@ -240,18 +240,20 @@ const Hero: React.FC = () => {
             <div className="relative lg:h-full min-h-[400px] flex items-center justify-center">
                <div className="w-full flex justify-center">
                  <div className="relative w-full max-w-md aspect-[4/5] perspective-1000">
-                    {/* Photo Card */}
-                    <div className="absolute inset-0 bg-curio-cream rounded-[2rem] rotate-3 transform transition-all duration-700 hover:rotate-0 hover:scale-[1.02] overflow-hidden border-4 border-curio-cream shadow-2xl group z-0">
+                    {/* Photo Card - outer handles transform, inner handles clip */}
+                    <div className="absolute inset-0 rounded-[2rem] rotate-3 transform transition-all duration-700 hover:rotate-0 hover:scale-[1.02] shadow-2xl group z-0">
+                      <div className="w-full h-full rounded-[2rem] overflow-hidden border-4 border-curio-cream bg-curio-cream">
                        <img
                         src="https://images.unsplash.com/photo-1540835237482-cb9ca281c01f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Travel destination"
                         className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 will-change-transform"
                        />
-                       
+
                        {/* Mini Audio Player Overlay - Fixed Bottom Full Width */}
                        <div className="absolute bottom-0 left-0 right-0 z-20">
                          <MiniPlayer />
                        </div>
+                      </div>
                     </div>
 
                     {/* Decorative Elements - Floating */}
