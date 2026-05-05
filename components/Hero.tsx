@@ -242,7 +242,7 @@ const Hero: React.FC = () => {
                  <div className="relative w-full max-w-md aspect-[4/5] perspective-1000">
                     {/* Photo Card - outer handles transform, inner handles clip */}
                     <div className="absolute inset-0 rounded-[2rem] rotate-3 transform transition-all duration-700 hover:rotate-0 hover:scale-[1.02] shadow-2xl group z-0">
-                      <div className="w-full h-full rounded-[2rem] overflow-hidden border-4 border-curio-cream bg-curio-cream">
+                      <div className="relative w-full h-full rounded-[2rem] overflow-hidden border-4 border-curio-cream bg-curio-cream">
                        <img
                         src="https://images.unsplash.com/photo-1540835237482-cb9ca281c01f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Travel destination"
