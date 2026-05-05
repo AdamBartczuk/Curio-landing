@@ -69,7 +69,7 @@ const MiniPlayer = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="text-[10px] font-bold text-curio-orange uppercase tracking-wider mb-1">Now Playing</p>
-          <p className="text-curio-green-dark font-display font-bold text-xl leading-tight">Manhattan's Secret</p>
+          <p className="text-curio-green-dark font-display font-bold text-xl leading-tight">Cracow - The Other Capital</p>
         </div>
         <div className="flex gap-1 h-5 items-end">
           <div className={`w-1.5 bg-curio-green rounded-full ${isPlaying ? 'animate-[pulse_1s_ease-in-out_infinite]' : 'h-2'}`} style={{ height: isPlaying ? '16px' : '6px' }}></div>
@@ -242,9 +242,9 @@ const Hero: React.FC = () => {
                  <div className="relative w-full max-w-md aspect-[4/5] perspective-1000">
                     {/* Photo Card */}
                     <div className="absolute inset-0 bg-curio-cream rounded-[2rem] rotate-3 transform transition-all duration-700 hover:rotate-0 hover:scale-[1.02] overflow-hidden border-4 border-curio-cream shadow-2xl group z-0 [mask-image:radial-gradient(white,black)]">
-                       <img 
-                        src="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=2070&auto=format&fit=crop" 
-                        alt="Traveler in New York" 
+                       <img
+                        src="/krakow-hero.jpg"
+                        alt="Cracow - St. Mary's Basilica at night"
                         className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 will-change-transform"
                        />
                        
