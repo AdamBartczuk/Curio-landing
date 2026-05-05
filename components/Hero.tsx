@@ -250,7 +250,7 @@ const Hero: React.FC = () => {
                        />
 
                        {/* Mini Audio Player Overlay - Fixed Bottom Full Width */}
-                       <div className="absolute bottom-0 left-0 right-0 z-20">
+                       <div className="absolute bottom-0 left-0 right-0 z-20 overflow-hidden rounded-b-[1.75rem]">
                          <MiniPlayer />
                        </div>
                       </div>
