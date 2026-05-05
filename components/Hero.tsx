@@ -7,12 +7,7 @@ const MiniPlayer = () => {
   const [progress, setProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // Primary local file
-  const localAudio = "ElevenLabs_NYC_Unveiling_the_Hidden_Gems.mp3";
-  // Fallback stream (Ambient city sounds or music)
-  const fallbackAudio = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-  
-  const [audioSrc, setAudioSrc] = useState(localAudio);
+  const audioSrc = "https://trexuhtydiwygtxugqfb.supabase.co/storage/v1/object/public/Landing%20page/Curio_cracow_teaser.mp3";
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -56,13 +51,6 @@ const MiniPlayer = () => {
     setProgress(0);
   };
 
-  const handleAudioError = () => {
-    if (audioSrc === localAudio) {
-      console.warn("Local audio file not found. Switching to fallback audio.");
-      setAudioSrc(fallbackAudio);
-      setIsPlaying(false);
-    }
-  };
 
   return (
     <div className="bg-curio-cream/40 backdrop-blur-[32px] backdrop-saturate-[180%] w-full p-6 md:p-8 border-t border-white/40 shadow-[0_-4px_32px_rgba(0,0,0,0.1)] select-none transition-all duration-300 rounded-b-[1.75rem]">
@@ -118,7 +106,6 @@ const MiniPlayer = () => {
         src={audioSrc} 
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
-        onError={handleAudioError}
       />
     </div>
   );
