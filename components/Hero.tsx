@@ -65,7 +65,7 @@ const MiniPlayer = () => {
   };
 
   return (
-    <div className="bg-curio-cream/40 backdrop-blur-[32px] backdrop-saturate-[180%] w-full p-6 md:p-8 border-t border-white/40 shadow-[0_-4px_32px_rgba(0,0,0,0.1)] select-none transition-all duration-300">
+    <div className="bg-curio-cream/40 backdrop-blur-[32px] backdrop-saturate-[180%] w-full p-6 md:p-8 border-t border-white/40 shadow-[0_-4px_32px_rgba(0,0,0,0.1)] select-none transition-all duration-300 rounded-b-[1.75rem]">
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="text-[10px] font-bold text-curio-orange uppercase tracking-wider mb-1">Now Playing</p>
