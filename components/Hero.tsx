@@ -242,9 +242,9 @@ const Hero: React.FC = () => {
                  <div className="relative w-full max-w-md aspect-[4/5] perspective-1000">
                     {/* Photo Card */}
                     <div className="absolute inset-0 bg-curio-cream rounded-[2rem] rotate-3 transform transition-all duration-700 hover:rotate-0 hover:scale-[1.02] overflow-hidden border-4 border-curio-cream shadow-2xl group z-0 [mask-image:radial-gradient(white,black)]">
-                       <img 
-                        src="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=2070&auto=format&fit=crop" 
-                        alt="Traveler in New York" 
+                       <img
+                        src="https://images.unsplash.com/photo-1667898381610-222899adf83f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Clock tower on a building"
                         className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 will-change-transform"
                        />
                        
