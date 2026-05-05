@@ -12,11 +12,11 @@
           extend: {
             colors: {
               curio: {
-                cream: '#FFF9F0',
-                green: '#005C45',
-                'green-dark': '#00382B',
-                orange: '#FF5C35',
-                yellow: '#FDBF11',
+                cream: '#FFF9F0',      // Warm background
+                green: '#005C45',      // Forest green (Primary)
+                'green-dark': '#00382B', // Text color
+                orange: '#FF5C35',     // Vibrant orange (Accent)
+                yellow: '#FDBF11',     // Sticker/Highlight yellow
               }
             },
             fontFamily: {
@@ -80,11 +80,13 @@
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Bricolage Grotesque', sans-serif;
       }
+      
       .texture-grain {
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
         background-size: 100px;
         background-repeat: repeat;
       }
+
       .grain-overlay {
         position: absolute;
         top: 0;
@@ -95,19 +97,32 @@
         z-index: 0;
         opacity: 0.12;
       }
-      @keyframes dash { to { stroke-dashoffset: 0; } }
-      .animate-dash { animation: dash 1.5s linear forwards; }
+      
+      /* Utilities for map animations */
+      @keyframes dash {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      .animate-dash {
+        animation: dash 1.5s linear forwards;
+      }
       @keyframes float-up {
         0% { transform: translateY(10px); opacity: 0; }
         100% { transform: translateY(0); opacity: 1; }
       }
-      .animate-float-up { animation: float-up 0.4s ease-out forwards; }
+      .animate-float-up {
+        animation: float-up 0.4s ease-out forwards;
+      }
       @keyframes pulse-ring {
         0% { transform: scale(0.8); opacity: 0.5; }
         100% { transform: scale(1.5); opacity: 0; }
       }
-      .animate-pulse-ring { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+      .animate-pulse-ring {
+        animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
     </style>
+
   <script type="importmap">
 {
   "imports": {
@@ -118,7 +133,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/Curio-landing/assets/index-Drc8j5da.js"></script>
+  <script type="module" crossorigin src="/assets/index-BRYGR3CW.js"></script>
 </head>
   <body>
     <div id="root"></div>
