@@ -68,8 +68,8 @@ const MiniPlayer = () => {
     <div className="bg-curio-cream/40 backdrop-blur-[32px] backdrop-saturate-[180%] w-full p-6 md:p-8 border-t border-white/40 shadow-[0_-4px_32px_rgba(0,0,0,0.1)] select-none transition-all duration-300 rounded-b-[1.75rem]">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-[10px] font-bold text-curio-orange uppercase tracking-wider mb-1">Now Playing</p>
-          <p className="text-curio-green-dark font-display font-bold text-xl leading-tight">Manhattan's Secret</p>
+          <p className="text-[10px] font-bold text-curio-green uppercase tracking-wider mb-1">Cracow</p>
+          <p className="text-curio-green-dark font-display font-bold text-xl leading-tight">The Other Capital</p>
         </div>
         <div className="flex gap-1 h-5 items-end">
           <div className={`w-1.5 bg-curio-green rounded-full ${isPlaying ? 'animate-[pulse_1s_ease-in-out_infinite]' : 'h-2'}`} style={{ height: isPlaying ? '16px' : '6px' }}></div>
