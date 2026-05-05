@@ -234,13 +234,13 @@ const Features: React.FC = () => {
           {/* Left Column: Feature Cards Grid */}
           <div className="lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-6">
             {features.map((item, index) => (
-              <RevealOnScroll key={index} delay={index * 100}>
-                <div 
+              <RevealOnScroll key={index} delay={index * 100} className="h-full">
+                <div
                   onMouseEnter={() => setActiveFeature(index)}
                   className={`
-                    ${item.bg} ${item.text} 
-                    p-8 rounded-[2rem] border border-black/5 
-                    flex flex-col justify-between min-h-[220px] 
+                    ${item.bg} ${item.text}
+                    p-8 rounded-[2rem] border border-black/5
+                    flex flex-col justify-between h-full min-h-[220px]
                     cursor-pointer transition-all duration-300
                     ${activeFeature === index ? 'ring-4 ring-curio-green/20 scale-[1.02] shadow-xl' : 'hover:scale-[1.01] hover:shadow-lg hover:-translate-y-1'}
                   `}
