@@ -15,17 +15,37 @@ const WaitlistForm: React.FC<WaitlistFormProps> = ({
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    
     setStatus('loading');
-    
-    // Simulate API call
-    setTimeout(() => {
-      setStatus('success');
-      setEmail('');
-    }, 1500);
+
+    try {
+      const res = await fetch(
+        'https://trexuhtydiwygtxugqfb.supabase.co/rest/v1/waitlist',
+        {
+          method: 'POST',
+          headers: {
+            'apikey': 'sb_publishable_AYOYUV4jWCtJalPF8UkGCQ_CcSSP59F',
+            'Authorization': 'Bearer sb_publishable_AYOYUV4jWCtJalPF8UkGCQ_CcSSP59F',
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      if (res.ok || res.status === 201 || res.status === 409) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('idle');
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      setStatus('idle');
+      alert('Network error. Please try again.');
+    }
   };
 
   if (status === 'success') {
