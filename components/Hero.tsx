@@ -153,9 +153,9 @@ const Hero: React.FC = () => {
             <div className="relative w-24 h-24 md:w-32 md:h-32 animate-[spin_10s_linear_infinite] group-hover:animate-[spin_4s_linear_infinite]">
                <svg viewBox="0 0 100 100" className="w-full h-full fill-curio-orange">
                   <path id="curve" d="M 50 50 m -37 0 a 37 37 0 1 1 74 0 a 37 37 0 1 1 -74 0" fill="transparent"/>
-                  <text fontSize="13" fontWeight="bold" fill="#FFF9F0">
-                    <textPath href="#curve" startOffset="0" letterSpacing="2">
-                      • SHAPE YOUR OWN JOURNEY • 
+                  <text fontSize="11" fontWeight="bold" fill="#FFF9F0">
+                    <textPath href="#curve" startOffset="0" letterSpacing="1.5">
+                      • SHAPE YOUR OWN JOURNEY •
                     </textPath>
                   </text>
                </svg>
