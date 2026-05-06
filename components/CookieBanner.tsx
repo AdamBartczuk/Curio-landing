@@ -29,7 +29,7 @@ const CookieBanner: React.FC<Props> = ({ onAccept, onDecline }) => {
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
     >
-      <div className="bg-curio-green text-curio-cream rounded-2xl px-6 py-4 shadow-2xl max-w-2xl w-full flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <div className="bg-curio-green text-curio-cream rounded-2xl px-6 py-4 shadow-2xl max-w-2xl w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 border border-white/20">
         <p className="text-sm flex-1 leading-relaxed opacity-90">
           🍪 We use cookies to understand how visitors use Curio. No personal data is sold or shared.
         </p>
