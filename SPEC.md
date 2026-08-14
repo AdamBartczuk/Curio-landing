@@ -227,6 +227,43 @@ Contrast: `espresso` on `cream` and `cream` on `terracotta` both pass WCAG AA.
   constantly — parallax on scroll listeners, infinite spin, bounce, pulse — which
   reads as busy rather than modern, and costs performance. Fewer, better moves.
 
+## 5.6 Interactive layer — explore it like a city (decided 2026-08-14)
+
+Adam's brief after the first build: take the page to a different level
+visually — more interactive, more modern, "so people explore it like a city".
+Confirmed scope: the full experience, map as stylized SVG (no photo maps).
+
+**a) Interactive Tokyo map — "The moment" becomes the demo.**
+The section's copy already names a gate, a photographed tree, an old building —
+those become tappable pins on a hand-drawn SVG neighbourhood map (brand
+colours only: espresso ground, cream streets, sand blocks, terracotta pins).
+Tap a pin → a story teaser card in brand voice with a `2 min listen` chip and
+a link to the waitlist. Five pins: gate, sakura tree, old building, corner
+izakaya, bridge. One pin pre-opened on desktop so the mechanic is obvious.
+Replaces the VID-01 video placeholder entirely. Rules: pins are real
+`<button>`s (keyboard + `aria-expanded`), teaser text is server-rendered
+(SEO gains words), **no fake audio in cards** — the only real clip stays in
+the hero. `curio:pin-opened` event mirrors the existing analytics pattern.
+
+**b) Walking-path spine.** A dotted SVG path weaves down the left margin
+(desktop only), drawing itself as you scroll via CSS scroll-driven animations
+(`animation-timeline`), with numbered stop pills at each section. No JS; no
+support or reduced motion → static dotted path, still a design element.
+
+**c) Distance meter.** Header shows `TOKYO · 0.0 KM WALKED` mapping scroll
+progress to ~1.8 km (desktop); mobile gets a thin dotted progress bar under
+the header bar. Footer easter egg at page end.
+
+**d) Motion layer.** Hero pointer parallax on floating chips + image
+(desktop, `hover:hover` only), richer staggered reveals, card hover lift,
+button arrow nudge. All CSS-first, all under the global
+`prefers-reduced-motion` kill switch.
+
+**Guardrails:** no scroll-jacking, no new dependencies or React islands, no
+layout shift (SVGs get explicit dimensions), every interaction reachable by
+keyboard, page fully usable with JS disabled (cards render open-less, path
+static, meter absent).
+
 ## 6. Technical plan
 
 **Stack:** Astro with React islands.
@@ -265,8 +302,8 @@ Contrast: `espresso` on `cream` and `cream` on `terracotta` both pass WCAG AA.
       only). Blocks the header, favicon and the p.12 tile pattern.
 - [ ] Tokyo/sakura hero audio clip from Adam. Until then the Kraków clip is
       labelled "early sample" (never "placeholder" — visitors see it).
-- [ ] **VID-01** — the Moment section still shows a hatched placeholder where
-      the looping Tokyo-alley video belongs. Most visible missing asset.
+- [x] ~~VID-01~~ — retired 2026-08-14: the Moment section became the
+      interactive city map (§5.6a); no video needed there anymore.
 - [ ] Brand photography — warm street/headphone shots per the p.18 moodboard.
       Placeholder Unsplash until then, but it must be replaced before launch.
 - [ ] Privacy and Terms page content — currently dead links.
