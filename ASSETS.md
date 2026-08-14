@@ -3,8 +3,10 @@
 **Status (2026-08-14):** IMG-01, IMG-02, IMG-03, IMG-04 are done — real
 generated photos, converted to WebP, wired into their components at
 `public/media/`. `IMG-02`/`IMG-03` used the non-identifying brief (hands,
-notebook, back view), not posed faces. Still outstanding: **VID-01** and
-**IMG-OG**, plus the real logo SVG and a genuine Tokyo audio sample.
+notebook, back view), not posed faces. `VID-01` is superseded (the section
+became the interactive map). `IMG-OG` has a generated interim card at
+`public/media/og.png` — redo per the Figma brief when the logo lands. Still
+outstanding: the real logo SVG and a genuine Tokyo audio sample.
 
 Every visual placeholder on the page carries an id (`IMG-01`, `VID-01`…). Find
 the id in the rendered page or in the component source, then use the matching
@@ -116,8 +118,13 @@ it.
 
 ---
 
-## VID-01 — Explore-mode loop
-`src/components/TheMoment.astro` · 4:5 portrait · 5–8s seamless loop
+## VID-01 — Explore-mode loop — **SUPERSEDED 2026-08-14**
+
+The Moment section became the interactive city map (`CityWalk.astro`,
+SPEC §5.6a); no video slot exists on the page anymore. Brief kept below in
+case the loop returns for social/ads.
+
+`src/components/TheMoment.astro` (removed) · 4:5 portrait · 5–8s seamless loop
 Export: MP4 (H.264) **and** WebM · target under 2 MB · muted, autoplay, loop,
 `playsinline`, with a poster frame
 
@@ -199,4 +206,4 @@ last frames nearly match, or cross-fade the last 0.5s back to the first.
 |---|---|---|
 | **Curio logo, SVG** | `public/brand/curio-mark.svg` | Blocks `Logo.astro`, the favicon and the p.12 tile pattern. Currently a text wordmark. Needs to come from your designer — do not generate or trace it. |
 | **Favicon** | `public/favicon.svg` | Placeholder circle. Style guide p.13 shows the four approved lockups. |
-| **Tokyo audio sample** | `public/media/tokyo-sample.mp3` | Currently the Kraków teaser, labelled "placeholder" in the UI. See the `TOKYO SWAP` comment in `Hero.astro`. |
+| **Tokyo audio sample** | `public/media/tokyo-sample.mp3` | Currently the Kraków teaser, labelled "early sample" in the UI. See the `TOKYO SWAP` comment in `Hero.astro`. |

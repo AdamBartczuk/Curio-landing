@@ -35,6 +35,10 @@ function loadGA() {
   window.addEventListener("curio:sample-played", () => {
     window.gtag?.("event", "sample_played");
   });
+  // Opening a map pin = engaging with the explore-mode demo.
+  window.addEventListener("curio:pin-opened", () => {
+    window.gtag?.("event", "pin_opened");
+  });
 }
 
 export default function CookieBanner() {

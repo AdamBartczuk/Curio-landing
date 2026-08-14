@@ -1,0 +1,352 @@
+---
+/*
+ * The interactive centrepiece (SPEC §5.6a). "The moment" copy named a gate, a
+ * photographed tree, an old building — here they become tappable pins on a
+ * stylized SVG neighbourhood, so the section stops describing explore mode
+ * and starts being it. Replaces the old TheMoment.astro + VID-01 placeholder.
+ *
+ * Honesty rules: this is an archetypal neighbourhood, labelled as such — no
+ * invented facts about real places, and no fake audio (the one real clip
+ * lives in the hero). Teasers are sample stops in the brand voice.
+ *
+ * Pins are HTML <button>s absolutely positioned over the SVG (percentage
+ * coords) — real focus rings, ≥44px hit areas, aria-expanded. All teaser text
+ * is server-rendered; the script only swaps visibility.
+ */
+const stops = [
+  {
+    id: "gate",
+    name: "The gate",
+    x: 30,
+    y: 24,
+    teaser:
+      "Everyone photographs the famous gate two streets over. This one is older, quieter, and the reason the street bends the way it does. Worth thirty seconds of your walk.",
+  },
+  {
+    id: "tree",
+    name: "The tree",
+    x: 78,
+    y: 17,
+    teaser:
+      "One tree, forty photographers, every April. The story isn't the blossom — it's who planted it, and why the whole block once fought to keep it.",
+  },
+  {
+    id: "building",
+    name: "The old building",
+    x: 55,
+    y: 47,
+    teaser:
+      "Three earthquakes, one war, and a stubborn owner who wouldn't sell. The newest thing on this building is the vending machine outside.",
+  },
+  {
+    id: "izakaya",
+    name: "The corner izakaya",
+    x: 22,
+    y: 64,
+    teaser:
+      "Six seats, no menu, and one firm opinion about how you should drink your beer. The person who wrote this story has been thrown out twice.",
+  },
+  {
+    id: "bridge",
+    name: "The bridge",
+    x: 72,
+    y: 76,
+    teaser:
+      "Cross it at five in the evening and you'll share it with half the neighbourhood. There's a reason everyone pauses in the middle, and it isn't the view.",
+  },
+];
+---
+
+<section class="px-4 py-20 sm:px-6 sm:py-28" id="walk">
+  <div class="mx-auto max-w-6xl">
+    <div class="overflow-hidden rounded-[2.5rem] bg-espresso text-cream">
+      <div class="grid gap-0 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_1fr]">
+        <!-- Copy -->
+        <div class="reveal p-8 pb-4 sm:p-12 sm:pb-6 lg:p-14 lg:pb-4">
+          <p class="chip mb-7 w-fit bg-cream/10 text-cream/70">Explore mode</p>
+
+          <h2 class="display-lg">
+            You're not lost.<br />
+            You're just <span class="text-sand">curious.</span>
+          </h2>
+
+          <p class="mt-6 max-w-md text-lg leading-relaxed text-cream/75">
+            A gate at the end of a side street. A tree everyone is
+            photographing. A building older than everything around it.
+            Normally you shrug and walk past — with Curio you tap it, and
+            someone tells you.
+          </p>
+
+          <p class="mt-5 text-sm text-cream/50">
+            Try it. Tap a pin on the map.
+          </p>
+        </div>
+
+        <!-- Map -->
+        <div
+          class="reveal relative p-6 sm:p-8 lg:row-span-2 lg:p-10 lg:pl-0"
+          id="walk-map"
+        >
+          <div class="relative">
+            <svg
+              viewBox="0 0 800 620"
+              class="block h-auto w-full rounded-[1.75rem] bg-cream/[0.05] ring-1 ring-inset ring-cream/10"
+              aria-hidden="true"
+            >
+              <!-- streets -->
+              <g stroke="#FEF0E3" stroke-opacity="0.16" stroke-linecap="round" fill="none">
+                <path d="M40 150 H760" stroke-width="12" />
+                <path d="M40 310 H760" stroke-width="12" />
+                <path d="M40 470 H520" stroke-width="12" />
+                <path d="M200 60 V560" stroke-width="12" />
+                <path d="M430 60 V560" stroke-width="12" />
+                <path d="M640 60 V240" stroke-width="12" />
+                <!-- the avenue -->
+                <path d="M70 585 L560 70" stroke-width="20" stroke-opacity="0.10" />
+              </g>
+
+              <!-- river -->
+              <path
+                d="M545 620 C590 520 660 470 800 440"
+                stroke="#FEF0E3"
+                stroke-opacity="0.09"
+                stroke-width="46"
+                fill="none"
+              />
+              <path
+                d="M545 620 C590 520 660 470 800 440"
+                stroke="#FEF0E3"
+                stroke-opacity="0.14"
+                stroke-width="2.5"
+                stroke-dasharray="8 10"
+                fill="none"
+              />
+              <!-- bridge deck -->
+              <rect x="556" y="448" width="20" height="58" rx="6" transform="rotate(52 566 477)" fill="#EAB894" fill-opacity="0.5" />
+
+              <!-- building blocks -->
+              <g fill="#EAB894" fill-opacity="0.09" stroke="#EAB894" stroke-opacity="0.30">
+                <rect x="60" y="70" width="120" height="60" rx="10" />
+                <rect x="222" y="70" width="120" height="60" rx="10" />
+                <rect x="60" y="175" width="120" height="112" rx="10" />
+                <rect x="222" y="175" width="185" height="50" rx="10" />
+                <rect x="222" y="240" width="185" height="47" rx="10" />
+                <rect x="455" y="175" width="160" height="112" rx="10" />
+                <rect x="60" y="335" width="120" height="112" rx="10" />
+                <rect x="245" y="335" width="162" height="112" rx="10" />
+                <rect x="455" y="335" width="90" height="70" rx="10" />
+                <rect x="90" y="495" width="180" height="70" rx="10" />
+                <rect x="310" y="495" width="97" height="70" rx="10" />
+              </g>
+
+              <!-- park (top-right) -->
+              <g>
+                <rect x="655" y="55" width="120" height="170" rx="18" fill="#EAB894" fill-opacity="0.07" stroke="#EAB894" stroke-opacity="0.25" />
+                <g stroke="#EAB894" stroke-opacity="0.45" fill="none">
+                  <circle cx="690" cy="95" r="13" />
+                  <circle cx="735" cy="120" r="16" />
+                  <circle cx="688" cy="155" r="11" />
+                  <circle cx="730" cy="185" r="13" />
+                </g>
+              </g>
+
+              <!-- rail line -->
+              <g>
+                <path d="M40 545 H760" stroke="#FEF0E3" stroke-opacity="0.25" stroke-width="3" stroke-dasharray="14 10" fill="none" />
+                <rect x="470" y="536" width="26" height="18" rx="5" fill="#FEF0E3" fill-opacity="0.25" />
+              </g>
+
+              <!-- labels -->
+              <g
+                fill="#FEF0E3"
+                fill-opacity="0.35"
+                font-family="Hind, sans-serif"
+                font-size="13"
+                letter-spacing="2.5"
+              >
+                <text x="62" y="52">THE OLD QUARTER</text>
+                <text x="672" y="248">PARK</text>
+                <text x="620" y="590">RIVER</text>
+                <text x="700" y="536">RAIL</text>
+              </g>
+
+              <!-- compass -->
+              <g transform="translate(748 300)" stroke="#FEF0E3" stroke-opacity="0.35" fill="none">
+                <circle r="14" />
+                <path d="M0 8 L0 -8 M0 -8 L-4 -2 M0 -8 L4 -2" stroke-linecap="round" />
+              </g>
+            </svg>
+
+            <!-- floating brand chips over the map -->
+            <span class="chip float-soft absolute -top-2 left-6 bg-terracotta text-cream shadow-lg">
+              GPS
+            </span>
+            <span
+              class="chip float-soft absolute -right-1 top-[52%] bg-sand text-espresso shadow-lg"
+              style="animation-delay:-3s"
+            >
+              Explore
+            </span>
+
+            <!-- pins -->
+            {
+              stops.map((s, i) => (
+                <button
+                  type="button"
+                  class="map-pin absolute"
+                  style={`left:${s.x}%; top:${s.y}%; --pulse-delay:${i * 0.7}s`}
+                  data-stop={s.id}
+                  aria-expanded={i === 0 ? "true" : "false"}
+                  aria-controls={`stop-card-${s.id}`}
+                >
+                  <span class="sr-only">{s.name} — show story teaser</span>
+                  <span class="pin-dot" aria-hidden="true" />
+                </button>
+              ))
+            }
+          </div>
+
+          <p class="mt-4 text-center text-xs text-cream/40">
+            A stylized neighbourhood. The real Tokyo map arrives with launch.
+          </p>
+        </div>
+
+        <!-- Story card slot: swapped by the pins -->
+        <div class="p-8 pt-2 sm:p-12 sm:pt-3 lg:p-14 lg:pt-4">
+          {
+            stops.map((s, i) => (
+              <article
+                id={`stop-card-${s.id}`}
+                data-card={s.id}
+                class="stop-card rounded-[1.75rem] bg-cream/[0.07] p-6 ring-1 ring-inset ring-cream/15 sm:p-7"
+                hidden={i !== 0}
+              >
+                <div class="flex items-center justify-between gap-4">
+                  <p class="chip bg-terracotta text-cream">
+                    Stop 0{i + 1} · {s.name}
+                  </p>
+                  <span class="chip bg-cream/10 text-cream/60">2 min listen</span>
+                </div>
+                <p class="mt-4 leading-relaxed text-cream/80">{s.teaser}</p>
+                <a
+                  href="#waitlist"
+                  class="mt-4 inline-block text-sm font-medium text-sand underline-offset-2 hover:underline"
+                >
+                  Hear stories like this →
+                </a>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .map-pin {
+    /* ≥44px hit area, centred on its coordinate */
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .pin-dot {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: var(--color-terracotta);
+    box-shadow: 0 0 0 4px rgba(254, 240, 227, 0.85);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .map-pin:hover .pin-dot {
+    transform: scale(1.2);
+  }
+
+  /* soft radar pulse, staggered per pin */
+  .pin-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 999px;
+    border: 2px solid rgba(254, 240, 227, 0.7);
+    animation: pin-pulse 2.8s ease-out infinite;
+    animation-delay: var(--pulse-delay, 0s);
+  }
+
+  @keyframes pin-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    70%,
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+
+  /* active pin inverts: cream shell, terracotta core */
+  .map-pin[aria-expanded="true"] .pin-dot {
+    background: var(--color-cream);
+    box-shadow:
+      0 0 0 4px var(--color-terracotta),
+      0 0 0 8px rgba(254, 240, 227, 0.35);
+    transform: scale(1.15);
+  }
+
+  .map-pin[aria-expanded="true"] .pin-dot::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .stop-card {
+    animation: card-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pin-dot::after {
+      animation: none;
+      opacity: 0;
+    }
+    .stop-card {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const pins = document.querySelectorAll<HTMLButtonElement>("[data-stop]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-card]");
+
+  pins.forEach((pin) => {
+    pin.addEventListener("click", () => {
+      const id = pin.dataset.stop;
+      pins.forEach((p) =>
+        p.setAttribute("aria-expanded", String(p === pin)),
+      );
+      cards.forEach((c) => {
+        c.hidden = c.dataset.card !== id;
+      });
+      // Same first-party event pattern as the audio sample / waitlist signup.
+      window.dispatchEvent(new CustomEvent("curio:pin-opened"));
+    });
+  });
+</script>
