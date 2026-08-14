@@ -9,19 +9,36 @@ import Logo from "./Logo.astro";
   <div class="mx-auto max-w-6xl px-4 py-4 sm:px-6">
     <div
       id="header-bar"
-      class="flex items-center justify-between rounded-full px-5 py-3 transition-all duration-300"
+      class="relative flex items-center justify-between rounded-full px-5 py-3 transition-all duration-300"
     >
       <Logo tone="terracotta" />
 
       <div class="flex items-center gap-4">
+        <!-- Scroll progress in the city metaphor (SPEC §5.6c). The km count
+             replaces the static marker once you start walking the page. -->
         <span
           class="hidden text-xs uppercase tracking-widest text-espresso/50 sm:inline"
+          id="walk-meter"
+          data-label="Tokyo · Spring 2027"
         >
           Tokyo · Spring 2027
         </span>
         <a href="#waitlist" class="btn-primary px-5 py-2.5 text-sm">
           Get early access
         </a>
+      </div>
+
+      <!-- Mobile: a thin dotted trail under the bar instead of the km text -->
+      <div
+        class="absolute inset-x-5 bottom-0 h-[3px] overflow-hidden rounded-full sm:hidden"
+        aria-hidden="true"
+      >
+        <div
+          id="walk-meter-bar"
+          class="h-full w-full origin-left scale-x-0 rounded-full bg-terracotta/70"
+          style="transition: transform 0.1s linear"
+        >
+        </div>
       </div>
     </div>
   </div>
@@ -45,4 +62,34 @@ import Logo from "./Logo.astro";
     },
     { threshold: 0 },
   ).observe(sentinel);
+
+  // Distance-walked meter: scroll progress mapped to a ~1.8 km stroll.
+  // rAF-throttled; the passive listener does no work during the scroll itself.
+  const meter = document.getElementById("walk-meter");
+  const meterBar = document.getElementById("walk-meter-bar");
+  const WALK_KM = 1.8;
+  let meterRaf = 0;
+
+  const updateMeter = () => {
+    meterRaf = 0;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+
+    if (meter) {
+      meter.textContent =
+        progress < 0.02
+          ? meter.dataset.label || ""
+          : `Tokyo · ${(progress * WALK_KM).toFixed(1)} km walked`;
+    }
+    if (meterBar) meterBar.style.transform = `scaleX(${progress})`;
+  };
+
+  updateMeter();
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!meterRaf) meterRaf = requestAnimationFrame(updateMeter);
+    },
+    { passive: true },
+  );
 </script>
