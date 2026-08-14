@@ -1,8 +1,9 @@
 # Curio Landing Page — Spec
 
-**Status:** draft, awaiting branding PDF
+**Status:** draft — branding received, ready to build
 **Branch:** `feature/astro-rebuild-tokyo`
 **Last updated:** 2026-08-14
+**Brand source:** `Curio_SSS_13_07.pdf` (Style Guide, 18pp, 2026)
 
 ---
 
@@ -32,6 +33,26 @@ Timing: "early 2027", with Tokyo tied to sakura (bloom typically opens
 ~20–25 March, peaks late March–early April). **The page must be live and
 indexed well before then** — Japan spring trips are planned 6–9 months ahead,
 so hanami search traffic ramps from September 2026 through January 2027.
+
+### 2.1 Never sell this as AI (hard rule)
+
+Adam's instruction, 2026-08-14: B2C travellers do not value "AI-powered" — for
+many it *lowers* perceived value. **The page must never use "AI", "AI-powered",
+"generated", "LLM", "machine learning", or equivalents as a selling point.**
+
+The brand book already supplies the answer, so this is not a workaround — it is
+the actual brand position. It says stories are **"written by locals"** and the
+mission is **"locally-sourced audio storytelling"**. So the page sells:
+
+> Stories from people who live there.
+
+Human, local, opinionated — the exact opposite of a generated feed. Whatever
+technology sits behind the product is an implementation detail the visitor does
+not need. This also aligns with the tone of voice (§5.0): a friend who knows the
+city, not a system.
+
+Corollary for the Higgsfield work in §8: if video/image narration ships later,
+it is described by what the traveller gets, never by the tool that made it.
 
 ## 3. Problems with the current page (analysis 2026-08-14)
 
@@ -91,20 +112,50 @@ mindfulness message — never adjacent.
 
 ## 5. Copy
 
-Draft. To be revised against the branding PDF's tone of voice.
+### 5.0 Tone of voice (from brand book p.04)
+
+**Surprising · Personal · Opinionated.**
+
+> Curio adopts the persona of a well-travelled, curious friend rather than a
+> formal expert or a flag-bearing guide.
+
+Practical rules for this page:
+- Write like a friend who knows the city, not like a brochure or a system.
+- Have opinions. "Skip the queue at the main gate, the side entrance is better"
+  beats "explore a range of attractions."
+- Second person, short sentences, contractions allowed.
+- Never "AI" (§2.1). Never "seamless", "leverage", "solutions", "curated
+  experiences", "unlock the power of".
+
+Brand lines already in use (brand book pp.15–17) — reuse, don't reinvent:
+`Get curious, get lost on purpose.` (official tagline, on the Facebook cover) ·
+`Every place gets a story.` · `Listen and explore.` · `The digital way to feel
+culture.`
+
+`Explore mode` is the brand book's own name (p.03) for wandering freely without
+a route — i.e. the single-point behaviour. **Use that term**, don't invent one.
 
 **Hero**
 - Badge: `Launching in Tokyo · cherry blossom 2027`
 - H1: `See something? Hear its story.`
 - Sub: `Curio is an audio guide for people without a plan. Tap whatever is in
-  front of you and hear a two-minute story about it. No itinerary, no research,
-  no phone in your face.`
+  front of you and hear a two-minute story about it — written by someone who
+  actually lives there. No itinerary, no research, no phone in your face.`
 - Chips: `Audio-first` · `No plan needed` · `Works offline`
 - CTA: `Get early access`
 
-`Get CURIOus. Get lost on purpose.` is strong brand copy and is retained — but
-as the brand line (sticker / header / footer), not as the H1. The H1 must
+`Get curious, get lost on purpose.` is the official tagline and is retained —
+but as the brand line (header / sticker / footer), not as the H1. The H1 must
 explain the product to someone who has never heard of Curio.
+
+**Who writes the stories** — a short section, and the answer to §2.1
+
+> Every story is written by someone who lives in the city. Not scraped from a
+> guidebook, not the same five facts you'd find in a search result. The person
+> who tells you about the bar on the corner has probably been thrown out of it.
+
+**Why Curio** — benefit 5, replacing nothing, added after the brand book:
+- `Written by locals` — real people, real opinions, from the city itself
 
 **The moment**
 > You are somewhere in Tokyo without a plan. A gate at the end of a side street.
@@ -122,6 +173,50 @@ explain the product to someone who has never heard of Curio.
 - `Works with no signal` — download before you go out, roam nothing
 
 **Tokyo / sakura** — to be written once launch scope is confirmed.
+
+## 5.5 Design system (from brand book)
+
+The shipped site is **entirely off-brand** — forest green `#005C45` / orange
+`#FF5C35` / yellow `#FDBF11`, Bricolage Grotesque + Inter. None of that survives.
+This is a full recolour and retype, not a tweak.
+
+**Palette** (brand book p.08 — these four, no others)
+
+| Token | Hex | Role |
+|---|---|---|
+| `cream` | `#FEF0E3` | Default page background |
+| `terracotta` | `#CA5137` | Primary — CTAs, logo, accents, dark-on-light headings |
+| `sand` | `#EAB894` | Secondary — chips, fills, quiet surfaces |
+| `espresso` | `#351D06` | Body text on cream; background for dark sections |
+
+Contrast: `espresso` on `cream` and `cream` on `terracotta` both pass WCAG AA.
+**`sand` on `cream` fails** — never use it for text, fills and borders only.
+
+**Type** (p.10–11) — both Google Fonts, so self-host via `@fontsource`
+- Headings: **Montserrat Bold** (also the logo font)
+- Subheadings: **Hind Medium**
+- Body: **Hind Regular**
+
+**Visual language** (pp.12–18)
+- **Pill/capsule everything** — the guide's dominant shape. Buttons, chips, nav,
+  list rows, all fully rounded. Pills often paired with a circular arrow button.
+- **Floating labels** — small pills like `AUDIO ✳` `GPS ⌕` `EXPLORE`
+  `DOWNLOAD ↓` scattered over images. This is the most recognisable device in the
+  whole guide and should drive the hero.
+- **Oversized headline type**, tight tracking, set very large.
+- **Logo-mark tile pattern** (p.12) — a section background, used sparingly.
+- **Warm photography** — golden-hour street scenes, headphones, motion blur,
+  graded warm. Replaces the current cool Unsplash shot.
+- **Rounded-rectangle cards** with generous radius; soft, not heavy shadows.
+
+**Modern / light / interactive** (Adam's brief) — how that maps here:
+- Light: `cream` is the default; `espresso` sections are punctuation, not the norm.
+- Bold: headline type set genuinely large; full-bleed `terracotta` blocks.
+- Interactive: the floating pills respond to pointer/scroll, the audio player is
+  the centrepiece, and the "your city next" vote is a real input.
+- Motion respects `prefers-reduced-motion`. The current build animates
+  constantly — parallax on scroll listeners, infinite spin, bounce, pulse — which
+  reads as busy rather than modern, and costs performance. Fewer, better moves.
 
 ## 6. Technical plan
 
@@ -153,10 +248,12 @@ explain the product to someone who has never heard of Curio.
 
 ## 7. Open items
 
-- [ ] **Branding PDF** — blocks all visual work (colour, type, tone). Current
-      palette (`#005C45` green, `#FF5C35` orange, `#FDBF11` yellow, `#FFF9F0`
-      cream) and fonts (Bricolage Grotesque / Inter) are assumed replaced.
+- [x] ~~Branding PDF~~ — received 2026-08-14, applied in §5.5.
+- [ ] **Logo asset** — need the Curio mark as SVG (brand book has it as artwork
+      only). Blocks the header, favicon and the p.12 tile pattern.
 - [ ] Tokyo/sakura hero audio clip from Adam.
+- [ ] Brand photography — warm street/headphone shots per the p.18 moodboard.
+      Placeholder Unsplash until then, but it must be replaced before launch.
 - [ ] Privacy and Terms page content — currently dead links.
 - [ ] Confirm Supabase `waitlist` RLS is insert-only.
 - [ ] Confirm the early-access incentive wording ("free premium weekend"?).
