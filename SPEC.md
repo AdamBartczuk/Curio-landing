@@ -1,6 +1,6 @@
 # Curio Landing Page — Spec
 
-**Status:** draft — branding received, ready to build
+**Status:** built — conversion & rhythm pass applied after first review
 **Branch:** `feature/astro-rebuild-tokyo`
 **Last updated:** 2026-08-14
 **Brand source:** `Curio_SSS_13_07.pdf` (Style Guide, 18pp, 2026)
@@ -99,10 +99,19 @@ Carried here so the reasons for each change are not lost.
 | 4 | Two ways to use it | (a) Tap a single point, zero plan. (b) Follow a journey when you want more. Resolves spontaneous-vs-planned without muddling the hero. |
 | 5 | Why Curio | 4 benefits in traveller language (down from 6) |
 | 6 | Tokyo first | Sakura 2027, why Tokyo, what launch includes |
+| 6.5 | Mid CTA band | One calm anchor-CTA after Tokyo (peak persuasion) — closes the hero-to-waitlist gap without a third form |
 | 7 | Your city next | Global ambition preserved as a **vote**, not a claim. Doubles as signup reason + market data. |
-| 8 | FAQ | Real SEO surface; answers cost, story length, languages, offline |
+| 8 | FAQ | Real SEO surface; answers cost, story length, languages, offline, who's behind it. Single source: `src/data/faq.ts` (section + JSON-LD). |
 | 9 | Waitlist | Primary CTA with the incentive attached to the form |
 | 10 | Footer | Working Privacy / Terms / Contact |
+
+**Conversion rules (added after 2026-08-14 review):**
+- The hero email form must sit fully above the fold at 1280×720 — form
+  directly after the sub-paragraph, chips demoted below it.
+- When the hero audio sample ends, the caption becomes a signup nudge.
+- Section headlines: the stacked two-line black/terracotta split is reserved
+  for the big beats (hero, Moment, Tokyo). Quiet sections use a kicker chip +
+  single-line headline, so the device stays special.
 
 **Cut:** Free/Premium pricing tiers (→ one honest line in FAQ). Fabricated
 testimonial (→ founder note or live signup counter). Nine-city list (→ §7 vote).
@@ -249,14 +258,22 @@ Contrast: `espresso` on `cream` and `cream` on `terracotta` both pass WCAG AA.
 ## 7. Open items
 
 - [x] ~~Branding PDF~~ — received 2026-08-14, applied in §5.5.
+- [x] ~~og:image~~ — generated brand card at `public/media/og.png`
+      (2026-08-14). Regenerate when the real logo mark lands.
+- [x] ~~Old React prototype in repo~~ — deleted 2026-08-14 (history keeps it).
 - [ ] **Logo asset** — need the Curio mark as SVG (brand book has it as artwork
       only). Blocks the header, favicon and the p.12 tile pattern.
-- [ ] Tokyo/sakura hero audio clip from Adam.
+- [ ] Tokyo/sakura hero audio clip from Adam. Until then the Kraków clip is
+      labelled "early sample" (never "placeholder" — visitors see it).
+- [ ] **VID-01** — the Moment section still shows a hatched placeholder where
+      the looping Tokyo-alley video belongs. Most visible missing asset.
 - [ ] Brand photography — warm street/headphone shots per the p.18 moodboard.
       Placeholder Unsplash until then, but it must be replaced before launch.
 - [ ] Privacy and Terms page content — currently dead links.
 - [ ] Confirm Supabase `waitlist` RLS is insert-only.
 - [ ] Confirm the early-access incentive wording ("free premium weekend"?).
+- [ ] Known local quirk: a stale dev server may hold port 4321; Astro then
+      picks the next free port. Kill old `node` listeners before demoing.
 
 ## 8. Out of scope (next step, not now)
 
