@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://curio.guide/sitemap.xml
+Sitemap: https://curio.guide/sitemap-index.xml
