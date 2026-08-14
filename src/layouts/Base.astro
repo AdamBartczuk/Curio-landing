@@ -9,8 +9,9 @@ interface Props {
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
-// og:image is a placeholder until brand artwork exists — see ASSETS.md (IMG-OG).
-const ogImage = new URL("/media/og-placeholder.png", Astro.site).href;
+// Branded og card (1200x630), generated to match the hero. Regenerate when the
+// real logo mark lands — see ASSETS.md (IMG-OG).
+const ogImage = new URL("/media/og.png", Astro.site).href;
 
 const appSchema = {
   "@context": "https://schema.org",
