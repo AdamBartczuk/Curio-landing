@@ -1,0 +1,91 @@
+---
+import AudioPlayer from "./islands/AudioPlayer.tsx";
+import WaitlistForm from "./islands/WaitlistForm.tsx";
+import MediaPlaceholder from "./MediaPlaceholder.astro";
+
+/*
+ * TOKYO SWAP — the sample below is the old Cracow teaser, used as a placeholder.
+ * Replace with a Tokyo clip: put the MP3 at public/media/tokyo-sample.mp3 and
+ * change `sampleSrc` to "/media/tokyo-sample.mp3", plus `place` and `title`.
+ */
+const sampleSrc =
+  "https://trexuhtydiwygtxugqfb.supabase.co/storage/v1/object/public/Landing%20page/Curio_cracow_teaser.mp3";
+const samplePlace = "Kraków · placeholder";
+const sampleTitle = "The Other Capital";
+---
+
+<section class="relative px-4 pb-16 pt-28 sm:px-6 sm:pt-32">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+      <!-- Left: the promise -->
+      <div>
+        <p
+          class="chip mb-6 bg-sand/60 text-espresso"
+        >
+          <span class="h-1.5 w-1.5 rounded-full bg-terracotta"></span>
+          Tokyo first · Cherry blossom 2027
+        </p>
+
+        <h1 class="display-xl text-espresso">
+          See something?<br />
+          <span class="text-terracotta">Hear its story.</span>
+        </h1>
+
+        <p class="mt-7 max-w-lg text-lg leading-relaxed text-espresso/75 sm:text-xl">
+          Curio is an audio guide for people without a plan. Tap whatever is in
+          front of you and hear a two-minute story about it — written by someone
+          who actually lives there. No itinerary, no research, no phone in your
+          face.
+        </p>
+
+        <div class="mt-7 flex flex-wrap gap-2">
+          <span class="chip bg-espresso text-cream">Audio-first</span>
+          <span class="chip bg-sand/60 text-espresso">No plan needed</span>
+          <span class="chip bg-sand/60 text-espresso">Works offline</span>
+        </div>
+
+        <div class="mt-9" id="hero-form">
+          <WaitlistForm client:idle buttonText="Get early access" />
+          <p class="mt-3 px-2 text-sm text-espresso/50">
+            Free premium weekend in the first city you visit. No spam, ever.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: proof you can hear -->
+      <div class="relative mx-auto w-full max-w-sm lg:mx-0 lg:max-w-md">
+        <MediaPlaceholder
+          id="IMG-01"
+          label="Hero — traveller in warm golden-hour Tokyo street, headphones on, mid-stride"
+          ratio="4/5"
+          class="shadow-xl"
+        />
+
+        <!-- Floating brand labels, per style guide pp.15-18 -->
+        <span
+          class="chip float-soft absolute -left-3 top-10 bg-terracotta text-cream shadow-lg sm:-left-5"
+        >
+          GPS
+        </span>
+        <span
+          class="chip float-soft absolute -right-2 top-1/4 bg-sand text-espresso shadow-lg sm:-right-4"
+          style="animation-delay:-2.5s"
+        >
+          Explore
+        </span>
+
+        <!-- The single most important element on the page: press play.
+             Overlaps the image bottom so it reads as part of the card. -->
+        <div class="relative z-10 -mt-16 px-3 sm:px-5">
+          <AudioPlayer
+            client:visible
+            src={sampleSrc}
+            place={samplePlace}
+            title={sampleTitle}
+            note="A real Curio story. Two minutes, no map required."
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

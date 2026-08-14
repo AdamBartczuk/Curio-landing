@@ -1,0 +1,146 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// og:image is a placeholder until brand artwork exists — see ASSETS.md (IMG-OG).
+const ogImage = new URL("/media/og-placeholder.png", Astro.site).href;
+
+const appSchema = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  name: "Curio",
+  description,
+  url: "https://curio.guide/",
+  applicationCategory: "TravelApplication",
+  operatingSystem: "iOS, Android",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Organization", name: "Curio", url: "https://curio.guide/" },
+};
+
+// FAQPage schema — mirrors the FAQ section. Keep the two in sync.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Do I need to plan a route before I go out?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. That is the whole point. Open explore mode, start walking, and tap anything that catches your eye. Curio has planned journeys too, for when you want one, but you never have to use them.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How long is a single story?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Around two minutes. Long enough to be worth stopping for, short enough that you can listen while you keep walking.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Curio work without mobile data?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Download the city before you head out and everything — maps and audio — works with no signal and no roaming. Useful in Tokyo, where visitor SIMs and metro basements do not always agree.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Who writes the stories?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "People who live in the city. Not rewritten guidebook copy and not the same five facts you would find in a search result — local writers with opinions about their own neighbourhoods.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What will it cost?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "There will be a free tier you can use without paying. We are still working out the rest, and early-access members will hear it from us first.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "When does Curio launch?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Tokyo comes first, in time for cherry blossom season in spring 2027. More cities follow — early-access members help decide which.",
+      },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#FEF0E3" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Curio" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </head>
+
+  <body class="overflow-x-hidden antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-espresso focus:px-5 focus:py-3 focus:text-cream"
+    >
+      Skip to content
+    </a>
+
+    <slot />
+
+    <script>
+      // Reveal-on-scroll. IntersectionObserver only — no scroll listener, so
+      // this costs nothing on the main thread while scrolling.
+      const els = document.querySelectorAll(".reveal");
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        els.forEach((el) => el.classList.add("is-visible"));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          // threshold 0 — a section taller than the viewport would never reach
+          // a fractional threshold, and would stay invisible forever.
+          { rootMargin: "0px 0px -8% 0px", threshold: 0 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

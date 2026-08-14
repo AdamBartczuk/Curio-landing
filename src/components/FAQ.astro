@@ -1,0 +1,71 @@
+---
+/*
+ * Real SEO surface — this is most of the page's indexable word count, and it
+ * answers the questions the old page left open (cost, length, offline, who
+ * writes it). Mirrored as FAQPage JSON-LD in Base.astro — keep both in sync.
+ */
+const faqs = [
+  {
+    q: "Do I need to plan a route before I go out?",
+    a: "No. That's the whole point. Open explore mode, start walking, and tap anything that catches your eye. There are planned journeys too, for when you want one, but you never have to use them.",
+  },
+  {
+    q: "How long is a single story?",
+    a: "Around two minutes. Long enough to be worth stopping for, short enough that you can listen while you keep walking.",
+  },
+  {
+    q: "Does Curio work without mobile data?",
+    a: "Yes. Download the city before you head out and everything — maps and audio — works with no signal and no roaming. Useful in Tokyo, where visitor SIMs and metro basements don't always agree.",
+  },
+  {
+    q: "Who writes the stories?",
+    a: "People who live in the city. Not rewritten guidebook copy and not the same five facts you'd find in a search result — local writers with opinions about their own neighbourhoods.",
+  },
+  {
+    q: "What will it cost?",
+    a: "There'll be a free tier you can use without paying. We're still working out the rest, and early-access members will hear it from us first.",
+  },
+  {
+    q: "When does Curio launch?",
+    a: "Tokyo comes first, in time for cherry blossom season in spring 2027. More cities follow — early-access members help decide which.",
+  },
+];
+---
+
+<section class="px-4 py-16 sm:px-6 sm:py-20" id="faq">
+  <div class="mx-auto max-w-3xl">
+    <div class="reveal mb-10">
+      <h2 class="display-lg text-espresso">Questions.</h2>
+    </div>
+
+    <div class="divide-y divide-espresso/10">
+      {
+        faqs.map((f) => (
+          <details class="group reveal py-5">
+            <summary
+              class="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-lg font-bold text-espresso"
+            >
+              {f.q}
+              <span
+                class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sand/50 text-terracotta transition-transform duration-300 group-open:rotate-45"
+                aria-hidden="true"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M7 1v12M1 7h12"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-3 max-w-2xl pr-14 leading-relaxed text-espresso/70">
+              {f.a}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

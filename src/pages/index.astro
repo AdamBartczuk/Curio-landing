@@ -1,0 +1,37 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import TheMoment from "../components/TheMoment.astro";
+import TwoWays from "../components/TwoWays.astro";
+import WhyCurio from "../components/WhyCurio.astro";
+import LocalVoices from "../components/LocalVoices.astro";
+import TokyoFirst from "../components/TokyoFirst.astro";
+import FAQ from "../components/FAQ.astro";
+import WaitlistCTA from "../components/WaitlistCTA.astro";
+import Footer from "../components/Footer.astro";
+import CookieBanner from "../components/islands/CookieBanner.tsx";
+
+const title = "Curio — Audio City Guide for Spontaneous Travel | Tokyo 2027";
+const description =
+  "Curio is an audio guide for people without a plan. Tap what's in front of you and hear a two-minute story, written by locals. Launching in Tokyo for cherry blossom season 2027.";
+---
+
+<Base title={title} description={description}>
+  <Header />
+
+  <main id="main">
+    <Hero />
+    <TheMoment />
+    <TwoWays />
+    <WhyCurio />
+    <LocalVoices />
+    <TokyoFirst />
+    <FAQ />
+    <WaitlistCTA />
+  </main>
+
+  <Footer />
+
+  <CookieBanner client:idle />
+</Base>

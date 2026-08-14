@@ -1,0 +1,59 @@
+---
+import MediaPlaceholder from "./MediaPlaceholder.astro";
+---
+
+<section class="px-4 py-16 sm:px-6 sm:py-20" id="tokyo">
+  <div class="mx-auto max-w-6xl">
+    <div class="reveal overflow-hidden rounded-[2.5rem] bg-terracotta text-cream">
+      <div class="grid gap-0 lg:grid-cols-[1.1fr_1fr]">
+        <div class="p-8 sm:p-12 lg:p-16">
+          <p class="chip mb-7 w-fit bg-cream/15 text-cream">First city</p>
+
+          <h2 class="display-lg">
+            Tokyo, while<br />the blossom lasts.
+          </h2>
+
+          <p class="mt-7 max-w-lg text-lg leading-relaxed text-cream/80">
+            Curio launches in Tokyo in spring 2027, timed to sakura. It's the
+            best possible argument for the way this app works: during hanami the
+            whole city is worth stopping for, and the good spots are never the
+            ones on the list.
+          </p>
+
+          <ul class="mt-9 space-y-3 text-cream/85">
+            <li class="flex gap-3">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cream"></span>
+              Stories across the city, not just the famous parks
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cream"></span>
+              Fully offline — visitor SIMs and metro basements don't always agree
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cream"></span>
+              Written by people who live in the neighbourhoods you'll walk through
+            </li>
+          </ul>
+
+          <p class="mt-9 border-t border-cream/20 pt-6 text-sm text-cream/60">
+            Then more cities — and early-access members help pick which.
+          </p>
+        </div>
+
+        <div class="relative min-h-[320px]">
+          <MediaPlaceholder
+            id="IMG-04"
+            label="Tokyo sakura — blossom over a canal or side street, people walking beneath, warm evening light"
+            ratio="1/1"
+            class="h-full rounded-none"
+          />
+          <span
+            class="chip float-soft absolute bottom-8 left-6 bg-espresso text-cream shadow-lg"
+          >
+            Spring 2027
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

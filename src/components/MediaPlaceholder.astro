@@ -1,0 +1,53 @@
+---
+/*
+ * Visible placeholder for imagery and video that has not been produced yet.
+ *
+ * Every placeholder carries an asset id (e.g. IMG-01). The matching generation
+ * prompt and recommended model live in ASSETS.md at the repo root.
+ *
+ * TO REPLACE: put the real file in public/media/, then swap this component for
+ * a plain <img> / <video>. The `id` is the only thing you need to look up.
+ */
+interface Props {
+  id: string;
+  label: string;
+  /** CSS aspect-ratio value, e.g. "4/5" or "16/9". */
+  ratio?: string;
+  kind?: "image" | "video";
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  ratio = "4/5",
+  kind = "image",
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class={`relative overflow-hidden rounded-[2rem] bg-sand/40 ring-1 ring-inset ring-espresso/10 ${className}`}
+  style={`aspect-ratio: ${ratio};`}
+  data-asset-id={id}
+  role="img"
+  aria-label={`Placeholder for ${label}`}
+>
+  {/* Diagonal hatch so it is unmistakably not final artwork. */}
+  <div
+    class="absolute inset-0 opacity-[0.14]"
+    style="background-image: repeating-linear-gradient(45deg, #351D06 0 1px, transparent 1px 11px);"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
+    <span class="chip bg-espresso text-cream">{kind === "video" ? "Video" : "Image"} · {id}</span>
+    <p class="max-w-[26ch] text-sm leading-snug text-espresso/70">{label}</p>
+    <p class="text-[11px] uppercase tracking-widest text-espresso/40">
+      Prompt in ASSETS.md
+    </p>
+  </div>
+
+  <slot />
+</div>
