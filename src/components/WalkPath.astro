@@ -16,7 +16,7 @@ const stations = ["walk", "why", "locals", "tokyo", "waitlist"];
 
 <div
   id="walk-path"
-  class="pointer-events-none absolute inset-y-0 left-0 hidden w-20 xl:block"
+  class="pointer-events-none absolute inset-y-0 left-0 hidden w-20 overflow-hidden xl:block"
   aria-hidden="true"
   data-stations={stations.join(",")}
 >
@@ -137,7 +137,12 @@ const stations = ["walk", "why", "locals", "tokyo", "waitlist"];
 
     place();
     mark();
-    new ResizeObserver(place).observe(document.body);
+    // Observe main (the content that actually determines section offsets),
+    // not body — body's size can itself be affected by overflowing absolute
+    // children, which risks a reposition feedback loop. The overflow-hidden
+    // on the wrapper guards the same failure from the other side.
+    const content = document.getElementById("main");
+    if (content) new ResizeObserver(place).observe(content);
     window.addEventListener(
       "scroll",
       () => {
