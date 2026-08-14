@@ -1,7 +1,3 @@
----
-import MediaPlaceholder from "./MediaPlaceholder.astro";
----
-
 <section class="px-4 py-16 sm:px-6 sm:py-20" id="tokyo">
   <div class="mx-auto max-w-6xl">
     <div class="reveal overflow-hidden rounded-[2.5rem] bg-terracotta text-cream">
@@ -41,11 +37,13 @@ import MediaPlaceholder from "./MediaPlaceholder.astro";
         </div>
 
         <div class="relative min-h-[320px]">
-          <MediaPlaceholder
-            id="IMG-04"
-            label="Tokyo sakura — blossom over a canal or side street, people walking beneath, warm evening light"
-            ratio="1/1"
-            class="h-full rounded-none"
+          <img
+            src="/media/tokyo-sakura.webp"
+            alt="Cherry blossom branches over a Tokyo canal at golden hour, two people walking the path beneath"
+            width="1200"
+            height="1200"
+            loading="lazy"
+            class="h-full w-full object-cover"
           />
           <span
             class="chip float-soft absolute bottom-8 left-6 bg-espresso text-cream shadow-lg"

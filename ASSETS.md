@@ -1,5 +1,11 @@
 # Curio Landing Page — Asset Brief
 
+**Status (2026-08-14):** IMG-01, IMG-02, IMG-03, IMG-04 are done — real
+generated photos, converted to WebP, wired into their components at
+`public/media/`. `IMG-02`/`IMG-03` used the non-identifying brief (hands,
+notebook, back view), not posed faces. Still outstanding: **VID-01** and
+**IMG-OG**, plus the real logo SVG and a genuine Tokyo audio sample.
+
 Every visual placeholder on the page carries an id (`IMG-01`, `VID-01`…). Find
 the id in the rendered page or in the component source, then use the matching
 brief below.
