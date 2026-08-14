@@ -24,6 +24,9 @@ export default function AudioPlayer({ src, place, title, note }: Props) {
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
+  // Once the clip finishes, the note line becomes a signup nudge — that's the
+  // moment of peak intent, and the form is one anchor-jump away.
+  const [finished, setFinished] = useState(false);
 
   // Keep React state honest even when playback changes outside our handlers
   // (autoplay blocked, media keys, headphone buttons, audio focus loss).
@@ -37,6 +40,7 @@ export default function AudioPlayer({ src, place, title, note }: Props) {
     const onEnd = () => {
       setPlaying(false);
       setCurrent(0);
+      setFinished(true);
     };
     el.addEventListener("play", onPlay);
     el.addEventListener("pause", onPause);
@@ -172,7 +176,17 @@ export default function AudioPlayer({ src, place, title, note }: Props) {
         </span>
       </div>
 
-      {note ? (
+      {finished ? (
+        <p className="mt-4 text-center text-xs text-espresso/60">
+          Like this?{" "}
+          <a
+            href="#waitlist"
+            className="font-medium text-terracotta underline-offset-2 hover:underline"
+          >
+            Get early access →
+          </a>
+        </p>
+      ) : note ? (
         <p className="mt-4 text-center text-xs text-espresso/50">{note}</p>
       ) : null}
 

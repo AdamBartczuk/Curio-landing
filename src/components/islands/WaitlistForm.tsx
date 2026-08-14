@@ -127,7 +127,7 @@ export default function WaitlistForm({
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="Which city should we do next? (optional)"
+            placeholder="Your city next? (optional)"
             className={`w-full rounded-full border-2 px-6 py-3.5 outline-none transition-colors ${field}`}
           />
         </div>
