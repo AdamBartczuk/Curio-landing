@@ -39,10 +39,11 @@ const benefits = [
 
 <section class="px-4 py-16 sm:px-6 sm:py-20" id="why">
   <div class="mx-auto max-w-6xl">
-    <div class="reveal mb-12 max-w-2xl">
+    <!-- Single-line headline + kicker — see the note in TwoWays.astro. -->
+    <div class="reveal mb-12 max-w-3xl">
+      <p class="chip mb-6 bg-sand/60 text-espresso">Why Curio</p>
       <h2 class="display-lg text-espresso">
-        Not a map.<br />
-        <span class="text-terracotta">A narrator.</span>
+        Not a map. <span class="text-terracotta">A narrator.</span>
       </h2>
       <p class="mt-5 text-lg text-espresso/70">
         Curio turns the city into something you listen to.
@@ -53,16 +54,20 @@ const benefits = [
       {
         benefits.map((b, i) => (
           <div
-            class="reveal rounded-[1.75rem] bg-cream p-7 ring-1 ring-inset ring-espresso/10 transition-shadow duration-300 hover:shadow-lg"
+            class="reveal rounded-[1.75rem] bg-cream p-5 ring-1 ring-inset ring-espresso/10 transition-shadow duration-300 hover:shadow-lg sm:p-7"
             style={`transition-delay:${i * 70}ms`}
           >
-            <div class="mb-5 grid h-11 w-11 place-items-center rounded-full bg-sand/50 text-terracotta">
-              <b.icon className="h-5 w-5" />
+            {/* Icon inline with the title — six stacked icon-over-title cards
+                made this section ~1,800px tall on a phone. */}
+            <div class="flex items-center gap-3">
+              <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand/50 text-terracotta">
+                <b.icon className="h-5 w-5" />
+              </div>
+              <h3 class="font-display text-lg font-bold text-espresso sm:text-xl">
+                {b.title}
+              </h3>
             </div>
-            <h3 class="font-display text-xl font-bold text-espresso">
-              {b.title}
-            </h3>
-            <p class="mt-2 leading-relaxed text-espresso/65">{b.body}</p>
+            <p class="mt-3 leading-relaxed text-espresso/65">{b.body}</p>
           </div>
         ))
       }
