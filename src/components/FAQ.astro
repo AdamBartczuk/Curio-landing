@@ -2,34 +2,10 @@
 /*
  * Real SEO surface — this is most of the page's indexable word count, and it
  * answers the questions the old page left open (cost, length, offline, who
- * writes it). Mirrored as FAQPage JSON-LD in Base.astro — keep both in sync.
+ * writes it, who's behind it). Content lives in src/data/faq.ts, shared with
+ * the FAQPage JSON-LD in Base.astro.
  */
-const faqs = [
-  {
-    q: "Do I need to plan a route before I go out?",
-    a: "No. That's the whole point. Open explore mode, start walking, and tap anything that catches your eye. There are planned journeys too, for when you want one, but you never have to use them.",
-  },
-  {
-    q: "How long is a single story?",
-    a: "Around two minutes. Long enough to be worth stopping for, short enough that you can listen while you keep walking.",
-  },
-  {
-    q: "Does Curio work without mobile data?",
-    a: "Yes. Download the city before you head out and everything — maps and audio — works with no signal and no roaming. Useful in Tokyo, where visitor SIMs and metro basements don't always agree.",
-  },
-  {
-    q: "Who writes the stories?",
-    a: "People who live in the city. Not rewritten guidebook copy and not the same five facts you'd find in a search result — local writers with opinions about their own neighbourhoods.",
-  },
-  {
-    q: "What will it cost?",
-    a: "There'll be a free tier you can use without paying. We're still working out the rest, and early-access members will hear it from us first.",
-  },
-  {
-    q: "When does Curio launch?",
-    a: "Tokyo comes first, in time for cherry blossom season in spring 2027. More cities follow — early-access members help decide which.",
-  },
-];
+import { faqs } from "../data/faq";
 ---
 
 <section class="px-4 py-16 sm:px-6 sm:py-20" id="faq">

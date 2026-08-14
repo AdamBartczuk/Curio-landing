@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { faqs } from "../data/faq";
 
 interface Props {
   title: string;
@@ -25,60 +26,15 @@ const appSchema = {
   author: { "@type": "Organization", name: "Curio", url: "https://curio.guide/" },
 };
 
-// FAQPage schema — mirrors the FAQ section. Keep the two in sync.
+// FAQPage schema — same data as the FAQ section, via src/data/faq.ts.
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Do I need to plan a route before I go out?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. That is the whole point. Open explore mode, start walking, and tap anything that catches your eye. Curio has planned journeys too, for when you want one, but you never have to use them.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How long is a single story?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Around two minutes. Long enough to be worth stopping for, short enough that you can listen while you keep walking.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does Curio work without mobile data?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Download the city before you head out and everything — maps and audio — works with no signal and no roaming. Useful in Tokyo, where visitor SIMs and metro basements do not always agree.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Who writes the stories?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "People who live in the city. Not rewritten guidebook copy and not the same five facts you would find in a search result — local writers with opinions about their own neighbourhoods.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What will it cost?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "There will be a free tier you can use without paying. We are still working out the rest, and early-access members will hear it from us first.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "When does Curio launch?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Tokyo comes first, in time for cherry blossom season in spring 2027. More cities follow — early-access members help decide which.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 ---
 
