@@ -11,6 +11,7 @@ import MidCTA from "../components/MidCTA.astro";
 import FAQ from "../components/FAQ.astro";
 import WaitlistCTA from "../components/WaitlistCTA.astro";
 import Footer from "../components/Footer.astro";
+import WalkPath from "../components/WalkPath.astro";
 import CookieBanner from "../components/islands/CookieBanner.tsx";
 
 const title = "Curio — Audio City Guide for Spontaneous Travel | Tokyo 2027";
@@ -21,17 +22,23 @@ const description =
 <Base title={title} description={description}>
   <Header />
 
-  <main id="main">
-    <Hero />
-    <CityWalk />
-    <TwoWays />
-    <WhyCurio />
-    <LocalVoices />
-    <TokyoFirst />
-    <MidCTA />
-    <FAQ />
-    <WaitlistCTA />
-  </main>
+  <!-- Shared positioned wrapper: WalkPath's station dots use section
+       offsetTop, which resolves against this element. -->
+  <div class="relative">
+    <WalkPath />
+
+    <main id="main">
+      <Hero />
+      <CityWalk />
+      <TwoWays />
+      <WhyCurio />
+      <LocalVoices />
+      <TokyoFirst />
+      <MidCTA />
+      <FAQ />
+      <WaitlistCTA />
+    </main>
+  </div>
 
   <Footer />
 
