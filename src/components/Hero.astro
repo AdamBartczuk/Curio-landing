@@ -81,8 +81,11 @@ const sampleTitle = "The Other Capital";
         <!-- The single most important element on the page: press play.
              Overlaps the image bottom so it reads as part of the card. -->
         <div class="relative z-10 -mt-16 px-3 sm:px-5">
+          {/* client:idle, not client:visible — the player is above the fold on
+              load, and it's the page's centrepiece: don't gate its hydration
+              on IntersectionObserver quirks. */}
           <AudioPlayer
-            client:visible
+            client:idle
             src={sampleSrc}
             place={samplePlace}
             title={sampleTitle}
