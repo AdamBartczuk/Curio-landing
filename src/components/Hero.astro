@@ -14,7 +14,7 @@ const samplePlace = "Kraków · early sample";
 const sampleTitle = "The Other Capital";
 ---
 
-<section class="relative px-4 pb-16 pt-24 sm:px-6 sm:pt-28">
+<section class="relative px-4 pb-16 pt-24 sm:px-6 sm:pt-28" id="hero">
   <div class="mx-auto max-w-6xl">
     <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
       <!-- Left: the promise -->
@@ -63,19 +63,24 @@ const sampleTitle = "The Other Capital";
           height="1425"
           class="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-xl"
           fetchpriority="high"
+          data-depth="6"
         />
 
-        <!-- Floating brand labels, per style guide pp.15-18 -->
-        <span
-          class="chip float-soft absolute -left-3 top-10 bg-terracotta text-cream shadow-lg sm:-left-5"
-        >
-          GPS
+        <!-- Floating brand labels, per style guide pp.15-18. Parallax lives on
+             the wrapper: float-soft animates the chip's own transform, and an
+             animation would override an inline transform on the same node. -->
+        <span class="absolute -left-3 top-10 sm:-left-5" data-depth="20">
+          <span class="chip float-soft bg-terracotta text-cream shadow-lg">
+            GPS
+          </span>
         </span>
-        <span
-          class="chip float-soft absolute -right-2 top-1/4 bg-sand text-espresso shadow-lg sm:-right-4"
-          style="animation-delay:-2.5s"
-        >
-          Explore
+        <span class="absolute -right-2 top-1/4 sm:-right-4" data-depth="-14">
+          <span
+            class="chip float-soft bg-sand text-espresso shadow-lg"
+            style="animation-delay:-2.5s"
+          >
+            Explore
+          </span>
         </span>
 
         <!-- The single most important element on the page: press play.
@@ -96,3 +101,46 @@ const sampleTitle = "The Other Capital";
     </div>
   </div>
 </section>
+
+<script>
+  // Pointer parallax (SPEC §5.6d): the floating chips and hero image drift a
+  // few px with the cursor. Mouse-only devices, and never under
+  // prefers-reduced-motion. Smoothing comes from a CSS transition, so there is
+  // no continuous rAF loop — work only happens on actual pointer movement.
+  const zone = document.getElementById("hero");
+  const wantsMotion =
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (zone && wantsMotion) {
+    const els = zone.querySelectorAll<HTMLElement>("[data-depth]");
+    els.forEach((el) => {
+      el.style.transition = "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+    });
+
+    let mx = 0;
+    let my = 0;
+    let raf = 0;
+
+    const apply = () => {
+      raf = 0;
+      els.forEach((el) => {
+        const depth = Number(el.dataset.depth) || 0;
+        el.style.transform = `translate(${(mx * depth).toFixed(1)}px, ${(my * depth).toFixed(1)}px)`;
+      });
+    };
+
+    zone.addEventListener("mousemove", (e) => {
+      const r = zone.getBoundingClientRect();
+      mx = (e.clientX - r.left) / r.width - 0.5;
+      my = (e.clientY - r.top) / r.height - 0.5;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+
+    zone.addEventListener("mouseleave", () => {
+      mx = 0;
+      my = 0;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+  }
+</script>
