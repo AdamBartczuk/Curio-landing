@@ -234,16 +234,25 @@ visually — more interactive, more modern, "so people explore it like a city".
 Confirmed scope: the full experience, map as stylized SVG (no photo maps).
 
 **a) Interactive Tokyo map — "The moment" becomes the demo.**
-The section's copy already names a gate, a photographed tree, an old building —
-those become tappable pins on a hand-drawn SVG neighbourhood map (brand
-colours only: espresso ground, cream streets, sand blocks, terracotta pins).
-Tap a pin → a story teaser card in brand voice with a `2 min listen` chip and
-a link to the waitlist. Five pins: gate, sakura tree, old building, corner
-izakaya, bridge. One pin pre-opened on desktop so the mechanic is obvious.
-Replaces the VID-01 video placeholder entirely. Rules: pins are real
-`<button>`s (keyboard + `aria-expanded`), teaser text is server-rendered
-(SEO gains words), **no fake audio in cards** — the only real clip stays in
-the hero. `curio:pin-opened` event mirrors the existing analytics pattern.
+*(Revised 2026-08-16: the first build used a stylized SVG neighbourhood; Adam
+found it too abstract — "doesn't look like Tokyo" — and supplied a Mapbox
+public token. It's now a real map.)*
+A **Mapbox GL** map of **Yanaka** (Tokyo's old quarter — sakura, temples,
+streets that survived 1945), Standard style with the **dusk** light preset to
+match the golden-hour brand photography, plus a dashed terracotta highlight
+around the district (approximate polygon; swap in precise GeoJSON if
+provided). Copy + the story card sit in a frosted espresso panel **overlaid
+left**; the five pins (gate, sakura tree, old building, corner izakaya,
+bridge) are geo-anchored markers **on the right**. Tap a pin → teaser card in
+brand voice with a `2 min listen` chip and a waitlist link; the map eases to
+the pin. Calm rules: no scroll-zoom, no rotate, cooperative gestures on
+touch; GL lazy-loads near the viewport (its ~520KB gzip chunk never blocks
+first paint) over a Static-Images-API frame that also serves no-JS visitors.
+The token is a Mapbox *public* token (client-side by design) — **restrict it
+to curio.guide + localhost in the Mapbox dashboard**. Pins remain real
+`<button>`s (keyboard + `aria-expanded`), teaser text stays server-rendered,
+cards are labelled sample stops, **no fake audio** — the only real clip stays
+in the hero. `curio:pin-opened` mirrors the existing analytics pattern.
 
 **b) Walking-path spine.** A dotted SVG path weaves down the left margin
 (desktop only), drawing itself as you scroll via CSS scroll-driven animations

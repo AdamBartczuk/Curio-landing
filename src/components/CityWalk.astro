@@ -1,243 +1,198 @@
 ---
 /*
- * The interactive centrepiece (SPEC §5.6a). "The moment" copy named a gate, a
- * photographed tree, an old building — here they become tappable pins on a
- * stylized SVG neighbourhood, so the section stops describing explore mode
- * and starts being it. Replaces the old TheMoment.astro + VID-01 placeholder.
+ * The interactive centrepiece (SPEC §5.6a, revised): a real Mapbox map of
+ * Yanaka — Tokyo's old quarter — replaces the earlier stylized SVG, which
+ * Adam found too abstract. Copy + story card sit in a frosted panel overlaid
+ * on the LEFT of the map; the pins live on the map itself, to the right.
  *
- * Honesty rules: this is an archetypal neighbourhood, labelled as such — no
- * invented facts about real places, and no fake audio (the one real clip
- * lives in the hero). Teasers are sample stops in the brand voice.
+ * Map: Mapbox Standard style at dusk (warm golden light + 3D buildings — the
+ * same golden-hour mood as the brand photography), lazy-initialised so the
+ * ~1.5MB GL bundle never blocks first paint. Until GL boots (or if JS is
+ * off), the container shows a Static-Images-API frame of the same view.
  *
- * Pins are HTML <button>s absolutely positioned over the SVG (percentage
- * coords) — real focus rings, ≥44px hit areas, aria-expanded. All teaser text
- * is server-rendered; the script only swaps visibility.
+ * The access token below is a Mapbox PUBLIC token (pk.) — designed to ship in
+ * client code. Restrict it to curio.guide + localhost in the Mapbox dashboard.
+ *
+ * Honesty rules still apply: pins are "sample stops" and say so — archetypal
+ * teasers, no invented facts about real venues, no fake audio (the one real
+ * clip stays in the hero player).
  */
+const MAPBOX_TOKEN =
+  import.meta.env.PUBLIC_MAPBOX_TOKEN ?? "";
+
+// Yanaka / Nezu / Sendagi — sakura, temples, and streets that survived 1945.
+const MAP_CENTER: [number, number] = [139.7635, 35.7235];
+const MAP_ZOOM = 14.8;
+
 const stops = [
   {
     id: "gate",
     name: "The gate",
-    x: 30,
-    y: 24,
+    lng: 139.7702,
+    lat: 35.7278,
     teaser:
       "Everyone photographs the famous gate two streets over. This one is older, quieter, and the reason the street bends the way it does. Worth thirty seconds of your walk.",
   },
   {
     id: "tree",
     name: "The tree",
-    x: 78,
-    y: 17,
+    lng: 139.7668,
+    lat: 35.7208,
     teaser:
       "One tree, forty photographers, every April. The story isn't the blossom — it's who planted it, and why the whole block once fought to keep it.",
   },
   {
     id: "building",
     name: "The old building",
-    x: 55,
-    y: 47,
+    lng: 139.7645,
+    lat: 35.7266,
     teaser:
       "Three earthquakes, one war, and a stubborn owner who wouldn't sell. The newest thing on this building is the vending machine outside.",
   },
   {
     id: "izakaya",
     name: "The corner izakaya",
-    x: 22,
-    y: 64,
+    lng: 139.7689,
+    lat: 35.7241,
     teaser:
       "Six seats, no menu, and one firm opinion about how you should drink your beer. The person who wrote this story has been thrown out twice.",
   },
   {
     id: "bridge",
     name: "The bridge",
-    x: 72,
-    y: 76,
+    lng: 139.7713,
+    lat: 35.7183,
     teaser:
       "Cross it at five in the evening and you'll share it with half the neighbourhood. There's a reason everyone pauses in the middle, and it isn't the view.",
   },
 ];
+
+// Instant-paint fallback while GL boots (and the no-JS view).
+const staticMapUrl =
+  `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/` +
+  `${MAP_CENTER[0]},${MAP_CENTER[1]},${MAP_ZOOM - 0.6},0/1280x720@2x` +
+  `?access_token=${MAPBOX_TOKEN}&logo=false`;
 ---
 
 <section class="px-4 py-20 sm:px-6 sm:py-28" id="walk">
   <div class="mx-auto max-w-6xl">
-    <div class="overflow-hidden rounded-[2.5rem] bg-espresso text-cream">
-      <div class="grid gap-0 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_1fr]">
-        <!-- Copy -->
-        <div class="reveal p-8 pb-4 sm:p-12 sm:pb-6 lg:p-14 lg:pb-4">
-          <p class="chip mb-7 w-fit bg-cream/10 text-cream/70">Explore mode</p>
+    <div
+      class="reveal relative overflow-hidden rounded-[2.5rem] bg-espresso text-cream"
+    >
+      <!-- Map: in-flow block on mobile, full-bleed backdrop on lg. The
+           positioning lives on this wrapper, NOT on the GL container —
+           mapbox-gl.css forces `position: relative` on its container and
+           would silently cancel an absolute placement (collapsing it to
+           zero height). The static frame here also paints while GL boots. -->
+      <div
+        class="h-[400px] w-full bg-cover bg-center sm:h-[480px] lg:absolute lg:inset-0 lg:h-full"
+        style={`background-image:url('${staticMapUrl}')`}
+      >
+        <div
+          id="city-map"
+          class="h-full w-full"
+          data-center={MAP_CENTER.join(",")}
+          data-zoom={MAP_ZOOM}
+          data-token={MAPBOX_TOKEN}
+        >
+        </div>
+      </div>
+
+      <!-- Left overlay: copy + the story card the pins drive -->
+      <div
+        class="relative z-10 p-6 sm:p-8 lg:flex lg:min-h-[680px] lg:w-[46%] lg:flex-col lg:justify-center lg:p-12"
+      >
+        <div
+          class="rounded-[2rem] bg-espresso/80 p-7 ring-1 ring-inset ring-cream/10 backdrop-blur-md sm:p-8"
+        >
+          <p class="chip mb-6 w-fit bg-cream/10 text-cream/70">Explore mode</p>
 
           <h2 class="display-lg">
             You're not lost.<br />
             You're just <span class="text-sand">curious.</span>
           </h2>
 
-          <p class="mt-6 max-w-md text-lg leading-relaxed text-cream/75">
+          <p class="mt-5 max-w-md leading-relaxed text-cream/75">
             A gate at the end of a side street. A tree everyone is
             photographing. A building older than everything around it.
             Normally you shrug and walk past — with Curio you tap it, and
             someone tells you.
           </p>
 
-          <p class="mt-5 text-sm text-cream/50">
-            Try it. Tap a pin on the map.
-          </p>
-        </div>
+          <p class="mt-4 text-sm text-cream/50">Try it. Tap a pin on the map.</p>
 
-        <!-- Map -->
-        <div
-          class="reveal relative p-6 sm:p-8 lg:row-span-2 lg:p-10 lg:pl-0"
-          id="walk-map"
-        >
-          <div class="relative">
-            <svg
-              viewBox="0 0 800 620"
-              class="block h-auto w-full rounded-[1.75rem] bg-cream/[0.05] ring-1 ring-inset ring-cream/10"
-              aria-hidden="true"
-            >
-              <!-- streets -->
-              <g stroke="#FEF0E3" stroke-opacity="0.16" stroke-linecap="round" fill="none">
-                <path d="M40 150 H760" stroke-width="12" />
-                <path d="M40 310 H760" stroke-width="12" />
-                <path d="M40 470 H520" stroke-width="12" />
-                <path d="M200 60 V560" stroke-width="12" />
-                <path d="M430 60 V560" stroke-width="12" />
-                <path d="M640 60 V240" stroke-width="12" />
-                <!-- the avenue -->
-                <path d="M70 585 L560 70" stroke-width="20" stroke-opacity="0.10" />
-              </g>
-
-              <!-- river -->
-              <path
-                d="M545 620 C590 520 660 470 800 440"
-                stroke="#FEF0E3"
-                stroke-opacity="0.09"
-                stroke-width="46"
-                fill="none"
-              />
-              <path
-                d="M545 620 C590 520 660 470 800 440"
-                stroke="#FEF0E3"
-                stroke-opacity="0.14"
-                stroke-width="2.5"
-                stroke-dasharray="8 10"
-                fill="none"
-              />
-              <!-- bridge deck -->
-              <rect x="556" y="448" width="20" height="58" rx="6" transform="rotate(52 566 477)" fill="#EAB894" fill-opacity="0.5" />
-
-              <!-- building blocks -->
-              <g fill="#EAB894" fill-opacity="0.09" stroke="#EAB894" stroke-opacity="0.30">
-                <rect x="60" y="70" width="120" height="60" rx="10" />
-                <rect x="222" y="70" width="120" height="60" rx="10" />
-                <rect x="60" y="175" width="120" height="112" rx="10" />
-                <rect x="222" y="175" width="185" height="50" rx="10" />
-                <rect x="222" y="240" width="185" height="47" rx="10" />
-                <rect x="455" y="175" width="160" height="112" rx="10" />
-                <rect x="60" y="335" width="120" height="112" rx="10" />
-                <rect x="245" y="335" width="162" height="112" rx="10" />
-                <rect x="455" y="335" width="90" height="70" rx="10" />
-                <rect x="90" y="495" width="180" height="70" rx="10" />
-                <rect x="310" y="495" width="97" height="70" rx="10" />
-              </g>
-
-              <!-- park (top-right) -->
-              <g>
-                <rect x="655" y="55" width="120" height="170" rx="18" fill="#EAB894" fill-opacity="0.07" stroke="#EAB894" stroke-opacity="0.25" />
-                <g stroke="#EAB894" stroke-opacity="0.45" fill="none">
-                  <circle cx="690" cy="95" r="13" />
-                  <circle cx="735" cy="120" r="16" />
-                  <circle cx="688" cy="155" r="11" />
-                  <circle cx="730" cy="185" r="13" />
-                </g>
-              </g>
-
-              <!-- rail line -->
-              <g>
-                <path d="M40 545 H760" stroke="#FEF0E3" stroke-opacity="0.25" stroke-width="3" stroke-dasharray="14 10" fill="none" />
-                <rect x="470" y="536" width="26" height="18" rx="5" fill="#FEF0E3" fill-opacity="0.25" />
-              </g>
-
-              <!-- labels -->
-              <g
-                fill="#FEF0E3"
-                fill-opacity="0.35"
-                font-family="Hind, sans-serif"
-                font-size="13"
-                letter-spacing="2.5"
-              >
-                <text x="62" y="52">THE OLD QUARTER</text>
-                <text x="672" y="248">PARK</text>
-                <text x="620" y="590">RIVER</text>
-                <text x="700" y="536">RAIL</text>
-              </g>
-
-              <!-- compass -->
-              <g transform="translate(748 300)" stroke="#FEF0E3" stroke-opacity="0.35" fill="none">
-                <circle r="14" />
-                <path d="M0 8 L0 -8 M0 -8 L-4 -2 M0 -8 L4 -2" stroke-linecap="round" />
-              </g>
-            </svg>
-
-            <!-- floating brand chips over the map -->
-            <span class="chip float-soft absolute -top-2 left-6 bg-terracotta text-cream shadow-lg">
-              GPS
-            </span>
-            <span
-              class="chip float-soft absolute -right-1 top-[52%] bg-sand text-espresso shadow-lg"
-              style="animation-delay:-3s"
-            >
-              Explore
-            </span>
-
-            <!-- pins -->
+          <!-- Story card slot: swapped by the pins -->
+          <div class="mt-6">
             {
               stops.map((s, i) => (
-                <button
-                  type="button"
-                  class="map-pin absolute"
-                  style={`left:${s.x}%; top:${s.y}%; --pulse-delay:${i * 0.7}s`}
-                  data-stop={s.id}
-                  aria-expanded={i === 0 ? "true" : "false"}
-                  aria-controls={`stop-card-${s.id}`}
+                <article
+                  id={`stop-card-${s.id}`}
+                  data-card={s.id}
+                  class="stop-card rounded-[1.5rem] bg-cream/[0.08] p-5 ring-1 ring-inset ring-cream/15 sm:p-6"
+                  hidden={i !== 0}
                 >
-                  <span class="sr-only">{s.name} — show story teaser</span>
-                  <span class="pin-dot" aria-hidden="true" />
-                </button>
+                  <div class="flex flex-wrap items-center justify-between gap-3">
+                    <p class="chip bg-terracotta text-cream">
+                      Stop 0{i + 1} · {s.name}
+                    </p>
+                    <span class="chip bg-cream/10 text-cream/60">
+                      2 min listen
+                    </span>
+                  </div>
+                  <p class="mt-3 text-sm leading-relaxed text-cream/80 sm:text-base">
+                    {s.teaser}
+                  </p>
+                  <a
+                    href="#waitlist"
+                    class="mt-3 inline-block text-sm font-medium text-sand underline-offset-2 hover:underline"
+                  >
+                    Hear stories like this →
+                  </a>
+                </article>
               ))
             }
           </div>
 
-          <p class="mt-4 text-center text-xs text-cream/40">
-            A stylized neighbourhood. The real Tokyo map arrives with launch.
+          <p class="mt-5 text-xs text-cream/40">
+            Yanaka — Tokyo's old quarter. Sample stops; the full story map
+            arrives with launch.
           </p>
         </div>
+      </div>
 
-        <!-- Story card slot: swapped by the pins -->
-        <div class="p-8 pt-2 sm:p-12 sm:pt-3 lg:p-14 lg:pt-4">
-          {
-            stops.map((s, i) => (
-              <article
-                id={`stop-card-${s.id}`}
-                data-card={s.id}
-                class="stop-card rounded-[1.75rem] bg-cream/[0.07] p-6 ring-1 ring-inset ring-cream/15 sm:p-7"
-                hidden={i !== 0}
-              >
-                <div class="flex items-center justify-between gap-4">
-                  <p class="chip bg-terracotta text-cream">
-                    Stop 0{i + 1} · {s.name}
-                  </p>
-                  <span class="chip bg-cream/10 text-cream/60">2 min listen</span>
-                </div>
-                <p class="mt-4 leading-relaxed text-cream/80">{s.teaser}</p>
-                <a
-                  href="#waitlist"
-                  class="mt-4 inline-block text-sm font-medium text-sand underline-offset-2 hover:underline"
-                >
-                  Hear stories like this →
-                </a>
-              </article>
-            ))
-          }
-        </div>
+      <!-- Floating brand chips over the map (desktop; the map is behind) -->
+      <span
+        class="chip float-soft absolute right-8 top-8 z-10 hidden bg-terracotta text-cream shadow-lg lg:inline-flex"
+      >
+        GPS
+      </span>
+      <span
+        class="chip float-soft absolute bottom-10 right-1/4 z-10 hidden bg-sand text-espresso shadow-lg lg:inline-flex"
+        style="animation-delay:-3s"
+      >
+        Explore
+      </span>
+
+      <!-- Pins: server-rendered here, adopted as geo-anchored map markers by
+           the script. Staging box is invisible but keeps them in the DOM
+           (and focusable in order) if GL never boots. -->
+      <div id="pin-staging" class="absolute inset-x-6 bottom-6 z-10 flex gap-3 lg:inset-auto">
+        {
+          stops.map((s, i) => (
+            <button
+              type="button"
+              class="map-pin"
+              style={`--pulse-delay:${i * 0.7}s`}
+              data-stop={s.id}
+              data-lnglat={`${s.lng},${s.lat}`}
+              aria-expanded={i === 0 ? "true" : "false"}
+              aria-controls={`stop-card-${s.id}`}
+            >
+              <span class="sr-only">{s.name} — show story teaser</span>
+              <span class="pin-dot" aria-hidden="true" />
+            </button>
+          ))
+        }
       </div>
     </div>
   </div>
@@ -245,10 +200,9 @@ const stops = [
 
 <style>
   .map-pin {
-    /* ≥44px hit area, centred on its coordinate */
+    /* ≥44px hit area */
     width: 44px;
     height: 44px;
-    transform: translate(-50%, -50%);
     display: grid;
     place-items: center;
     border-radius: 999px;
@@ -261,7 +215,9 @@ const stops = [
     height: 20px;
     border-radius: 999px;
     background: var(--color-terracotta);
-    box-shadow: 0 0 0 4px rgba(254, 240, 227, 0.85);
+    box-shadow:
+      0 0 0 4px rgba(254, 240, 227, 0.9),
+      0 4px 12px rgba(0, 0, 0, 0.35);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -275,7 +231,7 @@ const stops = [
     position: absolute;
     inset: -4px;
     border-radius: 999px;
-    border: 2px solid rgba(254, 240, 227, 0.7);
+    border: 2px solid rgba(254, 240, 227, 0.75);
     animation: pin-pulse 2.8s ease-out infinite;
     animation-delay: var(--pulse-delay, 0s);
   }
@@ -297,7 +253,8 @@ const stops = [
     background: var(--color-cream);
     box-shadow:
       0 0 0 4px var(--color-terracotta),
-      0 0 0 8px rgba(254, 240, 227, 0.35);
+      0 0 0 8px rgba(254, 240, 227, 0.35),
+      0 4px 12px rgba(0, 0, 0, 0.35);
     transform: scale(1.15);
   }
 
@@ -321,6 +278,17 @@ const stops = [
     }
   }
 
+  /* Mapbox chrome, nudged toward the brand */
+  #city-map :global(.mapboxgl-ctrl-attrib) {
+    background: rgba(53, 29, 6, 0.6);
+    color: rgba(254, 240, 227, 0.6);
+    border-radius: 999px 0 0 0;
+  }
+
+  #city-map :global(.mapboxgl-ctrl-attrib a) {
+    color: rgba(254, 240, 227, 0.6);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .pin-dot::after {
       animation: none;
@@ -333,20 +301,182 @@ const stops = [
 </style>
 
 <script>
+  const mapEl = document.getElementById("city-map");
+  const staging = document.getElementById("pin-staging");
   const pins = document.querySelectorAll<HTMLButtonElement>("[data-stop]");
   const cards = document.querySelectorAll<HTMLElement>("[data-card]");
 
+  // Card swapping works with or without the map.
   pins.forEach((pin) => {
     pin.addEventListener("click", () => {
       const id = pin.dataset.stop;
-      pins.forEach((p) =>
-        p.setAttribute("aria-expanded", String(p === pin)),
-      );
+      pins.forEach((p) => p.setAttribute("aria-expanded", String(p === pin)));
       cards.forEach((c) => {
         c.hidden = c.dataset.card !== id;
       });
-      // Same first-party event pattern as the audio sample / waitlist signup.
       window.dispatchEvent(new CustomEvent("curio:pin-opened"));
     });
   });
+
+  // Lazy-boot Mapbox GL: when the section approaches the viewport, with an
+  // idle-time fallback for environments where IntersectionObserver is quiet.
+  let booted = false;
+
+  const boot = async () => {
+    if (booted || !mapEl) return;
+    booted = true;
+
+    const [{ default: mapboxgl }] = await Promise.all([
+      import("mapbox-gl"),
+      import("mapbox-gl/dist/mapbox-gl.css"),
+    ]);
+
+    mapboxgl.accessToken = mapEl.dataset.token || "";
+    const center = (mapEl.dataset.center || "139.7635,35.7235")
+      .split(",")
+      .map(Number) as [number, number];
+
+    const desktop = window.matchMedia("(min-width: 1024px)").matches;
+
+    const map = new mapboxgl.Map({
+      container: mapEl,
+      style: "mapbox://styles/mapbox/standard",
+      center,
+      zoom: Number(mapEl.dataset.zoom) || 14.8,
+      pitch: desktop ? 48 : 30,
+      bearing: -12,
+      attributionControl: true,
+      // Calm rules: never fight the page scroll, never spin the city.
+      scrollZoom: false,
+      dragRotate: false,
+      pitchWithRotate: false,
+      cooperativeGestures: !desktop,
+    });
+
+    // The left overlay panel covers ~46% on desktop — pad the viewport so the
+    // visual centre (and every easeTo target) lands in the open right side.
+    // Recomputed on resize: a map booted on desktop must drop the padding if
+    // the window crosses down through the breakpoint (and vice versa).
+    const applyPadding = () => {
+      const wide = window.matchMedia("(min-width: 1024px)").matches;
+      map.setPadding(
+        wide
+          ? { left: 520, top: 0, right: 40, bottom: 0 }
+          : { left: 0, top: 0, right: 0, bottom: 0 },
+      );
+    };
+    applyPadding();
+
+    // Belt-and-braces beside GL's own ResizeObserver: some embedded webviews
+    // throttle observers hard enough that the canvas gets stuck at its boot
+    // size. An explicit resize on window resize costs nothing elsewhere.
+    window.addEventListener(
+      "resize",
+      () => {
+        map.resize();
+        applyPadding();
+        map.jumpTo({ center });
+      },
+      { passive: true },
+    );
+
+    map.on("style.load", () => {
+      // Dusk = the brand's golden hour.
+      map.setConfigProperty("basemap", "lightPreset", "dusk");
+
+      // Approximate Yanaka highlight. Swap `coordinates` for a precise
+      // boundary GeoJSON if one is ever provided.
+      map.addSource("district", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [139.7594, 35.7208],
+                [139.7625, 35.7301],
+                [139.7716, 35.7312],
+                [139.7756, 35.7243],
+                [139.7728, 35.7158],
+                [139.7636, 35.7152],
+                [139.7594, 35.7208],
+              ],
+            ],
+          },
+        },
+      });
+      map.addLayer({
+        id: "district-fill",
+        type: "fill",
+        source: "district",
+        slot: "middle",
+        paint: { "fill-color": "#CA5137", "fill-opacity": 0.08 },
+      });
+      map.addLayer({
+        id: "district-line",
+        type: "line",
+        source: "district",
+        slot: "middle",
+        paint: {
+          "line-color": "#CA5137",
+          "line-opacity": 0.55,
+          "line-width": 2,
+          "line-dasharray": [1.5, 2.5],
+        },
+      });
+    });
+
+    // Adopt the server-rendered pin buttons as geo-anchored markers.
+    const bounds = new mapboxgl.LngLatBounds();
+    pins.forEach((pin) => {
+      const [lng, lat] = (pin.dataset.lnglat || "0,0").split(",").map(Number);
+      bounds.extend([lng, lat]);
+      new mapboxgl.Marker({ element: pin, anchor: "center" })
+        .setLngLat([lng, lat])
+        .addTo(map);
+
+      pin.addEventListener("click", () => {
+        map.easeTo({ center: [lng, lat], duration: 900 });
+      });
+    });
+
+    // Below the breakpoint the composed desktop framing doesn't apply —
+    // frame the pin cluster itself so every pin starts on screen.
+    if (!desktop) {
+      map.fitBounds(bounds, {
+        padding: { top: 70, bottom: 70, left: 45, right: 45 },
+        duration: 0,
+      });
+    }
+    // Staging box has served its purpose.
+    staging?.classList.remove("flex", "absolute");
+
+    // A gentle establishing drift once, unless the visitor prefers stillness.
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      map.once("idle", () => {
+        map.easeTo({ bearing: -4, duration: 6000, easing: (t) => t });
+      });
+    }
+  };
+
+  if ("IntersectionObserver" in window && mapEl) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          boot();
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(mapEl);
+  }
+  // Fallback: idle-boot even if the observer never fires.
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(() => boot(), { timeout: 4000 });
+  } else {
+    setTimeout(() => boot(), 2500);
+  }
 </script>
