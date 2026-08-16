@@ -17,13 +17,17 @@ export const faqs: FaqItem[] = [
     q: "How long is a single story?",
     a: "Around two minutes. Long enough to be worth stopping for, short enough that you can listen while you keep walking.",
   },
+  // MISSING: "What language are the stories in?" belongs here. SPEC §4 lists
+  // languages as a job for this FAQ and it is still unanswered — for a European
+  // traveller heading to Japan it's a top-three question. Needs a real product
+  // answer from Adam; don't guess one. Tracked in SPEC §7.
   {
     q: "Does Curio work without mobile data?",
-    a: "Yes. Download the city before you head out and everything — maps and audio — works with no signal and no roaming. Useful in Tokyo, where visitor SIMs and metro basements don't always agree.",
+    a: "Yes. Download the city before you head out, and the maps and audio both work with no signal. Handy in Tokyo, where the metro runs deep underground and visitor SIMs can be patchy.",
   },
   {
     q: "Who writes the stories?",
-    a: "People who live in the city. Not rewritten guidebook copy and not the same five facts you'd find in a search result — local writers with opinions about their own neighbourhoods.",
+    a: "People who live in the city. Not rewritten guidebook copy and not the same five facts you'd find in a search result. Local writers with opinions about their own neighbourhoods.",
   },
   {
     q: "Who's behind Curio?",
@@ -35,6 +39,6 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "When does Curio launch?",
-    a: "Tokyo comes first, in time for cherry blossom season in spring 2027. More cities follow — early-access members help decide which.",
+    a: "Tokyo comes first, in time for cherry blossom season in spring 2027. More cities follow, and early-access members help decide which.",
   },
 ];
