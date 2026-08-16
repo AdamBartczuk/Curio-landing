@@ -312,9 +312,11 @@ Contrast: `espresso` on `cream` and `cream` on `terracotta` both pass WCAG AA.
   Texture only: it warms the cream without adding a motif.
   *Topographic contour lines were considered and rejected* — contours read as
   elevation and wilderness (the Strava/AllTrails register) where Curio is urban
-  discovery in a low-relief city, and the page already carries two cartographic
-  motifs in its first two screens: the `WalkPath` route spine running through the
-  hero gutter, and the real Mapbox map of Yanaka directly below. Don't re-propose.
+  discovery in a low-relief city, and the real Mapbox map of Yanaka sits directly
+  below the hero, so a second cartographic motif adds no meaning. The spine cut
+  in §5.6b points the same way: decorative line-work beside the content reads as
+  a stray line, not a route. Texture is the safe register here; motifs are not.
+  Don't re-propose.
 - **Warm photography** — golden-hour street scenes, headphones, motion blur,
   graded warm. Replaces the current cool Unsplash shot.
 - **Rounded-rectangle cards** with generous radius; soft, not heavy shadows.
