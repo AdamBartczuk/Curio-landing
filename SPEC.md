@@ -241,7 +241,22 @@ A **Mapbox GL** map of **Yanaka** (Tokyo's old quarter — sakura, temples,
 streets that survived 1945), Standard style with the **dusk** light preset to
 match the golden-hour brand photography, plus a dashed terracotta highlight
 around the district (approximate polygon; swap in precise GeoJSON if
-provided). Copy + the story card sit in a frosted espresso panel **overlaid
+provided).
+
+*Curation and palette (added 2026-08-16).* The stock basemap labels every
+convenience store, bank and school — noise that contradicts "someone chose
+this for you". All default POI, transit and road labels are off; in their
+place a **curated landmark layer** (from `mapbox.mapbox-streets-v8`
+`poi_label`) shows only temples, shrines, gardens, parks, museums and
+historic sites, in sand with a small dot. Neighbourhood names stay for
+orientation. Deliberately **not** filtered by Mapbox's `filterrank` — in
+Yanaka the good places are small and rank 3–5, so a strict rank cut removes
+exactly what we came for; `class` does the filtering, with
+`arts_and_entertainment` narrowed by `maki` so cinemas and nightlife stay
+out. The basemap is repainted in brand tones via the Standard style's
+`color*` config properties (warm espresso ground, sand roads, terracotta
+motorways, cream labels) — mid-tone values on purpose, since the dusk preset
+darkens whatever it's given. Copy + the story card sit in a frosted espresso panel **overlaid
 left**; the five pins (gate, sakura tree, old building, corner izakaya,
 bridge) are geo-anchored markers **on the right**. Tap a pin → teaser card in
 brand voice with a `2 min listen` chip and a waitlist link; the map eases to

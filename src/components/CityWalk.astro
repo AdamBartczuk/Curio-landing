@@ -355,19 +355,37 @@ const staticMapUrl =
       cooperativeGestures: !desktop,
     });
 
-    // The left overlay panel covers ~46% on desktop — pad the viewport so the
-    // visual centre (and every easeTo target) lands in the open right side.
-    // Recomputed on resize: a map booted on desktop must drop the padding if
-    // the window crosses down through the breakpoint (and vice versa).
-    const applyPadding = () => {
-      const wide = window.matchMedia("(min-width: 1024px)").matches;
-      map.setPadding(
-        wide
-          ? { left: 520, top: 0, right: 40, bottom: 0 }
-          : { left: 0, top: 0, right: 0, bottom: 0 },
-      );
+    /* Framing differs by breakpoint and must survive a resize — a window
+     * dragged narrow (or a tablet rotating) otherwise keeps the desktop
+     * padding and pushes every pin off-screen.
+     *   wide: the overlay panel covers ~46%, so pad the viewport left and
+     *         let the composed centre sit in the open right side.
+     *   narrow: no panel overlap — frame the pin cluster itself. */
+    const stopCoords = Array.from(pins).map(
+      (p) =>
+        (p.dataset.lnglat || "0,0").split(",").map(Number) as [number, number],
+    );
+    const pinBounds = new mapboxgl.LngLatBounds();
+    stopCoords.forEach((c) => pinBounds.extend(c));
+
+    const baseZoom = Number(mapEl.dataset.zoom) || 14.8;
+
+    const frame = () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        map.setPadding({ left: 520, top: 0, right: 40, bottom: 0 });
+        // Restore zoom as well as centre: coming back from the narrow
+        // layout the map would otherwise keep fitBounds' tighter zoom and
+        // strand the pins behind the overlay panel.
+        map.jumpTo({ center, zoom: baseZoom });
+      } else {
+        map.setPadding({ left: 0, top: 0, right: 0, bottom: 0 });
+        map.fitBounds(pinBounds, {
+          padding: { top: 70, bottom: 70, left: 45, right: 45 },
+          duration: 0,
+        });
+      }
     };
-    applyPadding();
+    frame();
 
     // Belt-and-braces beside GL's own ResizeObserver: some embedded webviews
     // throttle observers hard enough that the canvas gets stuck at its boot
@@ -376,15 +394,42 @@ const staticMapUrl =
       "resize",
       () => {
         map.resize();
-        applyPadding();
-        map.jumpTo({ center });
+        frame();
       },
       { passive: true },
     );
 
     map.on("style.load", () => {
+      const cfg = (k: string, v: unknown) =>
+        map.setConfigProperty("basemap", k, v);
+
       // Dusk = the brand's golden hour.
-      map.setConfigProperty("basemap", "lightPreset", "dusk");
+      cfg("lightPreset", "dusk");
+      // "faded" calms the stock hues so our palette below reads cleanly.
+      cfg("theme", "faded");
+
+      /* Curation, not cartography. The stock basemap labels every
+       * convenience store, bank branch and elementary school — noise that
+       * fights the "someone chose this for you" promise. All default POI and
+       * transit labels go; a curated landmark layer is added further down.
+       * Neighbourhood names stay: they're orientation, not clutter. */
+      cfg("showPointOfInterestLabels", false);
+      cfg("showTransitLabels", false);
+      cfg("showRoadLabels", false);
+      cfg("showPlaceLabels", true);
+
+      /* Palette. Mid-tones on purpose — the dusk preset darkens everything
+       * it touches, so picking final values here would come out muddy. */
+      cfg("colorLand", "#57381C"); // warm ground, reads espresso at dusk
+      cfg("colorBuildings", "#6E4A2A");
+      cfg("colorGreenspace", "#55552C"); // parks: warm olive, not lawn green
+      cfg("colorWater", "#2B3238");
+      cfg("colorRoads", "#9C7A56"); // sand
+      cfg("colorMotorways", "#B5623F"); // terracotta-leaning
+      cfg("colorTrunks", "#A9603E");
+      cfg("colorPlaceLabels", "#FEF0E3"); // cream
+      cfg("colorAdminBoundaries", "#8A6A4C");
+      cfg("roadsBrightness", 0.55);
 
       // Approximate Yanaka highlight. Swap `coordinates` for a precise
       // boundary GeoJSON if one is ever provided.
@@ -428,13 +473,103 @@ const staticMapUrl =
           "line-dasharray": [1.5, 2.5],
         },
       });
+
+      /* Curated landmarks: the only POIs on this map. Temples, shrines,
+       * gardens, museums and historic sites — the things a story would
+       * actually be written about — from Mapbox's own Streets tileset.
+       * `filterrank` is Mapbox's prominence score (1 = most prominent), so
+       * this keeps the landmarks a visitor would recognise and drops the
+       * long tail. */
+      map.addSource("landmarks", {
+        type: "vector",
+        url: "mapbox://mapbox.mapbox-streets-v8",
+      });
+
+      /* Temples, shrines, gardens, museums, historic sites — and nothing
+       * else. Deliberately NOT filtered by Mapbox's `filterrank`: in Yanaka
+       * the interesting places are small, so they rank 3–5 and a strict rank
+       * cut removes exactly what we came for. Class does the work instead;
+       * `arts_and_entertainment` is narrowed by maki so cinemas and
+       * nightlife don't sneak in. */
+      const landmarkFilter = [
+        "any",
+        [
+          "in",
+          ["get", "class"],
+          ["literal", ["park_like", "historic", "religion"]],
+        ],
+        [
+          "in",
+          ["get", "maki"],
+          [
+            "literal",
+            [
+              "museum",
+              "art-gallery",
+              "monument",
+              "attraction",
+              "castle",
+              "garden",
+              "religious-shinto",
+              "religious-buddhist",
+              "place-of-worship",
+            ],
+          ],
+        ],
+      ] as unknown as never;
+
+      map.addLayer({
+        id: "landmark-labels",
+        type: "symbol",
+        source: "landmarks",
+        "source-layer": "poi_label",
+        slot: "top",
+        minzoom: 13,
+        filter: landmarkFilter,
+        layout: {
+          "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+          "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+          "text-size": 12,
+          "text-offset": [0, 1.1],
+          "text-anchor": "top",
+          "text-max-width": 9,
+          "text-padding": 6,
+          "icon-allow-overlap": false,
+        },
+        paint: {
+          "text-color": "#EAB894", // sand
+          "text-halo-color": "#2A1708",
+          "text-halo-width": 1.4,
+          "text-opacity": 0.9,
+        },
+      });
+
+      // A small sand dot under each curated name, so they read as places.
+      map.addLayer(
+        {
+          id: "landmark-dots",
+          type: "circle",
+          source: "landmarks",
+          "source-layer": "poi_label",
+          slot: "top",
+          minzoom: 13,
+          filter: landmarkFilter,
+          paint: {
+            "circle-radius": 3,
+            "circle-color": "#EAB894",
+            "circle-opacity": 0.75,
+            "circle-stroke-width": 1.5,
+            "circle-stroke-color": "#2A1708",
+            "circle-stroke-opacity": 0.6,
+          },
+        },
+        "landmark-labels",
+      );
     });
 
     // Adopt the server-rendered pin buttons as geo-anchored markers.
-    const bounds = new mapboxgl.LngLatBounds();
     pins.forEach((pin) => {
       const [lng, lat] = (pin.dataset.lnglat || "0,0").split(",").map(Number);
-      bounds.extend([lng, lat]);
       // occludedOpacity 1: GL v3 fades markers hidden behind 3D buildings to
       // 20% — at dusk on this palette that reads as "no pins at all".
       // The pins are UI, not scenery; they must always win.
@@ -451,14 +586,6 @@ const staticMapUrl =
       });
     });
 
-    // Below the breakpoint the composed desktop framing doesn't apply —
-    // frame the pin cluster itself so every pin starts on screen.
-    if (!desktop) {
-      map.fitBounds(bounds, {
-        padding: { top: 70, bottom: 70, left: 45, right: 45 },
-        duration: 0,
-      });
-    }
     // Staging box has served its purpose.
     staging?.classList.remove("flex", "absolute");
 
