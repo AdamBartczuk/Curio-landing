@@ -434,6 +434,31 @@ to curio.guide + localhost in the Mapbox dashboard**. Pins remain real
 cards are labelled sample stops, **no fake audio** — the only real clip stays
 in the hero. `curio:pin-opened` mirrors the existing analytics pattern.
 
+*Demo mode + mobile carousel (decided 2026-08-16, Adam's pick "B + C" over
+desktop scrollytelling).* The section should read as **the app in use**, so:
+
+- **Demo mode (all breakpoints):** every 7s the tour advances one stop —
+  camera, card, walking route — through the same `openStop` path a tap uses.
+  Three hard rules: the **first human gesture** on the map or carousel ends
+  it for good (the demo attracts, it never wrestles); it only runs while
+  ≥200px of the section is on screen **and** the tab is visible; under
+  `prefers-reduced-motion` it never starts. Visibility is checked with a
+  rect inside the tick, NOT IntersectionObserver — IO callbacks simply never
+  fire in some embedded webviews, which would freeze the demo forever.
+  Demo-driven advances do **not** dispatch `curio:pin-opened`; only human
+  opens count, or the metric is meaningless.
+- **Mobile carousel (below `lg`):** the five story cards are ONE
+  server-rendered snap carousel under the map — swiping a card flies the map
+  to its stop (the most app-like gesture a phone has), tapping a pin snaps
+  the carousel back. The active card takes a terracotta ring. On desktop the
+  same markup is `display:none` and serves as the popup's clone source, so
+  the truth exists once in the HTML (and mobile-first indexing sees it as
+  visible text). Scroll-settle is a 120ms `setTimeout` debounce, not rAF —
+  rAF is suspended in throttled tabs and a timeout waits out the snap.
+- Scrollytelling was considered and parked: on phones sticky + ~450vh is a
+  thumb tunnel and would need a second mechanism anyway. If it returns, it
+  is desktop-only sugar over these same `openStop` steps.
+
 **b) Walking-path spine.** A dotted SVG path weaves down the left margin
 (desktop only), drawing itself as you scroll via CSS scroll-driven animations
 (`animation-timeline`), with numbered stop pills at each section. No JS; no

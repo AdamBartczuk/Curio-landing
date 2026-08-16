@@ -138,6 +138,84 @@ const staticMapUrl =
         </div>
       </div>
 
+      {/*
+        The five story cards, server-rendered ONCE. Below lg this is a
+        thumb-swipeable snap carousel wired to the map (swiping a card flies
+        the map to its stop — the most app-like gesture a phone has). On lg
+        it is display:none and serves as the template the popup clones from,
+        so there is exactly one copy of the truth in the HTML.
+      */}
+      <div id="stop-carousel" class="relative z-10 px-4 pb-4 pt-3 sm:px-6 lg:hidden">
+        <div class="carousel-track" role="list">
+          {
+            stops.map((s, i) => (
+              <div class="walk-popup stop-shell" role="listitem" data-cc={s.id}>
+                <article
+                  id={`stop-card-${s.id}`}
+                  data-card={s.id}
+                  class="stop-card"
+                >
+                  <div class="stop-hero">
+                    <img
+                      class="stop-hero-img"
+                      src={s.photo}
+                      alt=""
+                      width="360"
+                      height="360"
+                      loading="lazy"
+                    />
+                    <div class="stop-hero-text">
+                      <p class="stop-kind">
+                        Stop 0{i + 1} · {s.kind}
+                      </p>
+                      <h3 class="stop-name">{s.name}</h3>
+                    </div>
+                  </div>
+
+                  {/* Filled from the Directions API when the card activates;
+                      stays hidden if the request fails, so no distance is
+                      ever invented. */}
+                  <p class="stop-walk" hidden>
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <ellipse cx="7.5" cy="7" rx="3" ry="4.4" transform="rotate(-12 7.5 7)" />
+                      <ellipse cx="6.6" cy="13.2" rx="2.4" ry="1.7" transform="rotate(-12 6.6 13.2)" />
+                      <ellipse cx="16.5" cy="11.6" rx="3" ry="4.4" transform="rotate(10 16.5 11.6)" />
+                      <ellipse cx="17.4" cy="17.8" rx="2.4" ry="1.7" transform="rotate(10 17.4 17.8)" />
+                    </svg>
+                    <span class="stop-walk-text"></span>
+                  </p>
+
+                  <p class="stop-teaser">{s.teaser}</p>
+
+                  {/* Deliberately inert and labelled as such — the narration
+                      doesn't exist yet, and a play button that does nothing
+                      would be a lie. Swap for the real AudioPlayer island
+                      when the clips land. */}
+                  <div class="stop-audio">
+                    <span class="stop-audio-play" aria-hidden="true">▶</span>
+                    <span class="stop-audio-track" aria-hidden="true">
+                      <span class="stop-audio-fill" />
+                    </span>
+                    <span class="stop-audio-time">2:00</span>
+                  </div>
+                  <p class="stop-audio-note">Narration arrives with launch</p>
+
+                  <a class="stop-link" href="#waitlist">
+                    Get early access →
+                  </a>
+                </article>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
       <!-- Copy panel: in-flow on mobile, pinned to the map's top-left corner
            on lg as a floating glass card (it no longer fills the column, so
            nothing needs to be hidden to make it fit). -->
@@ -164,82 +242,7 @@ const staticMapUrl =
           <p class="mt-4 text-sm text-cream/50">
             Try it. Tap a pin on the map: five real stops in Yanaka.
           </p>
-
-          {/* Below lg the story lands here instead of in a popup: a ~230px
-              popup cannot fit above a pin inside a 400px-tall phone map, and
-              Mapbox flips it off the map edge. Desktop uses the popup. */}
-          <div id="stop-slot" class="walk-popup mt-5 lg:hidden"></div>
         </div>
-      </div>
-
-      {/*
-        Story cards live here, server-rendered, so the text is in the HTML for
-        search engines and for anyone without JS. The script clones a card
-        into a Mapbox popup on click; the originals stay put.
-      */}
-      <div id="stop-cards" class="sr-only">
-        {
-          stops.map((s, i) => (
-            <article id={`stop-card-${s.id}`} data-card={s.id} class="stop-card">
-              {/* Photo heads the card and dissolves into the espresso body,
-                  so the name sits on the image rather than under it. */}
-              <div class="stop-hero">
-                <img
-                  class="stop-hero-img"
-                  src={s.photo}
-                  alt=""
-                  width="360"
-                  height="360"
-                  loading="lazy"
-                />
-                <div class="stop-hero-text">
-                  <p class="stop-kind">
-                    Stop 0{i + 1} · {s.kind}
-                  </p>
-                  <h3 class="stop-name">{s.name}</h3>
-                </div>
-              </div>
-
-              {/* Filled from the Directions API when the card opens; stays
-                  hidden if the request fails, so no distance is ever
-                  invented. */}
-              <p class="stop-walk" hidden>
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <ellipse cx="7.5" cy="7" rx="3" ry="4.4" transform="rotate(-12 7.5 7)" />
-                  <ellipse cx="6.6" cy="13.2" rx="2.4" ry="1.7" transform="rotate(-12 6.6 13.2)" />
-                  <ellipse cx="16.5" cy="11.6" rx="3" ry="4.4" transform="rotate(10 16.5 11.6)" />
-                  <ellipse cx="17.4" cy="17.8" rx="2.4" ry="1.7" transform="rotate(10 17.4 17.8)" />
-                </svg>
-                <span class="stop-walk-text"></span>
-              </p>
-
-              <p class="stop-teaser">{s.teaser}</p>
-
-              {/* Deliberately inert and labelled as such — the narration
-                  doesn't exist yet, and a play button that does nothing
-                  would be a lie. Swap for the real AudioPlayer island when
-                  the clips land. */}
-              <div class="stop-audio">
-                <span class="stop-audio-play" aria-hidden="true">▶</span>
-                <span class="stop-audio-track" aria-hidden="true">
-                  <span class="stop-audio-fill" />
-                </span>
-                <span class="stop-audio-time">2:00</span>
-              </div>
-              <p class="stop-audio-note">Narration arrives with launch</p>
-
-              <a class="stop-link" href="#waitlist">
-                Get early access →
-              </a>
-            </article>
-          ))
-        }
       </div>
 
       {/* Replaces the decorative "GPS" chip: at this zoom the map could be
@@ -740,13 +743,42 @@ const staticMapUrl =
     text-shadow: 0 1px 12px rgba(53, 29, 6, 0.65);
   }
 
-  /* The mobile slot borrows the popup's inner styles but supplies its own
-     shell, since there's no .mapboxgl-popup-content wrapping it. */
-  #stop-slot:not(:empty) {
+  /* ---------------------------------------------------------------------
+     Mobile card carousel (also the popup's clone source on desktop)
+     --------------------------------------------------------------------- */
+  .carousel-track {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* breathing room so the snapped card centres with a peek of the next */
+    padding: 2px 2px 6px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Card shell: borrows the popup's inner styles via the walk-popup class,
+     supplies its own chrome since there's no .mapboxgl-popup-content here. */
+  .stop-shell {
+    scroll-snap-align: center;
+    flex: 0 0 86%;
+    max-width: 340px;
     border-radius: 1.5rem;
+    overflow: hidden;
     background: rgba(254, 240, 227, 0.08);
     box-shadow: inset 0 0 0 1px rgba(254, 240, 227, 0.15);
-    animation: card-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: box-shadow 0.3s;
+  }
+
+  /* The stop the map is currently showing. */
+  .stop-shell[data-active="true"] {
+    box-shadow:
+      inset 0 0 0 2px rgba(202, 81, 55, 0.75),
+      0 10px 26px -14px rgba(53, 29, 6, 0.6);
   }
 
   :global(.walk-popup .stop-kind) {
@@ -1293,12 +1325,105 @@ const staticMapUrl =
     };
 
     let openId = "";
+    const pinsArr = Array.from(pins);
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    /* --- Mobile: the carousel is the story surface ---------------------- */
+    const track = document.querySelector(
+      "#stop-carousel .carousel-track",
+    ) as HTMLElement | null;
+    const shells = track
+      ? (Array.from(track.children) as HTMLElement[])
+      : [];
+    let mobileIdx = -1;
+    // Programmatic snaps also fire `scroll`; anything settling within this
+    // window is ours, not a thumb, so it must not count as user intent.
+    let carouselAutoAt = 0;
+
+    const carouselTo = (idx: number) => {
+      const shell = shells[idx];
+      if (!track || !shell) return;
+      carouselAutoAt = Date.now();
+      track.scrollTo({
+        left: shell.offsetLeft - (track.clientWidth - shell.clientWidth) / 2,
+        behavior: reducedMotion ? "auto" : "smooth",
+      });
+    };
+
+    const activateStop = (idx: number, user: boolean) => {
+      if (idx === mobileIdx) return;
+      const pin = pinsArr[idx];
+      if (!pin) return;
+      mobileIdx = idx;
+
+      clearPins();
+      pin.setAttribute("aria-expanded", "true");
+      openId = pin.dataset.stop || "";
+      setRoute(null);
+      shells.forEach((s, i) => {
+        s.dataset.active = String(i === idx);
+      });
+
+      const at = stopCoords[idx];
+      const card = cardFor(openId); // the carousel card itself, no clone
+      if (card) {
+        const walkEl = card.querySelector(".stop-walk") as HTMLElement | null;
+        if (walkEl) walkEl.hidden = true;
+        showRoute(openId, at, card);
+      }
+
+      map.easeTo({ center: at, duration: reducedMotion ? 0 : 620 });
+      if (user) window.dispatchEvent(new CustomEvent("curio:pin-opened"));
+    };
+
+    /* Swiping a card is the activation gesture: when the scroll goes quiet
+     * for a beat, the nearest card wins. Debounced with setTimeout rather
+     * than rAF — rAF is suspended in throttled/hidden tabs, and a timeout
+     * naturally waits for the snap to finish instead of firing mid-fling. */
+    if (track) {
+      let settleTimer = 0;
+      const settle = () => {
+        const centre = track.scrollLeft + track.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        shells.forEach((s, i) => {
+          const d = Math.abs(s.offsetLeft + s.clientWidth / 2 - centre);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        });
+        if (best !== mobileIdx) {
+          activateStop(best, Date.now() - carouselAutoAt > 900);
+        }
+      };
+      track.addEventListener(
+        "scroll",
+        () => {
+          window.clearTimeout(settleTimer);
+          settleTimer = window.setTimeout(settle, 120);
+        },
+        { passive: true },
+      );
+    }
 
     const openStop = (
       pin: HTMLButtonElement,
       at: [number, number],
       ease = true,
+      user = true,
     ) => {
+      // Below lg there is no popup — snap the carousel and drive the map.
+      if (!window.matchMedia("(min-width: 1024px)").matches) {
+        const idx = pinsArr.indexOf(pin);
+        if (idx === -1) return;
+        carouselTo(idx);
+        activateStop(idx, user);
+        return;
+      }
+
       const card = cardFor(pin.dataset.stop);
       if (!card) return;
 
@@ -1318,19 +1443,6 @@ const staticMapUrl =
         walkEl.hidden = true;
         const t = walkEl.querySelector(".stop-walk-text");
         if (t) t.textContent = "";
-      }
-
-      // Below lg: render into the in-flow slot under the copy, not a popup.
-      if (!window.matchMedia("(min-width: 1024px)").matches) {
-        const slot = document.getElementById("stop-slot");
-        if (slot) {
-          slot.replaceChildren(content);
-          // No recentring here: the card is below the map, so moving the map
-          // only pushes the other four pins out of a small viewport.
-          showRoute(content.dataset.card || "", at, content);
-          window.dispatchEvent(new CustomEvent("curio:pin-opened"));
-          return;
-        }
       }
 
       const show = () => {
@@ -1363,7 +1475,9 @@ const staticMapUrl =
         });
         openedAt = Date.now();
         showRoute(content.dataset.card || "", at, content);
-        window.dispatchEvent(new CustomEvent("curio:pin-opened"));
+        // Only a human counts as intent — demo-mode advances stay out of
+        // the pin_opened metric or it becomes meaningless.
+        if (user) window.dispatchEvent(new CustomEvent("curio:pin-opened"));
       };
 
       if (!ease) {
@@ -1422,17 +1536,57 @@ const staticMapUrl =
     // Staging box has served its purpose.
     staging?.classList.remove("flex", "absolute");
 
-    /* Desktop opens one stop on arrival so the mechanic explains itself —
-     * without easing, or it would fight the framing we just computed. On
-     * touch the map starts clean: a popup covering a small screen before
-     * anyone has tapped is an obstacle, not an invitation. */
-    if (window.matchMedia("(min-width: 1024px)").matches && pins[0]) {
-      // Not gated on "idle": that event is unreliable in embedded webviews,
-      // and the popup positions itself correctly regardless.
-      const at = (pins[0].dataset.lnglat || "0,0")
-        .split(",")
-        .map(Number) as [number, number];
-      openStop(pins[0], at, false);
+    /* Open stop 01 on arrival so the mechanic explains itself: a popup on
+     * desktop, the first carousel card + route on mobile. Not gated on
+     * "idle" — that event is unreliable in embedded webviews. */
+    if (pinsArr[0]) {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        openStop(pinsArr[0], stopCoords[0], false, false);
+      } else {
+        activateStop(0, false);
+      }
+    }
+
+    /* --- Demo mode (SPEC §5.6f): the map plays itself ------------------- */
+    /* Every few seconds the tour advances one stop — camera, card, route —
+     * exactly as if someone tapped it, so the section reads as the app in
+     * use. Three hard rules:
+     *   1. The FIRST human gesture on the map or the carousel ends it for
+     *      good. The demo attracts; it never wrestles.
+     *   2. It only runs while the section is actually on screen and the tab
+     *      is visible.
+     *   3. prefers-reduced-motion means it never starts at all.
+     */
+    let autoOn = !reducedMotion;
+    let autoIdx = 0;
+    const stopAuto = () => {
+      autoOn = false;
+    };
+
+    mapEl.addEventListener("pointerdown", stopAuto, { passive: true });
+    mapEl.addEventListener("wheel", stopAuto, { passive: true });
+    track?.addEventListener("pointerdown", stopAuto, { passive: true });
+
+    /* Checked inside the tick rather than via IntersectionObserver: one
+     * getBoundingClientRect every 7s is free, and IO proved unreliable in
+     * embedded webviews (its callbacks simply never fire there, which would
+     * freeze the demo forever). "Visible" = at least ~200px of the section
+     * actually on screen. */
+    const section = document.getElementById("walk");
+    const sectionVisible = () => {
+      if (!section) return true;
+      const r = section.getBoundingClientRect();
+      return (
+        Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0) > 200
+      );
+    };
+
+    if (autoOn) {
+      window.setInterval(() => {
+        if (!autoOn || document.hidden || !sectionVisible()) return;
+        autoIdx = (autoIdx + 1) % pinsArr.length;
+        openStop(pinsArr[autoIdx], stopCoords[autoIdx], true, false);
+      }, 7000);
     }
   };
 
