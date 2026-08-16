@@ -14,21 +14,24 @@ Live at [curio.guide](https://curio.guide).
 Prerequisites: Node.js 18+.
 
 ```bash
+cp .env.example .env   # then paste the Mapbox token in
 npm install
 npm run dev      # dev server, usually http://localhost:4321
 npm run build    # static build into dist/
 npm run preview  # serve the built output
 ```
 
-There is no `.env` file and no API key to set. The two external services both use public,
-client-safe keys committed in the source:
+The two external services both use public, client-safe keys:
 
 - **Supabase** stores waitlist signups. The publishable key sits in
   `src/components/islands/WaitlistForm.tsx`; the `waitlist` table must have RLS set to
   insert-only.
-- **Mapbox** renders the Yanaka map. The `pk.` token in `src/components/CityWalk.astro` is
-  a public token and should be domain-restricted to `curio.guide` and `localhost` in the
-  Mapbox dashboard.
+- **Mapbox** renders the Yanaka map. The `pk.` token is read from
+  `PUBLIC_MAPBOX_TOKEN` — set it in `.env` locally, and as a repository secret of the
+  same name for the deploy workflow. It is a public token that ends up in the client
+  bundle either way, so the protection that matters is a URL restriction to
+  `curio.guide` and `localhost` in the Mapbox dashboard. Without it the map renders
+  empty; the deploy workflow fails loudly rather than shipping a blank map.
 
 ## Stack
 
