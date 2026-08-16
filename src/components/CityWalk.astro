@@ -54,7 +54,7 @@ const stops = [
     lng: 139.76069,
     lat: 35.72021,
     teaser:
-      "The shrine moved to this spot in 1705, and the buildings you're looking at went up the year after — Important Cultural Properties that outlived the fires, earthquakes and bombing that erased most of Edo Tokyo. Come between early April and early May and the grounds are solid azalea.",
+      "The shrine moved to this spot in 1705, and the buildings you're looking at went up the year after. They are still the originals: Important Cultural Properties that outlived the fires, earthquakes and bombing that erased most of Edo Tokyo. Come between early April and early May and the grounds are covered in azaleas.",
   },
   {
     id: "ginza",
@@ -64,7 +64,7 @@ const stops = [
     lng: 139.7665,
     lat: 35.7279,
     teaser:
-      "One short shitamachi street of small shops, ending in a staircase called Yuyake Dandan — 'sunset steps'. Stand at the top around six and you'll work out how it got the name, along with everyone else who stopped.",
+      "One short shitamachi street of small shops, ending in a staircase called Yuyake Dandan, 'sunset steps'. Stand at the top around six and you'll see how it got the name, along with everyone else who stopped.",
   },
   {
     id: "cemetery",
@@ -74,7 +74,7 @@ const stops = [
     lng: 139.77056,
     lat: 35.72528,
     teaser:
-      "Around seven thousand graves across ten hectares, an avenue of cherry trees that turns white every April, and the last shogun of Japan buried somewhere among them. The five-storied pagoda that stood here burned down in 1957 and was never rebuilt.",
+      "Around seven thousand graves across ten hectares, an avenue of cherry trees that turns white every April, and the last shogun of Japan buried somewhere among them. The five-storied pagoda that stood here burned down in 1957, set alight by two lovers who died in it. Nobody rebuilt it.",
   },
   {
     id: "asakura",
@@ -84,7 +84,7 @@ const stops = [
     lng: 139.76855,
     lat: 35.72685,
     teaser:
-      "The sculptor Fumio Asakura designed this as his own house and studio; it opened as a museum in 1967, after he died. He worked on human figures and, again and again, on cats — which in this neighbourhood turns out to be the right subject.",
+      "The sculptor Fumio Asakura designed this as his own house and studio; it opened as a museum in 1967, three years after he died. He worked on human figures and, again and again, on cats. He kept ten at a time, and planned a show of a hundred sculptures of them that he never finished.",
   },
   {
     id: "clock",
@@ -94,7 +94,7 @@ const stops = [
     lng: 139.7662,
     lat: 35.72128,
     teaser:
-      "One man, Sakujiro Kamiguchi, spent a lifetime collecting Edo-period clocks, and the small museum that holds them opened in the early 1970s, after he died. Those clocks kept seasonal hours — daylight was always six hours, so an hour stretched in summer and shrank in winter.",
+      "Sakujiro Kamiguchi spent a lifetime collecting Edo-period clocks, and the small museum that holds them opened in the early 1970s, after he died. Those clocks kept seasonal hours: daylight was always six hours, so an hour stretched in summer and shrank in winter.",
   },
 ];
 
@@ -157,12 +157,12 @@ const staticMapUrl =
           <p class="walk-intro mt-4 max-w-md leading-relaxed text-cream/75 lg:text-sm xl:text-base">
             A gate at the end of a side street. A tree everyone is
             photographing. A building older than everything around it.
-            Normally you shrug and walk past — with Curio you tap it, and
+            Normally you shrug and walk past. With Curio you tap it, and
             someone tells you.
           </p>
 
           <p class="mt-4 text-sm text-cream/50">
-            Try it. Tap a pin on the map — five real stops in Yanaka.
+            Try it. Tap a pin on the map: five real stops in Yanaka.
           </p>
 
           {/* Below lg the story lands here instead of in a popup: a ~230px
@@ -310,10 +310,10 @@ const staticMapUrl =
     <!-- Disclosure sits outside the card: it must stay readable, and inside
          the panel it was the first thing to get clipped. -->
     <p class="mt-4 px-2 text-xs leading-relaxed text-espresso/45">
-      Yanaka — Tokyo's old quarter. Five real stops; the full story map
+      Yanaka is Tokyo's old quarter. Five real stops; the full story map
       arrives with launch. The blue dot is an example position, not your
-      location — this page never asks for it. Photos: Wikimedia Commons,
-      CC&nbsp;BY&#8209;SA / CC0 — credited in ASSETS.md.
+      location. This page never asks for it. Photos: Wikimedia Commons,
+      CC&nbsp;BY&#8209;SA / CC0, credited in ASSETS.md.
     </p>
   </div>
 </section>
@@ -484,14 +484,14 @@ const staticMapUrl =
     inset: 0;
     background:
       radial-gradient(
-        120% 95% at 50% 45%,
-        rgba(53, 29, 6, 0) 55%,
-        rgba(53, 29, 6, 0.13) 100%
+        118% 92% at 50% 45%,
+        rgba(53, 29, 6, 0) 48%,
+        rgba(53, 29, 6, 0.22) 100%
       ),
       repeating-linear-gradient(
         102deg,
-        rgba(53, 29, 6, 0.022) 0px,
-        rgba(53, 29, 6, 0.022) 1px,
+        rgba(53, 29, 6, 0.04) 0px,
+        rgba(53, 29, 6, 0.04) 1px,
         rgba(53, 29, 6, 0) 1px,
         rgba(53, 29, 6, 0) 4px
       );
@@ -977,10 +977,12 @@ const staticMapUrl =
 
       map.setPadding({ left: 0, top: 0, right: 0, bottom: 0 });
       map.fitBounds(pinBounds, {
+        // Tighter padding than the first pass = the cluster sits closer in,
+        // while fitBounds still guarantees no pin touches an edge.
         padding: wide
-          ? { left: panel + 90, right: 190, top: 130, bottom: 110 }
-          : { left: 60, right: 60, top: 110, bottom: 80 },
-        maxZoom: 15.4,
+          ? { left: panel + 60, right: 140, top: 105, bottom: 85 }
+          : { left: 44, right: 44, top: 92, bottom: 64 },
+        maxZoom: 15.9,
         duration: 0,
         /* Pitch and bearing MUST be repeated here. fitBounds computes a fresh
          * camera and drops whatever the map was constructed with, which is

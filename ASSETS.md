@@ -229,23 +229,41 @@ metadata can change.
 ### Where the teaser facts come from
 
 The pins name real places, so the copy has to be true. Every claim in
-`CityWalk.astro`'s `stops` array traces to these sources — if you edit the
-copy, keep it inside what they support, and don't add colour that isn't there.
+`CityWalk.astro`'s `stops` array traces to these sources. If you edit the copy,
+keep it inside what they support, and don't add colour that isn't there.
 
-- **Nezu Shrine** — English Wikipedia: founded 1705; several buildings are
-  Important Cultural Properties; azalea festival early April → early May.
-- **Yanaka Cemetery** — English Wikipedia: ~7,000 graves over 102,537 m²
-  (≈10 ha); "Cherry-blossom Avenue" in April; five-storied pagoda lost to
-  arson in 1957. Tokugawa Yoshinobu's grave is there.
-- **Asakura Museum of Sculpture** — English Wikipedia: Fumio Asakura's own
-  house and studio; opened as a museum in 1967; his work centres on human
-  figures and cats.
-- **Daimyo Clock Museum** — English Wikipedia: opened 1972 in Yanaka
-  2-chōme; Edo-period Japanese clocks collected by Sakujiro Kamiguchi
-  (1892–1970). Seasonal-hour timekeeping is standard Edo horology.
-- **Yanaka Ginza** — no English Wikipedia article; the copy claims only what
-  is uncontroversial (a short shitamachi shopping street ending in the
-  staircase called Yuyake Dandan, "sunset steps"). Verify before launch.
+**Re-checked 2026-08-16.** The first pass through this list got two things
+wrong, and the errors reached the live page. Both are fixed; both are flagged
+in `CityWalk.astro`'s comment so they don't come back.
+
+- **Nezu Shrine** — [Wikipedia](https://en.wikipedia.org/wiki/Nezu_Shrine) ·
+  [GO TOKYO](https://www.gotokyo.org/en/spot/70/index.html).
+  ⚠️ **Previously recorded here as "founded 1705". That is wrong.** 1705 is when
+  Tokugawa Tsunayoshi *relocated* the shrine to this site; the surviving
+  buildings date from **1706**; the shrine itself is by legend ~1,900 years old.
+  Seven structures are Important Cultural Properties. Bunkyō azalea festival
+  runs early April → early May.
+- **Yanaka Cemetery** — [Wikipedia](https://en.wikipedia.org/wiki/Yanaka_Cemetery) ·
+  [pagoda arson case](https://en.wikipedia.org/wiki/Yanaka_five-storied_pagoda_double-suicide_arson_case).
+  ~7,000 graves over 102,537 m² (≈10 ha); "Cherry-blossom Avenue" in April;
+  Tokugawa Yoshinobu's grave is there. The five-storied pagoda was destroyed
+  6 July 1957 by **two lovers who set it alight and died inside**, and was never
+  rebuilt. That detail is sourced and is now in the teaser.
+- **Asakura Museum of Sculpture** —
+  [Wikipedia](https://en.wikipedia.org/wiki/Asakura_Museum_of_Sculpture) ·
+  [JNTO](https://www.japan.travel/en/spot/393/).
+  Fumio Asakura, 1883–1964; his own house and studio; opened as a museum in
+  1967. Sourced cat detail now used in the teaser: he **kept ten cats at once**
+  and planned a show of **a hundred** cat sculptures that he never completed.
+- **Daimyo Clock Museum** —
+  [Wikipedia](https://en.wikipedia.org/wiki/Daimyo_Clock_Museum).
+  ⚠️ **The opening year is disputed** — April 1972 per Wikipedia, April 1974 per
+  several other sources. The teaser says "the early 1970s"; don't pick a side.
+  Founder Sakujiro Kamiguchi (1892–1970), nicknamed "Guro" after his shop, died
+  before it opened. Seasonal-hour timekeeping is standard Edo horology.
+- **Yanaka Ginza** — no English Wikipedia article; the copy claims only what is
+  uncontroversial (a short shitamachi shopping street ending in the staircase
+  called Yuyake Dandan, "sunset steps"). Verify before launch.
 
 **Replacement brief** (what these should eventually be): a tight, warm,
 golden-hour detail of the actual place. Square, 168px minimum, house style as
