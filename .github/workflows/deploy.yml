@@ -26,18 +26,8 @@ jobs:
 
       - run: npm install
 
-      # Fail here rather than deploying a page whose map silently renders empty.
-      - name: Check Mapbox token is configured
-        env:
-          PUBLIC_MAPBOX_TOKEN: ${{ secrets.PUBLIC_MAPBOX_TOKEN }}
-        run: |
-          if [ -z "$PUBLIC_MAPBOX_TOKEN" ]; then
-            echo "::error::PUBLIC_MAPBOX_TOKEN secret is not set. Add it under" \
-                 "Settings > Secrets and variables > Actions, or the Yanaka map" \
-                 "will render empty."
-            exit 1
-          fi
-
+      # The prebuild script (scripts/check-env.mjs) fails the build when the
+      # token is missing, rather than deploying a page whose map renders blank.
       - run: npm run build
         env:
           PUBLIC_MAPBOX_TOKEN: ${{ secrets.PUBLIC_MAPBOX_TOKEN }}

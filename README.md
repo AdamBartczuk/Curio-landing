@@ -28,10 +28,22 @@ The two external services both use public, client-safe keys:
   insert-only.
 - **Mapbox** renders the Yanaka map. The `pk.` token is read from
   `PUBLIC_MAPBOX_TOKEN` — set it in `.env` locally, and as a repository secret of the
-  same name for the deploy workflow. It is a public token that ends up in the client
-  bundle either way, so the protection that matters is a URL restriction to
-  `curio.guide` and `localhost` in the Mapbox dashboard. Without it the map renders
-  empty; the deploy workflow fails loudly rather than shipping a blank map.
+  same name under Settings → Secrets and variables → Actions. It is a public token that
+  ends up in the client bundle either way, so the protection that matters is a URL
+  restriction to `curio.guide` and `localhost` in the Mapbox dashboard. Without the
+  token the map renders blank, so the build fails on a deploy rather than shipping it
+  (locally it only warns — see `scripts/check-env.mjs`).
+
+## Deployment
+
+Hosted on **GitHub Pages**. `.github/workflows/deploy.yml` builds every push to `main`
+and publishes `dist/` as the Pages artifact. `public/CNAME` holds `curio.guide`, which is
+what attaches the custom domain — deleting it would drop the domain back to
+`*.github.io`.
+
+The site is fully static: `npm run build` writes `dist/`, and that folder is the whole
+deployable artifact. Nothing needs Node at runtime, so it can be served from any static
+host by copying `dist/` into a web root.
 
 ## Stack
 
