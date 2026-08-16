@@ -243,6 +243,37 @@ match the golden-hour brand photography, plus a dashed terracotta highlight
 around the district (approximate polygon; swap in precise GeoJSON if
 provided).
 
+*Real stops, popups, demo position (2026-08-16, second pass).* The five
+archetypal stops became **five real Yanaka landmarks** — three well-known
+(Nezu Shrine, Yanaka Ginza, Yanaka Cemetery) and two quiet (Asakura Museum,
+Daimyo Clock Museum). **Naming a real place changes the copy rules**: the
+invented anecdotes that were fine for "the corner izakaya" are not fine here,
+so every teaser is built from sourced facts and ASSETS.md records which
+source backs which claim. The dashed district outline is gone.
+
+Clicking a pin opens the story **in a Mapbox popup at the pin** on desktop —
+the map is the stage, the left panel keeps only the headline and intro.
+Below `lg` the same card renders into an in-flow slot under the copy instead:
+a ~230px popup cannot fit above a pin inside a 400px-tall phone map, and
+Mapbox flips it off the map edge. Cards are server-rendered in an `sr-only`
+block and **cloned** into popup or slot, so the text stays crawlable and the
+original is never consumed. `closeOnClick` must stay `false` — the marker
+click bubbles to the map and would otherwise close the popup with the very
+click that opened it. Desktop auto-opens the first stop (not gated on
+`idle`, which is unreliable in embedded webviews); touch starts clean.
+
+Each card carries an **inert audio bar** labelled "Narration arrives with
+launch" — deliberately not a play button that does nothing. Swap for the real
+`AudioPlayer` island when clips exist.
+
+A **hypothetical position** marker sits between the stops with a radar sweep
+every 5s suggesting POI range. It is hard-coded and labelled "You are here —
+example": the page never requests geolocation, and must not imply it does.
+
+Map **attribution cannot be removed** (Mapbox ToS + OSM ODbL). It is set to
+`compact` and inset 22px so the card's rounded corner can't clip it — that
+clipping was the original complaint, not the attribution itself.
+
 *Pin design and framing (2026-08-16).* A pin is a **rounded-square photo**
 (54px, cream frame, small point beneath) with the stop's **name on a pill
 above it** — the photo is the "what's there", which is the product in one

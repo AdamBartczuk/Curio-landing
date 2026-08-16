@@ -204,31 +204,52 @@ last frames nearly match, or cross-fade the last 0.5s back to the first.
 
 `src/components/CityWalk.astro` · `public/media/stops/*.webp` · 168×168 WebP
 
-These are **Creative Commons photographs of the real Yanaka/Ueno area**, used
-as stand-ins so the pin design can be judged. They show the neighbourhood,
-not the fictional sample stops — which is why the line under the map says so.
-Replace with real story photography before launch.
+Since 2026-08-16 the five stops are **real Yanaka landmarks**, so each photo
+is a Creative Commons image *of that actual place*. They remain placeholders
+for Curio's own photography, but they are no longer generic neighbourhood
+atmosphere.
 
-**If any of these survive to production, the attribution below must ship with
-them** (CC BY-SA requires credit + licence; BY-SA also asks that adaptations
-stay under the same licence — the crops here are adaptations).
+**If any survive to production, the attribution below must ship with them**
+(CC BY-SA requires credit + licence; BY-SA also asks that adaptations stay
+under the same licence — the crops here are adaptations). The two CC0 files
+need no credit, but keeping it costs nothing.
 
-| Pin | File | Source (Wikimedia Commons) | Author | Licence |
+| Stop | File | Source (Wikimedia Commons) | Author | Licence |
 |---|---|---|---|---|
-| The gate | `gate.webp` | `Nezu-jinja Torii 01.jpg` | Zairon | CC BY-SA 4.0 |
-| The tree | `tree.webp` | `Cherry tree in blossom @ Ueno Park (13439347694).jpg` | Guilhem Vellut | CC BY 2.0 |
-| The old building | `building.webp` | `Kayaba Coffee by Sansakisaka Street in Ueno Sakuragi…2024 May.jpg` | Ximonic (Simo Räsänen) | CC BY-SA 4.0 |
-| The corner izakaya | `izakaya.webp` | `Yanaka Ginza 1.jpg` | Christophe95 | CC BY-SA 4.0 |
-| The steps | `steps.webp` | `Yuyake dandan yanaka taito tokyo 2009 Apr.JPG` | User:Kentin | CC BY-SA 3.0 |
+| Nezu Shrine | `nezu.webp` | `Nezu-jinja Torii 01.jpg` | Zairon | CC BY-SA 4.0 |
+| Yanaka Ginza | `ginza.webp` | `Yanaka Ginza 1.jpg` | Christophe95 | CC BY-SA 4.0 |
+| Yanaka Cemetery | `cemetery.webp` | `Yanaka 20130326 155108.jpg` | Ka23 13 | CC BY-SA 4.0 |
+| Asakura Museum | `asakura.webp` | `ASAKURA Museum of Sculpture 2020-01-12.jpg` | Asanagi | CC0 |
+| Daimyo Clock Museum | `clock.webp` | `Daimyōtokei Museum02.jpg` | Higa4 | CC0 |
 
 Each was centre-cropped to a square and resized to 168px; no other edits.
 Verify the author/licence on the file's Commons page before shipping — Commons
 metadata can change.
 
+### Where the teaser facts come from
+
+The pins name real places, so the copy has to be true. Every claim in
+`CityWalk.astro`'s `stops` array traces to these sources — if you edit the
+copy, keep it inside what they support, and don't add colour that isn't there.
+
+- **Nezu Shrine** — English Wikipedia: founded 1705; several buildings are
+  Important Cultural Properties; azalea festival early April → early May.
+- **Yanaka Cemetery** — English Wikipedia: ~7,000 graves over 102,537 m²
+  (≈10 ha); "Cherry-blossom Avenue" in April; five-storied pagoda lost to
+  arson in 1957. Tokugawa Yoshinobu's grave is there.
+- **Asakura Museum of Sculpture** — English Wikipedia: Fumio Asakura's own
+  house and studio; opened as a museum in 1967; his work centres on human
+  figures and cats.
+- **Daimyo Clock Museum** — English Wikipedia: opened 1972 in Yanaka
+  2-chōme; Edo-period Japanese clocks collected by Sakujiro Kamiguchi
+  (1892–1970). Seasonal-hour timekeeping is standard Edo horology.
+- **Yanaka Ginza** — no English Wikipedia article; the copy claims only what
+  is uncontroversial (a short shitamachi shopping street ending in the
+  staircase called Yuyake Dandan, "sunset steps"). Verify before launch.
+
 **Replacement brief** (what these should eventually be): a tight, warm,
-golden-hour detail of the actual thing the story is about — the gate, the
-tree, the shopfront. Square, 168px minimum, house style as above. Shot so it
-reads at 54px: one clear subject, no wide scenes.
+golden-hour detail of the actual place. Square, 168px minimum, house style as
+above. Shot so it reads at 54px: one clear subject, no wide scenes.
 
 ---
 
