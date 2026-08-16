@@ -66,7 +66,7 @@ export default function WaitlistForm({
       }
     } catch {
       setStatus("idle");
-      setError("Network hiccup. Try again?");
+      setError("Something went wrong. Try again?");
     }
   };
 
@@ -127,7 +127,7 @@ export default function WaitlistForm({
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="Your city next? (optional)"
+            placeholder="Which city next? (optional)"
             className={`w-full rounded-full border-2 px-6 py-3.5 outline-none transition-colors ${field}`}
           />
         </div>
