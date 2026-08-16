@@ -1,0 +1,58 @@
+---
+/*
+ * PLACEHOLDER LOGO — text wordmark only.
+ *
+ * TO REPLACE WITH THE REAL MARK:
+ *   1. Drop the SVG at  public/brand/curio-mark.svg
+ *   2. Uncomment the <img> block below and delete the wordmark <span>.
+ * Nothing else in the codebase needs to change — every usage goes through
+ * this component.
+ *
+ * The real mark is the "C + traveller" glyph on p.06 of the style guide.
+ * It is currently artwork-only; we need it as vector.
+ */
+interface Props {
+  /** Colour context. `cream` for use on espresso/terracotta backgrounds. */
+  tone?: "terracotta" | "cream" | "espresso";
+  class?: string;
+}
+
+const { tone = "terracotta", class: className = "" } = Astro.props;
+
+const toneClass = {
+  terracotta: "text-terracotta",
+  cream: "text-cream",
+  espresso: "text-espresso",
+}[tone];
+---
+
+<a
+  href="/"
+  class={`inline-flex items-center gap-2 ${toneClass} ${className}`}
+  aria-label="Curio — home"
+>
+  {/*
+  <img
+    src="/brand/curio-mark.svg"
+    alt=""
+    width="32"
+    height="32"
+    class="h-8 w-8"
+  />
+  */}
+
+  {/* Placeholder mark: the logo's circular counter, as a stand-in. */}
+  <span
+    class="grid h-8 w-8 place-items-center rounded-full border-2 border-current"
+    aria-hidden="true"
+  >
+    <span class="h-2 w-2 rounded-full bg-current"></span>
+  </span>
+
+  <span
+    class="font-display text-2xl font-bold tracking-tight"
+    style="font-family: var(--font-display);"
+  >
+    CURIO
+  </span>
+</a>

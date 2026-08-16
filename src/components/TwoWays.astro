@@ -1,0 +1,74 @@
+---
+import { Compass, Route } from "lucide-react";
+
+const ways = [
+  {
+    tag: "Most of the time",
+    title: "Just wander",
+    body: "Open Explore mode and walk wherever you feel like. Curio notices what's around you and offers a story when there's one worth hearing. Tap it or ignore it. You can stop whenever you want.",
+    accent: true,
+  },
+  {
+    tag: "When you want one",
+    title: "Follow a journey",
+    body: "Some days you want something to follow. Pick a journey (a neighbourhood, a theme, an afternoon) and Curio sets the pace to how fast you actually walk.",
+    accent: false,
+  },
+];
+---
+
+<section class="px-4 py-16 sm:px-6 sm:py-20">
+  <div class="mx-auto max-w-6xl">
+    <!-- Single-line headline + kicker — the stacked two-line split is reserved
+         for the big beats (hero, Moment, Tokyo) so it stays special. -->
+    <div class="reveal mb-12 max-w-3xl">
+      <p class="chip mb-6 bg-sand/60 text-espresso">Your pace</p>
+      <h2 class="display-lg text-espresso">Two ways to use it.</h2>
+    </div>
+
+    <div class="grid gap-5 md:grid-cols-2">
+      {
+        ways.map((w, i) => (
+          <div
+            class={`reveal card-lift rounded-[2rem] p-8 sm:p-10 ${
+              w.accent
+                ? "bg-terracotta text-cream"
+                : "bg-sand/35 text-espresso ring-1 ring-inset ring-espresso/10"
+            }`}
+            style={`transition-delay:${i * 90}ms`}
+          >
+            <div
+              class={`mb-6 grid h-12 w-12 place-items-center rounded-full ${
+                w.accent ? "bg-cream/15" : "bg-cream"
+              }`}
+            >
+              {w.accent ? (
+                <Compass className="h-5 w-5" />
+              ) : (
+                <Route className="h-5 w-5" />
+              )}
+            </div>
+
+            <p
+              class={`mb-3 text-xs uppercase tracking-widest ${
+                w.accent ? "text-cream/60" : "text-espresso/50"
+              }`}
+            >
+              {w.tag}
+            </p>
+
+            <h3 class="font-display text-3xl font-bold">{w.title}</h3>
+
+            <p
+              class={`mt-4 text-lg leading-relaxed ${
+                w.accent ? "text-cream/80" : "text-espresso/70"
+              }`}
+            >
+              {w.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+/* Brand fonts — self-hosted, no runtime CDN.
+   Montserrat Bold = headings + logo. Hind = subheads (500) and body (400). */
+@import "@fontsource/montserrat/700.css";
+@import "@fontsource/hind/400.css";
+@import "@fontsource/hind/500.css";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — Curio Style Guide 2026, p.08 / p.10-11.
+   These four colours are the whole palette. Do not add more.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-cream: #fef0e3;
+  --color-terracotta: #ca5137;
+  --color-sand: #eab894;
+  --color-espresso: #351d06;
+
+  /* Tints derived from the four, for hover/borders only — never new hues. */
+  --color-terracotta-hover: #b84730;
+  --color-espresso-soft: #6b4a2f;
+
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Hind", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-pill: 999px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    font-family: var(--font-body);
+    font-weight: 400;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  /* Visible focus for keyboard users — the old build had none. */
+  :focus-visible {
+    outline: 3px solid var(--color-terracotta);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--color-terracotta);
+    color: var(--color-cream);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Brand primitives. Written as plain CSS, not @apply — Tailwind v4 cannot
+   @apply a custom class from within the same stylesheet.
+   --------------------------------------------------------------------------- */
+@layer components {
+  /* The dominant brand shape (style guide pp.12-18): everything is a capsule. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-pill);
+  }
+
+  /* Small floating labels laid over imagery — AUDIO / GPS / EXPLORE / DOWNLOAD.
+     The most recognisable device in the brand book. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-pill);
+    padding: 0.875rem 1.75rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-pill);
+    padding: 0.875rem 1.75rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    background-color: var(--color-terracotta);
+    color: var(--color-cream);
+    transition: background-color 0.2s;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-terracotta-hover);
+  }
+
+  /* The arrow leans into the click. */
+  .btn-primary svg {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-primary:hover svg {
+    transform: translateX(3px);
+  }
+
+
+  /* Oversized headline type, per the guide's cover and section openers.
+     Capped so the hero still fits one screen on a large desktop. */
+  .display-xl {
+    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+  }
+
+  .display-lg {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. The previous build ran constant parallax, spin, bounce and pulse
+   simultaneously. Here: few, small, and always opt-out-able.
+   --------------------------------------------------------------------------- */
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Hover lift for cards. Sits after .reveal in this layer on purpose: once a
+     card is revealed, the snappier transform timing below must win over the
+     slow reveal transition. */
+  .card-lift,
+  .reveal.is-visible.card-lift {
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.3s;
+  }
+
+  @media (hover: hover) {
+    .card-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px -12px rgba(53, 29, 6, 0.25);
+    }
+  }
+
+  .float-soft {
+    animation: float-soft 7s ease-in-out infinite;
+  }
+
+  @keyframes float-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

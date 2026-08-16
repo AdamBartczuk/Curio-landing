@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Local secrets. `.env.example` is the committed template.
+.env
+.env.*
+!.env.example
+
+# Astro generated types
+.astro/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

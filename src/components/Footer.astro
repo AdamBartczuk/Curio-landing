@@ -1,0 +1,48 @@
+---
+import Logo from "./Logo.astro";
+
+/*
+ * The old footer linked Privacy / Terms / Contact to href="#" — all dead.
+ * Contact is a real mailto. Privacy and Terms point at pages that still need
+ * writing (SPEC.md §7); until they exist, don't ship fake links.
+ */
+const year = new Date().getFullYear();
+---
+
+<footer class="px-4 pb-10 pt-8 sm:px-6">
+  <div class="mx-auto max-w-6xl">
+    <div
+      class="flex flex-col items-center gap-8 border-t border-espresso/10 pt-10 sm:flex-row sm:justify-between"
+    >
+      <div class="flex flex-col items-center gap-3 sm:items-start">
+        <Logo tone="terracotta" />
+        <p class="text-sm text-espresso/50">Get curious, get lost on purpose.</p>
+      </div>
+
+      <nav class="flex flex-wrap justify-center gap-x-7 gap-y-3 text-sm">
+        <a
+          href="/privacy"
+          class="text-espresso/60 transition-colors hover:text-terracotta">Privacy</a
+        >
+        <a
+          href="/terms"
+          class="text-espresso/60 transition-colors hover:text-terracotta">Terms</a
+        >
+        <a
+          href="mailto:hello@curio.guide"
+          class="text-espresso/60 transition-colors hover:text-terracotta"
+          >Contact</a
+        >
+      </nav>
+    </div>
+
+    <!-- Rewards finishing the page in the same metaphor the header counts. -->
+    <p class="mt-10 text-center text-sm text-espresso/55">
+      You walked the whole page. Tokyo's easier with headphones.
+    </p>
+
+    <p class="mt-3 text-center text-xs text-espresso/40">
+      © {year} Curio. Made for wanderers.
+    </p>
+  </div>
+</footer>

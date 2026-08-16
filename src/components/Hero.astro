@@ -1,0 +1,216 @@
+---
+import AudioPlayer from "./islands/AudioPlayer.tsx";
+import WaitlistForm from "./islands/WaitlistForm.tsx";
+
+/*
+ * TOKYO SWAP — the sample below is the old Cracow teaser, used as a placeholder.
+ * Replace with a Tokyo clip: put the MP3 at public/media/tokyo-sample.mp3 and
+ * change `sampleSrc` to "/media/tokyo-sample.mp3", plus `place` and `title`.
+ */
+const sampleSrc =
+  "https://trexuhtydiwygtxugqfb.supabase.co/storage/v1/object/public/Landing%20page/Curio_cracow_teaser.mp3";
+// "early sample", not "placeholder" — visitors see this label.
+const samplePlace = "Kraków · early sample";
+const sampleTitle = "The Other Capital";
+---
+
+<section class="relative px-4 pb-16 pt-24 sm:px-6 sm:pt-28" id="hero">
+  <!-- Paper texture (SPEC "Visual language"): a warm bloom plus one grain
+       layer, no motif. Deliberately two flat siblings rather than a wrapped
+       group — a mask-image on a shared wrapper would create a stacking
+       context, which isolates the grain's multiply from the page and makes it
+       composite as grey static over the cream instead of multiplying into it.
+       Same reason there's no z-index here: content stacks above via DOM order
+       and its own `relative`, the WaitlistCTA precedent. -->
+  <div class="hero-bloom" data-depth="-5" aria-hidden="true"></div>
+  <div class="hero-grain" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-6xl">
+    {/* The image column is sized to the image (28rem = max-w-md) instead of
+        a fraction. As a fraction it came out ~531px wide while the image was
+        capped at 448, leaving 83px of dead space on the right — which read
+        as the whole hero being shifted left. Widening the image instead
+        would push the form below the fold (only ~26px of headroom at
+        1280x720), so the column shrinks to meet it. */}
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_28rem] lg:gap-16">
+      <!-- Left: the promise -->
+      <div>
+        <p
+          class="chip mb-6 bg-sand/60 text-espresso"
+        >
+          <span class="h-1.5 w-1.5 rounded-full bg-terracotta"></span>
+          Tokyo first · cherry blossom 2027
+        </p>
+
+        <h1 class="display-xl text-espresso">
+          See something?<br />
+          <span class="text-terracotta">Hear its story.</span>
+        </h1>
+
+        <p class="mt-5 max-w-lg text-lg leading-relaxed text-espresso/75 sm:text-xl">
+          Curio is an audio guide for people without a plan. Tap whatever is in
+          front of you and hear a short story about it, written by someone who
+          actually lives there. No route to plan and nothing to look up. Start
+          walking.
+        </p>
+
+        <!-- Form directly after the promise — it must sit above the fold on
+             a 720–800px desktop. Chips moved below; they're seasoning. -->
+        <div class="mt-7" id="hero-form">
+          <WaitlistForm client:idle buttonText="Get early access" />
+          <p class="mt-3 px-2 text-sm text-espresso/50">
+            A free premium weekend in your first city. We email about the launch
+            and nothing else.
+          </p>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <span class="chip bg-espresso text-cream">Audio-first</span>
+          <span class="chip bg-sand/60 text-espresso">Just walk</span>
+          <span class="chip bg-sand/60 text-espresso">Works offline</span>
+        </div>
+      </div>
+
+      <!-- Right: proof you can hear -->
+      <div class="relative mx-auto w-full max-w-sm lg:mx-0 lg:max-w-md">
+        <img
+          src="/media/hero-tokyo.webp"
+          alt="A traveller walking a Tokyo backstreet at golden hour, headphones on, looking up at something off-frame"
+          width="1140"
+          height="1425"
+          class="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-xl"
+          fetchpriority="high"
+          data-depth="6"
+        />
+
+        <!-- Floating brand labels, per style guide pp.15-18. Parallax lives on
+             the wrapper: float-soft animates the chip's own transform, and an
+             animation would override an inline transform on the same node. -->
+        <span class="absolute -left-3 top-10 sm:-left-5" data-depth="20">
+          <span class="chip float-soft bg-terracotta text-cream shadow-lg">
+            GPS
+          </span>
+        </span>
+        <span class="absolute -right-2 top-1/4 sm:-right-4" data-depth="-14">
+          <span
+            class="chip float-soft bg-sand text-espresso shadow-lg"
+            style="animation-delay:-2.5s"
+          >
+            Explore
+          </span>
+        </span>
+
+        <!-- The single most important element on the page: press play.
+             Overlaps the image bottom so it reads as part of the card. -->
+        <div class="relative z-10 -mt-16 px-3 sm:px-5">
+          {/* client:idle, not client:visible — the player is above the fold on
+              load, and it's the page's centrepiece: don't gate its hydration
+              on IntersectionObserver quirks. */}
+          <AudioPlayer
+            client:idle
+            src={sampleSrc}
+            place={samplePlace}
+            title={sampleTitle}
+            note="A real Curio story from Kraków, where we tested it first. This is the whole thing."
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Both layers dissolve before the section ends: CityWalk opens with a dark
+     espresso slab, and a hard texture edge would show against the cream gap
+     between the two sections. The mask lives on each layer, never on a shared
+     parent — see the markup comment. */
+  .hero-bloom,
+  .hero-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  /* Sand, the only warm tint in the locked four-colour palette. Sits top-right
+     behind the photo, so the left column's form and body copy stay on clean
+     cream where legibility matters most. */
+  .hero-bloom {
+    background: radial-gradient(
+      58% 52% at 78% 12%,
+      rgba(234, 184, 148, 0.55) 0%,
+      rgba(234, 184, 148, 0) 68%
+    );
+    opacity: 0.75;
+    /* `opacity`, never `transform`: this node carries data-depth, and the
+       parallax script below writes an inline transform on it. An animation on
+       the same property would silently win and kill the drift. */
+    animation: hero-bloom-breathe 14s ease-in-out infinite;
+  }
+
+  @keyframes hero-bloom-breathe {
+    0%,
+    100% {
+      opacity: 0.62;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+
+  /* Forked from CityWalk's .map-grain rather than shared: that one is tuned to
+     sit over a Mapbox map at opacity .52, this one over flat cream. One grain
+     here, not its two — the hero is above the fold and paint cost is LCP cost. */
+  .hero-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='hn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23hn)' opacity='0.5'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    /* Multiply keeps the cream's warmth; compositing greyscale noise normally
+       would desaturate it toward grey. */
+    mix-blend-mode: multiply;
+    opacity: 0.22;
+  }
+</style>
+
+<script>
+  // Pointer parallax (SPEC §5.6d): the floating chips and hero image drift a
+  // few px with the cursor. Mouse-only devices, and never under
+  // prefers-reduced-motion. Smoothing comes from a CSS transition, so there is
+  // no continuous rAF loop — work only happens on actual pointer movement.
+  const zone = document.getElementById("hero");
+  const wantsMotion =
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (zone && wantsMotion) {
+    const els = zone.querySelectorAll<HTMLElement>("[data-depth]");
+    els.forEach((el) => {
+      el.style.transition = "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+    });
+
+    let mx = 0;
+    let my = 0;
+    let raf = 0;
+
+    const apply = () => {
+      raf = 0;
+      els.forEach((el) => {
+        const depth = Number(el.dataset.depth) || 0;
+        el.style.transform = `translate(${(mx * depth).toFixed(1)}px, ${(my * depth).toFixed(1)}px)`;
+      });
+    };
+
+    zone.addEventListener("mousemove", (e) => {
+      const r = zone.getBoundingClientRect();
+      mx = (e.clientX - r.left) / r.width - 0.5;
+      my = (e.clientY - r.top) / r.height - 0.5;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+
+    zone.addEventListener("mouseleave", () => {
+      mx = 0;
+      my = 0;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+  }
+</script>

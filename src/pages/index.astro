@@ -1,0 +1,42 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import CityWalk from "../components/CityWalk.astro";
+import TwoWays from "../components/TwoWays.astro";
+import WhyCurio from "../components/WhyCurio.astro";
+import LocalVoices from "../components/LocalVoices.astro";
+import TokyoFirst from "../components/TokyoFirst.astro";
+import MidCTA from "../components/MidCTA.astro";
+import FAQ from "../components/FAQ.astro";
+import WaitlistCTA from "../components/WaitlistCTA.astro";
+import Footer from "../components/Footer.astro";
+import CookieBanner from "../components/islands/CookieBanner.tsx";
+
+// Sentence case to match every headline on the page, and the search phrase
+// ("Tokyo audio guide") sits at the front where it counts. Description kept
+// near 140 chars so Google doesn't truncate it.
+const title = "Curio — a Tokyo audio guide for travellers without a plan";
+const description =
+  "An audio guide for people without a plan. Tap what's in front of you and hear a short story about it, written by locals. Tokyo, spring 2027.";
+---
+
+<Base title={title} description={description}>
+  <Header />
+
+  <main id="main">
+    <Hero />
+    <CityWalk />
+    <TwoWays />
+    <WhyCurio />
+    <LocalVoices />
+    <TokyoFirst />
+    <MidCTA />
+    <FAQ />
+    <WaitlistCTA />
+  </main>
+
+  <Footer />
+
+  <CookieBanner client:idle />
+</Base>

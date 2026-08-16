@@ -1,0 +1,87 @@
+---
+import { CloudOff, Ear, Footprints, PenLine, Sparkles } from "lucide-react";
+
+/*
+ * Five benefits, in traveller language. The old page had six named after
+ * internal roadmap categories (Personalization / Gamification / Mindfulness) —
+ * and put "feel the atmosphere" next to "collect badges and XP", which are
+ * opposite promises. Gamification is deliberately not here; if it returns it
+ * belongs nowhere near the mindfulness message. See SPEC.md §3.6.
+ */
+const benefits = [
+  {
+    icon: Footprints,
+    title: "Made for wandering",
+    body: "Turn down whichever street looks better. Curio keeps up.",
+  },
+  {
+    icon: Ear,
+    title: "Ears, not eyes",
+    body: "Put the phone in your pocket and actually look at the city you came for.",
+  },
+  {
+    icon: PenLine,
+    title: "Written by locals",
+    body: "People with strong opinions about the streets they live on.",
+  },
+  {
+    icon: Sparkles,
+    title: "Follows what you like",
+    body: "Architecture, food, dark history, or just the atmosphere. You choose.",
+  },
+  {
+    icon: CloudOff,
+    title: "Works with no signal",
+    body: "Download the city before you head out. It keeps working in the metro, and your roaming bill doesn't move.",
+  },
+];
+---
+
+<section class="px-4 py-16 sm:px-6 sm:py-20" id="why">
+  <div class="mx-auto max-w-6xl">
+    <!-- Single-line headline + kicker — see the note in TwoWays.astro. -->
+    <div class="reveal mb-12 max-w-3xl">
+      <p class="chip mb-6 bg-sand/60 text-espresso">Why Curio</p>
+      <h2 class="display-lg text-espresso">
+        Not a map. <span class="text-terracotta">A narrator.</span>
+      </h2>
+      <p class="mt-5 text-lg text-espresso/70">
+        Curio turns the city into something you listen to.
+      </p>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        benefits.map((b, i) => (
+          <div
+            class="reveal card-lift rounded-[1.75rem] bg-cream p-5 ring-1 ring-inset ring-espresso/10 sm:p-7"
+            style={`transition-delay:${i * 70}ms`}
+          >
+            {/* Icon inline with the title — six stacked icon-over-title cards
+                made this section ~1,800px tall on a phone. */}
+            <div class="flex items-center gap-3">
+              <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand/50 text-terracotta">
+                <b.icon className="h-5 w-5" />
+              </div>
+              <h3 class="font-display text-lg font-bold text-espresso sm:text-xl">
+                {b.title}
+              </h3>
+            </div>
+            <p class="mt-3 leading-relaxed text-espresso/65">{b.body}</p>
+          </div>
+        ))
+      }
+
+      <!-- Sixth cell balances the grid and carries the tagline. -->
+      <div
+        class="reveal flex flex-col justify-center rounded-[1.75rem] bg-terracotta p-7 text-cream"
+        style="transition-delay:350ms"
+      >
+        <p class="font-display text-2xl font-bold leading-tight">
+          Get curious,<br />get lost on purpose.
+        </p>
+        <p class="mt-3 text-sm text-cream/70">Every place gets a story.</p>
+      </div>
+    </div>
+  </div>
+</section>

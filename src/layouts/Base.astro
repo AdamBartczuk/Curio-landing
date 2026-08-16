@@ -1,0 +1,103 @@
+---
+import "../styles/global.css";
+import { faqs } from "../data/faq";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Branded og card (1200x630), generated to match the hero. Regenerate when the
+// real logo mark lands — see ASSETS.md (IMG-OG).
+const ogImage = new URL("/media/og.png", Astro.site).href;
+
+const appSchema = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  name: "Curio",
+  description,
+  url: "https://curio.guide/",
+  applicationCategory: "TravelApplication",
+  operatingSystem: "iOS, Android",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Organization", name: "Curio", url: "https://curio.guide/" },
+};
+
+// FAQPage schema — same data as the FAQ section, via src/data/faq.ts.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#FEF0E3" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Curio" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </head>
+
+  <body class="overflow-x-hidden antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-espresso focus:px-5 focus:py-3 focus:text-cream"
+    >
+      Skip to content
+    </a>
+
+    <slot />
+
+    <script>
+      // Reveal-on-scroll. IntersectionObserver only — no scroll listener, so
+      // this costs nothing on the main thread while scrolling.
+      const els = document.querySelectorAll(".reveal");
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        els.forEach((el) => el.classList.add("is-visible"));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          // threshold 0 — a section taller than the viewport would never reach
+          // a fractional threshold, and would stay invisible forever.
+          { rootMargin: "0px 0px -8% 0px", threshold: 0 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

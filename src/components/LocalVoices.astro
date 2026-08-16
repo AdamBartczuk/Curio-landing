@@ -1,0 +1,75 @@
+---
+/*
+ * This section is the answer to "don't sell it as AI" (SPEC.md §2.1).
+ * It is not a workaround — the brand book itself says stories are
+ * "written by locals" and the mission is "locally-sourced audio storytelling".
+ * Never describe the technology here. Describe the people.
+ *
+ * Images are deliberately non-identifying (hands, notebook, back view) rather
+ * than a posed face captioned as a real contributor — see ASSETS.md's warning
+ * on IMG-02/03. Swap for real, credited photos once real writers are on board.
+ */
+---
+
+<section class="px-4 py-16 sm:px-6 sm:py-20" id="locals">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+      <div class="reveal order-2 lg:order-1">
+        <div class="grid grid-cols-2 gap-4">
+          <img
+            src="/media/local-writer-1.webp"
+            alt="Hands writing in a notebook at an outdoor café table, coffee beside a scatter of papers"
+            width="900"
+            height="1200"
+            loading="lazy"
+            class="aspect-[3/4] w-full rounded-[1.75rem] object-cover shadow-lg"
+          />
+          <img
+            src="/media/local-writer-2.webp"
+            alt="A resident seen from behind, waving to a neighbour on a quiet lantern-lit street at dusk"
+            width="900"
+            height="1200"
+            loading="lazy"
+            class="mt-8 aspect-[3/4] w-full rounded-[1.75rem] object-cover shadow-lg"
+          />
+        </div>
+      </div>
+
+      <div class="reveal order-1 lg:order-2">
+        <p class="chip mb-6 bg-sand/60 text-espresso">Who tells you</p>
+
+        <h2 class="display-lg text-espresso">
+          Stories from people<br />
+          <span class="text-terracotta">who live there.</span>
+        </h2>
+
+        <div class="mt-7 space-y-5 text-lg leading-relaxed text-espresso/75">
+          <p>
+            Every story is written by someone who lives in the city, about
+            their own streets. Not the same five facts a search result gives
+            you.
+          </p>
+          <p>
+            The person who tells you about the bar on the corner has probably
+            been thrown out of it. That kind of detail doesn't survive a
+            rewrite.
+          </p>
+        </div>
+
+        <!-- NOT a blockquote, and no quotation marks: this line is ours, not a
+             visitor's. Set as a quote with an attribution underneath, it read
+             as a testimonial at a glance — which is the exact pattern the
+             fabricated "Anna K." review was removed to avoid (SPEC §3.4, EU
+             Omnibus Directive). Label first, then the claim. -->
+        <div
+          class="mt-9 rounded-[1.75rem] bg-sand/35 p-7 ring-1 ring-inset ring-espresso/10"
+        >
+          <p class="mb-3 text-sm text-espresso/55">How we'd describe it</p>
+          <p class="font-display text-xl font-bold leading-snug text-espresso">
+            More like a walking podcast than a guided tour.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,45 @@
+---
+import WaitlistForm from "./islands/WaitlistForm.tsx";
+---
+
+<section class="px-4 py-16 sm:px-6 sm:py-20" id="waitlist">
+  <div class="mx-auto max-w-6xl">
+    <div
+      class="reveal relative overflow-hidden rounded-[2.5rem] bg-espresso px-6 py-14 text-cream sm:px-12 sm:py-20"
+    >
+      <!-- Logo tile pattern, style guide p.12. Swap the mark in when we have
+           the SVG; the circle stands in for now. -->
+      <div
+        class="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style="background-image: radial-gradient(circle at center, #FEF0E3 0 6px, transparent 7px); background-size: 44px 44px;"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative mx-auto max-w-2xl text-center">
+        <h2 class="display-lg">
+          Want to walk<br /><span class="text-sand">first?</span>
+        </h2>
+
+        <p class="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-cream/75">
+          Be in the first group walking Tokyo with Curio. Tell us where you'd
+          want it next, and we'll let you know the moment it's live.
+        </p>
+
+        <div class="mt-9 flex justify-center">
+          <WaitlistForm
+            client:visible
+            tone="dark"
+            askCity={true}
+            buttonText="Get early access"
+          />
+        </div>
+
+        <p class="mt-6 text-sm text-cream/50">
+          A free premium weekend in your first city. We email about the launch
+          and nothing else.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
