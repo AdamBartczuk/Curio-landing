@@ -168,7 +168,7 @@ const staticMapUrl =
         GPS
       </span>
       <span
-        class="chip float-soft absolute bottom-10 right-1/4 z-10 hidden bg-sand text-espresso shadow-lg lg:inline-flex"
+        class="chip float-soft absolute bottom-10 right-1/4 z-10 hidden bg-espresso text-cream shadow-lg lg:inline-flex"
         style="animation-delay:-3s"
       >
         Explore
@@ -232,7 +232,9 @@ const staticMapUrl =
     position: absolute;
     inset: -4px;
     border-radius: 999px;
-    border: 2px solid rgba(254, 240, 227, 0.75);
+    /* Terracotta, not cream: the map ground is cream now, so a cream pulse
+       would be invisible — and the pulse is what says "tap me". */
+    border: 2px solid rgba(202, 81, 55, 0.6);
     animation: pin-pulse 2.8s ease-out infinite;
     animation-delay: var(--pulse-delay, 0s);
   }
@@ -404,11 +406,11 @@ const staticMapUrl =
       const cfg = (k: string, v: unknown) =>
         map.setConfigProperty("basemap", k, v);
 
-      /* "Espresso ink" (picked by Adam from the palette lab, 2026-08-16):
-       * cream paper, bold espresso street network, green parks — a printed
-       * map in the four brand colours. Day light on purpose: the dusk
-       * preset's cool ambient crushes every warm brown to purple-grey (both
-       * dusk lab variants proved it), while day renders colours true. */
+      /* "Cream daylight" (picked by Adam from the palette lab, 2026-08-16):
+       * the page's own cream as ground, streets barely a shade lighter, soft
+       * green parks, terracotta spent only on the story pins. Day light on
+       * purpose: the dusk preset's cool ambient crushes warm tones to
+       * purple-grey (both dusk lab variants proved it); day renders true. */
       cfg("lightPreset", "day");
       cfg("theme", "faded");
 
@@ -428,20 +430,20 @@ const staticMapUrl =
        * not at all. Landuse tints (commercial/education/medical/industrial)
        * are pinned to the ground family: unset, they render as the "weird
        * grey stuff" Adam flagged. */
-      cfg("colorLand", "#3E2812");
-      cfg("colorBuildings", "#4A3118");
-      cfg("colorCommercial", "#443014");
-      cfg("colorEducation", "#443014");
-      cfg("colorMedical", "#443014");
-      cfg("colorIndustrial", "#443014");
-      cfg("colorRoads", "#6E5231");
-      cfg("roadsBrightness", 0.35);
-      cfg("colorMotorways", "#7E5C36");
-      cfg("colorTrunks", "#785834");
-      cfg("colorGreenspace", "#4F6B35"); // parks matter to sightseers — green
-      cfg("colorWater", "#241A0C");
-      cfg("colorPlaceLabels", "#FEF0E3");
-      cfg("colorAdminBoundaries", "#6B4E2E");
+      cfg("colorLand", "#F3E0C8");
+      cfg("colorBuildings", "#E9D2B4");
+      cfg("colorCommercial", "#EFDABE");
+      cfg("colorEducation", "#EFDABE");
+      cfg("colorMedical", "#EFDABE");
+      cfg("colorIndustrial", "#EFDABE");
+      cfg("colorRoads", "#FDF4E7");
+      cfg("roadsBrightness", 0.5);
+      cfg("colorMotorways", "#EAB894"); // sand
+      cfg("colorTrunks", "#EFC49E");
+      cfg("colorGreenspace", "#AFC58F"); // parks matter to sightseers — green
+      cfg("colorWater", "#C2CDD3");
+      cfg("colorPlaceLabels", "#351D06"); // espresso
+      cfg("colorAdminBoundaries", "#C9A87F");
 
       // Approximate Yanaka highlight. Swap `coordinates` for a precise
       // boundary GeoJSON if one is ever provided.

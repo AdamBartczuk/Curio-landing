@@ -256,18 +256,25 @@ exactly what we came for; `class` does the filtering, with
 out. The basemap is repainted in brand tones via the Standard style's
 `color*` config properties.
 
-*Palette revision — "espresso ink" (2026-08-16).* Adam rejected the dusk
+*Palette — "cream daylight" (decided 2026-08-16).* Adam rejected the dusk
 look as non-monochromatic (grey landuse patches, harsh dark-block /
-light-street contrast) and asked for tonal browns plus genuinely green
-parks. A four-variant lab (rendered side by side from real GL) established
-that **the dusk light preset's cool ambient crushes every warm brown to
-purple-grey — warm palettes need `lightPreset: "day"`**. The shipped
-palette: one espresso-brown family for ground/buildings/landuse (all four
-landuse tints pinned — unset they render grey), cream street network, green
-`colorGreenspace` (parks matter to sightseers), terracotta reserved for
-story pins and the district boundary. Values in `CityWalk.astro` are the
-exact approved lab inputs — the style tone-maps them zoom-dependently, so
-change them as a set against a live render, never individually by eye. Copy + the story card sit in a frosted espresso panel **overlaid
+light-street contrast) and asked for tonal shades plus genuinely green
+parks. A four-variant lab of real GL renders established that **the dusk
+light preset's cool ambient crushes warm tones to purple-grey — warm
+palettes need `lightPreset: "day"`**. Adam picked the light variant: the
+page's own cream as ground, streets barely a shade lighter, sand motorways,
+soft green `colorGreenspace` (parks matter to sightseers), espresso place
+labels, and **terracotta spent only on the story pins and district line** —
+so the pins are the loudest thing on the map. All four landuse tints
+(commercial/education/medical/industrial) are pinned to the ground family;
+unset they render as the grey patches Adam flagged.
+
+Values in `CityWalk.astro` are the exact approved lab inputs — the style
+tone-maps them zoom-dependently, so change them as a set against a live
+render, never individually by eye. Two page-level adaptations the lab
+couldn't show: the pin pulse ring is terracotta (a cream ring is invisible
+on a cream ground, and the pulse is the "tap me" affordance), and the
+floating `Explore` chip is espresso rather than sand, for contrast. Copy + the story card sit in a frosted espresso panel **overlaid
 left**; the five pins (gate, sakura tree, old building, corner izakaya,
 bridge) are geo-anchored markers **on the right**. Tap a pin → teaser card in
 brand voice with a `2 min listen` chip and a waitlist link; the map eases to
