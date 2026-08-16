@@ -26,7 +26,13 @@ const sampleTitle = "The Other Capital";
   <div class="hero-grain" aria-hidden="true"></div>
 
   <div class="relative mx-auto max-w-6xl">
-    <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+    {/* The image column is sized to the image (28rem = max-w-md) instead of
+        a fraction. As a fraction it came out ~531px wide while the image was
+        capped at 448, leaving 83px of dead space on the right — which read
+        as the whole hero being shifted left. Widening the image instead
+        would push the form below the fold (only ~26px of headroom at
+        1280x720), so the column shrinks to meet it. */}
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_28rem] lg:gap-16">
       <!-- Left: the promise -->
       <div>
         <p

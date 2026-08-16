@@ -107,7 +107,11 @@ Carried here so the reasons for each change are not lost.
 
 **Conversion rules (added after 2026-08-14 review):**
 - The hero email form must sit fully above the fold at 1280×720 — form
-  directly after the sub-paragraph, chips demoted below it.
+  directly after the sub-paragraph, chips demoted below it. Headroom there
+  is thin (~60px), so anything that grows the hero's right column must be
+  re-measured at that size: the image column is fixed at `28rem` to match
+  the image exactly, because a fractional column left 83px of dead space on
+  the right and widening the image instead pushed the form under the fold.
 - When the hero audio sample ends, the caption becomes a signup nudge.
 - Section headlines: the stacked two-line black/terracotta split is reserved
   for the big beats (hero, Moment, Tokyo). Quiet sections use a kicker chip +
@@ -473,10 +477,13 @@ desktop scrollytelling).* The section should read as **the app in use**, so:
   thumb tunnel and would need a second mechanism anyway. If it returns, it
   is desktop-only sugar over these same `openStop` steps.
 
-**b) Walking-path spine.** A dotted SVG path weaves down the left margin
-(desktop only), drawing itself as you scroll via CSS scroll-driven animations
-(`animation-timeline`), with numbered stop pills at each section. No JS; no
-support or reduced motion → static dotted path, still a design element.
+**b) Walking-path spine — REMOVED 2026-08-16.** A dotted SVG path drew
+itself down the left margin as you scrolled, with numbered stop pills per
+section (`WalkPath.astro`). Adam cut it: it read as a stray line running
+beside the content rather than a route. The component and its wrapper are
+gone; the city metaphor now lives entirely in the map and the header's
+distance meter. Don't reintroduce it without a stronger reason than
+decoration.
 
 **c) Distance meter.** Header shows `TOKYO · 0.0 KM WALKED` mapping scroll
 progress to ~1.8 km (desktop); mobile gets a thin dotted progress bar under

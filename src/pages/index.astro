@@ -11,7 +11,6 @@ import MidCTA from "../components/MidCTA.astro";
 import FAQ from "../components/FAQ.astro";
 import WaitlistCTA from "../components/WaitlistCTA.astro";
 import Footer from "../components/Footer.astro";
-import WalkPath from "../components/WalkPath.astro";
 import CookieBanner from "../components/islands/CookieBanner.tsx";
 
 // Sentence case to match every headline on the page, and the search phrase
@@ -25,23 +24,17 @@ const description =
 <Base title={title} description={description}>
   <Header />
 
-  <!-- Shared positioned wrapper: WalkPath's station dots use section
-       offsetTop, which resolves against this element. -->
-  <div class="relative">
-    <WalkPath />
-
-    <main id="main">
-      <Hero />
-      <CityWalk />
-      <TwoWays />
-      <WhyCurio />
-      <LocalVoices />
-      <TokyoFirst />
-      <MidCTA />
-      <FAQ />
-      <WaitlistCTA />
-    </main>
-  </div>
+  <main id="main">
+    <Hero />
+    <CityWalk />
+    <TwoWays />
+    <WhyCurio />
+    <LocalVoices />
+    <TokyoFirst />
+    <MidCTA />
+    <FAQ />
+    <WaitlistCTA />
+  </main>
 
   <Footer />
 
