@@ -343,7 +343,9 @@ const staticMapUrl =
       style: "mapbox://styles/mapbox/standard",
       center,
       zoom: Number(mapEl.dataset.zoom) || 14.8,
-      pitch: desktop ? 48 : 30,
+      // Moderate pitch: still cinematic, but 3D buildings stop swallowing
+      // whole streets (and the markers standing on them).
+      pitch: desktop ? 40 : 25,
       bearing: -12,
       attributionControl: true,
       // Calm rules: never fight the page scroll, never spin the city.
@@ -433,7 +435,14 @@ const staticMapUrl =
     pins.forEach((pin) => {
       const [lng, lat] = (pin.dataset.lnglat || "0,0").split(",").map(Number);
       bounds.extend([lng, lat]);
-      new mapboxgl.Marker({ element: pin, anchor: "center" })
+      // occludedOpacity 1: GL v3 fades markers hidden behind 3D buildings to
+      // 20% — at dusk on this palette that reads as "no pins at all".
+      // The pins are UI, not scenery; they must always win.
+      new mapboxgl.Marker({
+        element: pin,
+        anchor: "center",
+        occludedOpacity: 1,
+      })
         .setLngLat([lng, lat])
         .addTo(map);
 
