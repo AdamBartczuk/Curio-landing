@@ -11,7 +11,7 @@ export interface FaqItem {
 export const faqs: FaqItem[] = [
   {
     q: "Do I need to plan a route before I go out?",
-    a: "No. That's the whole point. Open explore mode, start walking, and tap anything that catches your eye. There are planned journeys too, for when you want one, but you never have to use them.",
+    a: "No. That's the whole point. Open Explore mode, start walking, and tap anything that catches your eye. There are planned journeys too, for when you want one, but you never have to use them.",
   },
   {
     q: "How long is a single story?",

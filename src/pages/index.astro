@@ -14,9 +14,12 @@ import Footer from "../components/Footer.astro";
 import WalkPath from "../components/WalkPath.astro";
 import CookieBanner from "../components/islands/CookieBanner.tsx";
 
-const title = "Curio — Audio City Guide for Spontaneous Travel | Tokyo 2027";
+// Sentence case to match every headline on the page, and the search phrase
+// ("Tokyo audio guide") sits at the front where it counts. Description kept
+// near 140 chars so Google doesn't truncate it.
+const title = "Curio — a Tokyo audio guide for travellers without a plan";
 const description =
-  "Curio is an audio guide for people without a plan. Tap what's in front of you and hear a two-minute story, written by locals. Launching in Tokyo for cherry blossom season 2027.";
+  "An audio guide for people without a plan. Tap what's in front of you and hear a short story about it, written by locals. Tokyo, spring 2027.";
 ---
 
 <Base title={title} description={description}>
