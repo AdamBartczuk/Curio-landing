@@ -695,17 +695,18 @@ const staticMapUrl =
     padding: 0 0 1.15rem;
   }
 
-  /* A card taller than the map can never be placed inside it, whichever
-     anchor Mapbox picks — so cap it and let the long teasers scroll. */
+  /* The card has to fit between the pin and the map edge, minus the 92px
+     offset — on a 709px map that is ~350px, so 424px overflowed whichever
+     side Mapbox chose. Capped here; long teasers scroll inside the card. */
   :global(.walk-popup .mapboxgl-popup-content) {
-    max-height: min(420px, 52vh);
+    max-height: min(330px, 42vh);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 
   :global(.walk-popup .stop-hero) {
     position: relative;
-    height: 132px;
+    height: 108px;
     overflow: hidden;
     border-radius: 1.5rem 1.5rem 0 0;
   }
@@ -1246,7 +1247,14 @@ const staticMapUrl =
       return `${dist} · ${Math.max(1, Math.round(s / 60))} min walk`;
     };
 
-    const showRoute = async (id: string, to: [number, number]) => {
+    /* `cardEl` is the mounted copy. Re-querying the document instead was the
+     * bug that made every stop read "1.0 km": the lookup could land on a
+     * different card and the distance leaked between stops. */
+    const showRoute = async (
+      id: string,
+      to: [number, number],
+      cardEl: HTMLElement,
+    ) => {
       let data = routeCache.get(id);
 
       if (data === undefined) {
@@ -1265,19 +1273,18 @@ const staticMapUrl =
         } catch {
           data = null;
         }
-        routeCache.set(id, data);
+        // Only cache successes: caching a failure would make one flaky
+        // request permanently hide the distance for that stop.
+        if (data) routeCache.set(id, data);
       }
 
-      // A slower fetch must not overwrite a stop the visitor has since left.
-      if (openId !== id || !data) return;
+      /* Write only if this exact card is still on screen. `isConnected` is
+       * the reliable half of the check — a superseded card has been removed
+       * from the DOM — so a slow response can't land on another stop. */
+      if (!data || !cardEl.isConnected) return;
 
       setRoute(data.geometry);
-      /* Ask the mounted card directly. A bare `.walk-popup .stop-walk` also
-       * matches the mobile slot (which borrows that class for styling and is
-       * display:none on desktop), so the distance would land in an invisible
-       * element. */
-      const mount = popup?.getElement() ?? document.getElementById("stop-slot");
-      const host = mount?.querySelector(".stop-walk") as HTMLElement | null;
+      const host = cardEl.querySelector(".stop-walk") as HTMLElement | null;
       if (host) {
         const text = host.querySelector(".stop-walk-text");
         if (text) text.textContent = walkLabel(data.distance, data.duration);
@@ -1305,6 +1312,14 @@ const staticMapUrl =
       content.removeAttribute("id");
       content.hidden = false;
 
+      // Clear any distance carried over in the markup before this one loads.
+      const walkEl = content.querySelector(".stop-walk") as HTMLElement | null;
+      if (walkEl) {
+        walkEl.hidden = true;
+        const t = walkEl.querySelector(".stop-walk-text");
+        if (t) t.textContent = "";
+      }
+
       // Below lg: render into the in-flow slot under the copy, not a popup.
       if (!window.matchMedia("(min-width: 1024px)").matches) {
         const slot = document.getElementById("stop-slot");
@@ -1312,7 +1327,7 @@ const staticMapUrl =
           slot.replaceChildren(content);
           // No recentring here: the card is below the map, so moving the map
           // only pushes the other four pins out of a small viewport.
-          showRoute(openId, at);
+          showRoute(content.dataset.card || "", at, content);
           window.dispatchEvent(new CustomEvent("curio:pin-opened"));
           return;
         }
@@ -1321,10 +1336,12 @@ const staticMapUrl =
       const show = () => {
         popup = new mapboxgl.Popup({
           className: "walk-popup",
-          /* Anchor left on auto so Mapbox flips the card to whichever side
-           * has room — above, below or beside the pin — instead of running
-           * off the map. The old jitter came from opening mid-flight; now we
-           * only open after `moveend`, so it picks once and stays. */
+          /* Deterministic: the map is eased so the pin sits well below centre
+           * (see the offset in the easeTo below), which always leaves more
+           * room above the pin than the card's capped height — so anchoring
+           * above is guaranteed to fit. Letting Mapbox auto-pick chose
+           * "below the pin" and ran the card off the bottom edge. */
+          anchor: "bottom",
           offset: 92, // clears the photo pin (~86px tall with its label)
           maxWidth: "320px",
           focusAfterOpen: false,
@@ -1345,7 +1362,7 @@ const staticMapUrl =
           openId = "";
         });
         openedAt = Date.now();
-        showRoute(openId, at);
+        showRoute(content.dataset.card || "", at, content);
         window.dispatchEvent(new CustomEvent("curio:pin-opened"));
       };
 
@@ -1358,10 +1375,21 @@ const staticMapUrl =
        * so the card always has room above it. `seq` guards against a fast
        * second click: only the newest request may open a popup. */
       const mine = ++seq;
-      map.easeTo({ center: at, duration: 620, offset: [0, 90] });
-      map.once("moveend", () => {
-        if (mine === seq) show();
-      });
+      let opened = false;
+      const openOnce = () => {
+        if (opened || mine !== seq) return;
+        opened = true;
+        show();
+      };
+
+      // +150px drops the pin into the lower third, reserving the space the
+      // card needs above it whatever the map height.
+      map.easeTo({ center: at, duration: 620, offset: [0, 150] });
+      map.once("moveend", openOnce);
+      /* Belt and braces: `easeTo` animates on requestAnimationFrame, so a
+       * throttled tab — or a camera that was already exactly there — can mean
+       * `moveend` never arrives and the card silently never opens. */
+      setTimeout(openOnce, 700);
     };
 
     let seq = 0;
