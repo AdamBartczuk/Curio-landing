@@ -303,6 +303,14 @@ Contrast: `espresso` on `cream` and `cream` on `terracotta` both pass WCAG AA.
   whole guide and should drive the hero.
 - **Oversized headline type**, tight tracking, set very large.
 - **Logo-mark tile pattern** (p.12) — a section background, used sparingly.
+- **Paper texture, not pattern** (hero, decided 2026-08-16) — the hero sits on a
+  soft `sand` bloom plus a single tiled grain layer, fading out before CityWalk.
+  Texture only: it warms the cream without adding a motif.
+  *Topographic contour lines were considered and rejected* — contours read as
+  elevation and wilderness (the Strava/AllTrails register) where Curio is urban
+  discovery in a low-relief city, and the page already carries two cartographic
+  motifs in its first two screens: the `WalkPath` route spine running through the
+  hero gutter, and the real Mapbox map of Yanaka directly below. Don't re-propose.
 - **Warm photography** — golden-hour street scenes, headphones, motion blur,
   graded warm. Replaces the current cool Unsplash shot.
 - **Rounded-rectangle cards** with generous radius; soft, not heavy shadows.
@@ -438,7 +446,12 @@ the header bar. Footer easter egg at page end.
 **d) Motion layer.** Hero pointer parallax on floating chips + image
 (desktop, `hover:hover` only), richer staggered reveals, card hover lift,
 button arrow nudge. All CSS-first, all under the global
-`prefers-reduced-motion` kill switch.
+`prefers-reduced-motion` kill switch. The hero's `sand` bloom joins the same
+parallax layer and breathes on a slow (~14s) opacity cycle — deliberately
+`opacity`, never `transform`, because the parallax script writes inline
+transforms on `[data-depth]` nodes and an animation on the same property
+would silently win. Under "fewer, better moves" this is the first thing to
+cut if the hero ever reads as busy.
 
 **Guardrails:** no scroll-jacking, no new dependencies or React islands, no
 layout shift (SVGs get explicit dimensions), every interaction reachable by
@@ -493,14 +506,17 @@ static, meter absent).
       policy text from Adam (not drafted here — legal copy shouldn't be invented).
       Once it exists: `src/pages/privacy.astro` + `terms.astro` on `Base.astro`,
       plus a consent line linking to it under both forms.
-- [ ] **What language are the stories in?** Blocks the last FAQ entry. §4 lists
-      languages as an FAQ job and it is still unanswered — for a European
-      traveller heading to Japan it's a top-three question. Needs a product
-      answer, not a guess.
-- [ ] Confirm Supabase `waitlist` RLS is insert-only.
-- [ ] Verify `hello@curio.guide` actually receives mail — it's published in the
-      FAQ and the footer, and a dead address on a page asking for trust is worse
-      than no address.
+- [x] ~~What language are the stories in?~~ — answered 2026-08-16: **English
+      only at launch**, more later but nothing committed. Now in the FAQ. If the
+      landing page ships in ES/DE/PL (§5.3), keep this answer prominent — a
+      visitor reading a German page will assume German audio.
+- [ ] **Confirm Supabase `waitlist` RLS is insert-only.** Highest-risk item on
+      the page: the publishable key ships in client code by design, so if the
+      table allows reads, every signup email is publicly readable.
+- [ ] **`hello@curio.guide` does not exist yet** (confirmed 2026-08-16, Adam is
+      setting it up). It is published in the FAQ and the footer, and the privacy
+      policy will name it as the route for deletion requests — so it must work
+      before this page goes live, not after.
 - [x] ~~Confirm the early-access incentive wording~~ — confirmed real and
       committed 2026-08-16; wording unified across both forms (§5.1).
 - [x] ~~Stale README~~ — the Google AI Studio scaffold (with `GEMINI_API_KEY`

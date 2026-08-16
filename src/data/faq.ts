@@ -17,10 +17,15 @@ export const faqs: FaqItem[] = [
     q: "How long is a single story?",
     a: "Around two minutes. Long enough to be worth stopping for, short enough that you can listen while you keep walking.",
   },
-  // MISSING: "What language are the stories in?" belongs here. SPEC §4 lists
-  // languages as a job for this FAQ and it is still unanswered — for a European
-  // traveller heading to Japan it's a top-three question. Needs a real product
-  // answer from Adam; don't guess one. Tracked in SPEC §7.
+  // Answered 2026-08-16 (Adam): English only at launch, more later but nothing
+  // committed. Keep it that way — no dates, no named languages.
+  // NOTE: if the landing page ships in ES/DE/PL (SPEC §5.3), this answer has to
+  // stay prominent. A visitor reading a German page will reasonably assume the
+  // audio is German.
+  {
+    q: "What language are the stories in?",
+    a: "English, at launch. The writers live in the city they're writing about, and they write in English so any visitor can use it. We'd like to add more languages, and early-access members are the first people we'll ask which.",
+  },
   {
     q: "Does Curio work without mobile data?",
     a: "Yes. Download the city before you head out, and the maps and audio both work with no signal. Handy in Tokyo, where the metro runs deep underground and visitor SIMs can be patchy.",
