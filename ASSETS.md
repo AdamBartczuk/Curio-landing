@@ -200,6 +200,38 @@ last frames nearly match, or cross-fade the last 0.5s back to the first.
 
 ---
 
+## STOP-01…05 — map pin photos (PLACEHOLDERS, attribution required)
+
+`src/components/CityWalk.astro` · `public/media/stops/*.webp` · 168×168 WebP
+
+These are **Creative Commons photographs of the real Yanaka/Ueno area**, used
+as stand-ins so the pin design can be judged. They show the neighbourhood,
+not the fictional sample stops — which is why the line under the map says so.
+Replace with real story photography before launch.
+
+**If any of these survive to production, the attribution below must ship with
+them** (CC BY-SA requires credit + licence; BY-SA also asks that adaptations
+stay under the same licence — the crops here are adaptations).
+
+| Pin | File | Source (Wikimedia Commons) | Author | Licence |
+|---|---|---|---|---|
+| The gate | `gate.webp` | `Nezu-jinja Torii 01.jpg` | Zairon | CC BY-SA 4.0 |
+| The tree | `tree.webp` | `Cherry tree in blossom @ Ueno Park (13439347694).jpg` | Guilhem Vellut | CC BY 2.0 |
+| The old building | `building.webp` | `Kayaba Coffee by Sansakisaka Street in Ueno Sakuragi…2024 May.jpg` | Ximonic (Simo Räsänen) | CC BY-SA 4.0 |
+| The corner izakaya | `izakaya.webp` | `Yanaka Ginza 1.jpg` | Christophe95 | CC BY-SA 4.0 |
+| The steps | `steps.webp` | `Yuyake dandan yanaka taito tokyo 2009 Apr.JPG` | User:Kentin | CC BY-SA 3.0 |
+
+Each was centre-cropped to a square and resized to 168px; no other edits.
+Verify the author/licence on the file's Commons page before shipping — Commons
+metadata can change.
+
+**Replacement brief** (what these should eventually be): a tight, warm,
+golden-hour detail of the actual thing the story is about — the gate, the
+tree, the shopfront. Square, 168px minimum, house style as above. Shot so it
+reads at 54px: one clear subject, no wide scenes.
+
+---
+
 ## Non-generated assets still needed
 
 | Asset | Where | Note |

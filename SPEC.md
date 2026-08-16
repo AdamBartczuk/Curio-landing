@@ -243,6 +243,22 @@ match the golden-hour brand photography, plus a dashed terracotta highlight
 around the district (approximate polygon; swap in precise GeoJSON if
 provided).
 
+*Pin design and framing (2026-08-16).* A pin is a **rounded-square photo**
+(54px, cream frame, small point beneath) with the stop's **name on a pill
+above it** — the photo is the "what's there", which is the product in one
+object. Active pin takes a terracotta frame and label. All five labels show
+from `lg`; below that only the open pin is labelled, or a phone-width map
+becomes unreadable. Markers anchor `bottom` so the point sits on the
+coordinate. Both breakpoints **fit the pin cluster** (`fitBounds` with
+asymmetric padding — heavy on the left to clear the overlay panel) rather
+than trusting a fixed centre/zoom, which clipped the eastern pins. The card
+is capped at `min(80vh,780px)` so the section never exceeds the viewport, the
+container is `max-w-7xl` (wider than the rest of the page — at `6xl` the map
+lost most of its width to gutters and nested padding), and on short desktop
+windows the intro paragraph is dropped so the story card is never the thing
+that scrolls out of sight. Pin photos are CC placeholders — see ASSETS.md
+(STOP-01…05); the line under the map discloses this.
+
 *Curation and palette (added 2026-08-16).* The stock basemap labels every
 convenience store, bank and school — noise that contradicts "someone chose
 this for you". All default POI, transit and road labels are off; in their
