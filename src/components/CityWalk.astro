@@ -129,14 +129,13 @@ const staticMapUrl =
         </div>
       </div>
 
-      <!-- Left overlay: copy + the story card the pins drive. Narrower and
-           less inset than before so the map keeps the width it needs. -->
+      <!-- Copy panel: in-flow on mobile, pinned to the map's top-left corner
+           on lg as a floating glass card (it no longer fills the column, so
+           nothing needs to be hidden to make it fit). -->
       <div
-        class="relative z-10 p-4 sm:p-6 lg:flex lg:h-full lg:w-[40%] lg:max-w-[460px] lg:flex-col lg:justify-center lg:p-6"
+        class="relative z-10 p-4 sm:p-6 lg:absolute lg:left-7 lg:top-7 lg:w-[38%] lg:max-w-[420px] lg:p-0"
       >
-        <div
-          class="rounded-[2rem] bg-espresso/80 p-6 ring-1 ring-inset ring-cream/10 backdrop-blur-md sm:p-7 lg:overflow-y-auto"
-        >
+        <div class="glass-panel rounded-[2rem] p-6 sm:p-7">
           <p class="chip mb-5 w-fit bg-cream/10 text-cream/70">Explore mode</p>
 
           <!-- Capped below display-lg on desktop: the panel is a fixed-height
@@ -173,10 +172,44 @@ const staticMapUrl =
         {
           stops.map((s, i) => (
             <article id={`stop-card-${s.id}`} data-card={s.id} class="stop-card">
-              <p class="stop-kind">
-                Stop 0{i + 1} · {s.kind}
+              {/* Photo heads the card and dissolves into the espresso body,
+                  so the name sits on the image rather than under it. */}
+              <div class="stop-hero">
+                <img
+                  class="stop-hero-img"
+                  src={s.photo}
+                  alt=""
+                  width="360"
+                  height="360"
+                  loading="lazy"
+                />
+                <div class="stop-hero-text">
+                  <p class="stop-kind">
+                    Stop 0{i + 1} · {s.kind}
+                  </p>
+                  <h3 class="stop-name">{s.name}</h3>
+                </div>
+              </div>
+
+              {/* Filled from the Directions API when the card opens; stays
+                  hidden if the request fails, so no distance is ever
+                  invented. */}
+              <p class="stop-walk" hidden>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <ellipse cx="7.5" cy="7" rx="3" ry="4.4" transform="rotate(-12 7.5 7)" />
+                  <ellipse cx="6.6" cy="13.2" rx="2.4" ry="1.7" transform="rotate(-12 6.6 13.2)" />
+                  <ellipse cx="16.5" cy="11.6" rx="3" ry="4.4" transform="rotate(10 16.5 11.6)" />
+                  <ellipse cx="17.4" cy="17.8" rx="2.4" ry="1.7" transform="rotate(10 17.4 17.8)" />
+                </svg>
+                <span class="stop-walk-text"></span>
               </p>
-              <h3 class="stop-name">{s.name}</h3>
+
               <p class="stop-teaser">{s.teaser}</p>
 
               {/* Deliberately inert and labelled as such — the narration
@@ -200,25 +233,43 @@ const staticMapUrl =
         }
       </div>
 
-      <!-- Floating brand chips over the map (desktop; the map is behind) -->
+      {/* Replaces the decorative "GPS" chip: at this zoom the map could be
+          any city, so say which one. Visible at every breakpoint. */}
       <span
-        class="chip float-soft absolute right-8 top-8 z-10 hidden bg-terracotta text-cream shadow-lg lg:inline-flex"
+        class="absolute right-5 top-5 z-10 inline-flex items-center gap-2 rounded-full bg-cream/90 px-3.5 py-2 text-xs font-medium text-espresso shadow-lg ring-1 ring-inset ring-espresso/10 backdrop-blur-sm sm:right-7 sm:top-7"
       >
-        GPS
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+          class="text-terracotta"
+        >
+          <path
+            d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+          <circle cx="12" cy="10" r="2.4" fill="currentColor" />
+        </svg>
+        Japan · Tokyo · Yanaka
       </span>
-      <span
-        class="chip float-soft absolute bottom-10 right-1/4 z-10 hidden bg-espresso text-cream shadow-lg lg:inline-flex"
-        style="animation-delay:-3s"
-      >
-        Explore
-      </span>
-
-      {/* Hypothetical position + POI radar. Labelled "example" because it is
-          one: the page never asks for or uses real geolocation. */}
+      {/* Hypothetical position + POI radar. Deliberately the familiar blue
+          navigation dot rather than a brand colour: "this is me on a map" is
+          a convention worth borrowing, and terracotta here would read as
+          just another pin. Labelled "example" because it is one — the page
+          never asks for or uses real geolocation. */}
       <div id="demo-me" class="demo-me" data-lnglat={DEMO_POSITION.join(",")} hidden>
         <span class="demo-me-radar" aria-hidden="true"></span>
+        <span class="demo-me-accuracy" aria-hidden="true"></span>
         <span class="demo-me-dot" aria-hidden="true"></span>
-        <span class="demo-me-label">You are here — example</span>
+        {/* Visually removed at Adam's request — the blue dot speaks for
+            itself. Kept for screen readers, and the caption under the map
+            still states in words that the position is an example, so the
+            dot never passes as real geolocation. */}
+        <span class="sr-only">Example position — not your real location</span>
       </div>
 
       <!-- Pins: server-rendered here, adopted as geo-anchored map markers by
@@ -250,9 +301,10 @@ const staticMapUrl =
     <!-- Disclosure sits outside the card: it must stay readable, and inside
          the panel it was the first thing to get clipped. -->
     <p class="mt-4 px-2 text-xs leading-relaxed text-espresso/45">
-      Yanaka — Tokyo's old quarter. Sample stops; the full story map arrives
-      with launch. Pin photos are placeholder images of the neighbourhood
-      (Wikimedia Commons, CC&nbsp;BY&#8209;SA — credited in ASSETS.md).
+      Yanaka — Tokyo's old quarter. Five real stops; the full story map
+      arrives with launch. The blue dot is an example position, not your
+      location — this page never asks for it. Photos: Wikimedia Commons,
+      CC&nbsp;BY&#8209;SA / CC0 — credited in ASSETS.md.
     </p>
   </div>
 </section>
@@ -385,13 +437,94 @@ const staticMapUrl =
     }
   }
 
-  /* On a short desktop window the panel is a fixed-height column and
-     something has to give. Drop the intro paragraph (it restates the hero)
-     rather than let the story card — the interactive payoff — be the part
-     that scrolls out of sight. */
-  @media (min-width: 1024px) and (max-height: 840px) {
-    .walk-intro {
+  /* On desktop the open card sits directly above the pin and already carries
+     the name, so the label would just repeat it into the popup's tip. */
+  @media (min-width: 1024px) {
+    .map-pin[aria-expanded="true"] .pin-label {
       display: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     Paper grain over the map — the analogue pass
+     --------------------------------------------------------------------- */
+  :global(.map-grain) {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    /* Self-contained SVG turbulence: no external asset, no extra request,
+       and it tiles seamlessly via stitchTiles. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    mix-blend-mode: multiply;
+    opacity: 0.5;
+  }
+
+  /* Warm vignette + a faint fibre wash, so it reads as paper rather than
+     as video noise. */
+  :global(.map-grain::after) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        120% 95% at 50% 45%,
+        rgba(53, 29, 6, 0) 55%,
+        rgba(53, 29, 6, 0.13) 100%
+      ),
+      repeating-linear-gradient(
+        102deg,
+        rgba(53, 29, 6, 0.022) 0px,
+        rgba(53, 29, 6, 0.022) 1px,
+        rgba(53, 29, 6, 0) 1px,
+        rgba(53, 29, 6, 0) 4px
+      );
+  }
+
+  /* ---------------------------------------------------------------------
+     Liquid glass copy panel
+     --------------------------------------------------------------------- */
+  .glass-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(
+      140deg,
+      rgba(53, 29, 6, 0.72) 0%,
+      rgba(53, 29, 6, 0.55) 55%,
+      rgba(53, 29, 6, 0.66) 100%
+    );
+    /* saturate() is what stops the blurred map underneath going grey and
+       makes this read as glass rather than a flat scrim. */
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    box-shadow:
+      0 18px 45px -18px rgba(53, 29, 6, 0.55),
+      inset 0 1px 0 rgba(254, 240, 227, 0.26),
+      inset 0 0 0 1px rgba(254, 240, 227, 0.12);
+  }
+
+  /* Specular sheen across the top-left, the giveaway of a glass surface. */
+  .glass-panel::before {
+    content: "";
+    position: absolute;
+    inset: -40% -10% auto -10%;
+    height: 70%;
+    background: radial-gradient(
+      60% 100% at 30% 0%,
+      rgba(254, 240, 227, 0.16) 0%,
+      rgba(254, 240, 227, 0) 70%
+    );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* No backdrop-filter (older Firefox, some webviews): fall back to a solid
+     panel rather than unreadable text over the map. */
+  @supports not (backdrop-filter: blur(1px)) {
+    .glass-panel {
+      background: rgba(53, 29, 6, 0.93);
     }
   }
 
@@ -419,14 +552,28 @@ const staticMapUrl =
     position: relative;
   }
 
+  /* Apple/Google navigation blue, on purpose off-brand: users read this
+     exact object as "my position". #007AFF is the iOS system blue. */
   .demo-me-dot {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 999px;
-    background: var(--color-espresso);
-    border: 3px solid var(--color-cream);
-    box-shadow: 0 2px 10px rgba(53, 29, 6, 0.45);
+    background: #007aff;
+    border: 3px solid #fff;
+    box-shadow:
+      0 0 0 1px rgba(0, 60, 130, 0.18),
+      0 2px 10px rgba(0, 60, 130, 0.5);
     grid-area: 1 / 1;
+  }
+
+  /* The soft "accuracy" halo every navigation app draws around the dot. */
+  .demo-me-accuracy {
+    grid-area: 1 / 1;
+    width: 132px;
+    height: 132px;
+    border-radius: 999px;
+    background: rgba(0, 122, 255, 0.13);
+    box-shadow: inset 0 0 0 1px rgba(0, 122, 255, 0.26);
   }
 
   /* One sweep every 5s: expands to roughly the POI search radius, then
@@ -437,11 +584,11 @@ const staticMapUrl =
     width: 72px;
     height: 72px;
     border-radius: 999px;
-    border: 2px solid rgba(202, 81, 55, 0.55);
+    border: 2px solid rgba(0, 122, 255, 0.5);
     background: radial-gradient(
       circle,
-      rgba(202, 81, 55, 0.16) 0%,
-      rgba(202, 81, 55, 0) 70%
+      rgba(0, 122, 255, 0.16) 0%,
+      rgba(0, 122, 255, 0) 70%
     );
     animation: demo-radar 5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
@@ -461,18 +608,21 @@ const staticMapUrl =
     }
   }
 
+  /* Lighter than before: the dot should carry the meaning, the label only
+     has to keep us honest about it being a demo. */
   .demo-me-label {
     position: absolute;
     top: 100%;
-    margin-top: 6px;
-    padding: 2px 8px;
+    margin-top: 10px;
+    padding: 2px 7px;
     border-radius: 999px;
-    background: rgba(53, 29, 6, 0.88);
-    color: var(--color-cream);
+    background: rgba(53, 29, 6, 0.6);
+    color: rgba(254, 240, 227, 0.9);
     font-family: var(--font-body);
-    font-size: 10px;
-    letter-spacing: 0.05em;
+    font-size: 9px;
+    letter-spacing: 0.06em;
     white-space: nowrap;
+    backdrop-filter: blur(4px);
   }
 
   /* ---------------------------------------------------------------------
@@ -487,9 +637,23 @@ const staticMapUrl =
     max-width: 320px;
   }
 
-  :global(.walk-popup .mapboxgl-popup-tip) {
+  /* The tip is coloured per-anchor by mapbox-gl.css, which loads after this
+     component's styles — so a plain `.walk-popup .mapboxgl-popup-tip` rule
+     loses and the arrow stays white. Matching the anchor class outranks it. */
+  :global(.walk-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip) {
     border-top-color: var(--color-espresso);
+  }
+
+  :global(.walk-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip) {
     border-bottom-color: var(--color-espresso);
+  }
+
+  :global(.walk-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip) {
+    border-right-color: var(--color-espresso);
+  }
+
+  :global(.walk-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip) {
+    border-left-color: var(--color-espresso);
   }
 
   :global(.walk-popup .mapboxgl-popup-close-button) {
@@ -506,8 +670,45 @@ const staticMapUrl =
     opacity: 1;
   }
 
+  /* Hero bleeds to the card edges, so padding moves onto the children. */
   :global(.walk-popup .stop-card) {
-    padding: 1.15rem 1.25rem 1.25rem;
+    padding: 0 0 1.15rem;
+  }
+
+  :global(.walk-popup .stop-hero) {
+    position: relative;
+    height: 132px;
+    overflow: hidden;
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  :global(.walk-popup .stop-hero-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* The shaded wash: photo at the top, espresso by the bottom, so the card
+     body reads as a continuation of the image rather than a separate slab. */
+  :global(.walk-popup .stop-hero::after) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(53, 29, 6, 0.05) 0%,
+      rgba(53, 29, 6, 0.45) 42%,
+      rgba(53, 29, 6, 0.88) 78%,
+      var(--color-espresso) 100%
+    );
+  }
+
+  :global(.walk-popup .stop-hero-text) {
+    position: absolute;
+    inset: auto 1.25rem 0.55rem;
+    z-index: 1;
+    text-shadow: 0 1px 12px rgba(53, 29, 6, 0.65);
   }
 
   /* The mobile slot borrows the popup's inner styles but supplies its own
@@ -527,15 +728,30 @@ const staticMapUrl =
   }
 
   :global(.walk-popup .stop-name) {
-    margin-top: 0.35rem;
+    margin-top: 0.2rem;
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
     line-height: 1.15;
+    color: var(--color-cream);
+  }
+
+  :global(.walk-popup .stop-walk) {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.7rem 1.25rem 0;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--color-sand);
+  }
+
+  :global(.walk-popup .stop-walk[hidden]) {
+    display: none;
   }
 
   :global(.walk-popup .stop-teaser) {
-    margin-top: 0.5rem;
+    margin: 0.55rem 1.25rem 0;
     font-size: 0.875rem;
     line-height: 1.6;
     color: rgba(254, 240, 227, 0.8);
@@ -547,7 +763,7 @@ const staticMapUrl =
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    margin-top: 0.9rem;
+    margin: 0.9rem 1.25rem 0;
     padding: 0.55rem 0.75rem;
     border-radius: 999px;
     background: rgba(254, 240, 227, 0.08);
@@ -585,7 +801,7 @@ const staticMapUrl =
   }
 
   :global(.walk-popup .stop-audio-note) {
-    margin-top: 0.4rem;
+    margin: 0.4rem 1.25rem 0;
     font-size: 10px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -594,7 +810,7 @@ const staticMapUrl =
 
   :global(.walk-popup .stop-link) {
     display: inline-block;
-    margin-top: 0.85rem;
+    margin: 0.85rem 1.25rem 0;
     font-size: 0.8125rem;
     font-weight: 500;
     color: var(--color-sand);
@@ -704,12 +920,27 @@ const staticMapUrl =
       "bottom-right",
     );
 
+    /* Paper grain over the tiles. Appended to the canvas container BEFORE any
+     * marker or popup exists, so it sits above the map imagery but under the
+     * pins and cards — grain over a photo pin would just look like a dirty
+     * thumbnail. pointer-events:none keeps the map draggable through it. */
+    const grain = document.createElement("div");
+    grain.className = "map-grain";
+    grain.setAttribute("aria-hidden", "true");
+    map.getCanvasContainer().appendChild(grain);
+
     /* Framing differs by breakpoint and must survive a resize — a window
      * dragged narrow (or a tablet rotating) otherwise keeps the desktop
      * padding and pushes every pin off-screen.
      *   wide: the overlay panel covers ~46%, so pad the viewport left and
      *         let the composed centre sit in the open right side.
      *   narrow: no panel overlap — frame the pin cluster itself. */
+    const DEMO_POS = (
+      document.getElementById("demo-me")?.dataset.lnglat || "139.7665,35.7243"
+    )
+      .split(",")
+      .map(Number) as [number, number];
+
     const stopCoords = Array.from(pins).map(
       (p) =>
         (p.dataset.lnglat || "0,0").split(",").map(Number) as [number, number],
@@ -736,6 +967,11 @@ const staticMapUrl =
           : { left: 60, right: 60, top: 110, bottom: 80 },
         maxZoom: 15.4,
         duration: 0,
+        /* Pitch and bearing MUST be repeated here. fitBounds computes a fresh
+         * camera and drops whatever the map was constructed with, which is
+         * why the view had silently flattened to straight-down. */
+        pitch: wide ? 42 : 30,
+        bearing: -12,
       });
     };
     frame();
@@ -798,6 +1034,40 @@ const staticMapUrl =
       /* The dashed district outline was removed on 2026-08-16 (Adam): the
        * photo pins and the position radar carry "this is your patch" on
        * their own, and the polygon was only ever an approximation. */
+
+      /* Walking route from the example position to the open stop. Empty
+       * until a pin is tapped; a cream casing keeps the dotted terracotta
+       * line legible where it crosses parks and buildings. */
+      map.addSource("route", {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+      map.addLayer({
+        id: "route-casing",
+        type: "line",
+        source: "route",
+        slot: "middle",
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": "#FEF0E3",
+          "line-width": 9,
+          "line-opacity": 0.95,
+        },
+      });
+      map.addLayer({
+        id: "route-line",
+        type: "line",
+        source: "route",
+        slot: "middle",
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": "#CA5137",
+          "line-width": 4.5,
+          // Round caps + a tiny dash = a dotted trail, the visual language
+          // every map uses for "on foot".
+          "line-dasharray": [0.01, 1.9],
+        },
+      });
 
       /* Curated landmarks: the only POIs on this map. Temples, shrines,
        * gardens, museums and historic sites — the things a story would
@@ -920,6 +1190,70 @@ const staticMapUrl =
      * while the popup gets its own copy to own and destroy. */
     let popup: import("mapbox-gl").Popup | null = null;
 
+    /* Walking route: real street-following directions from the example
+     * position, fetched once per stop and cached. If the request fails the
+     * line and the distance simply don't appear — better nothing than a
+     * made-up number on a map. */
+    const routeCache = new Map<
+      string,
+      { geometry: unknown; distance: number; duration: number } | null
+    >();
+
+    const setRoute = (geometry: unknown | null) => {
+      const src = map.getSource("route") as
+        | { setData: (d: unknown) => void }
+        | undefined;
+      src?.setData(
+        geometry
+          ? { type: "Feature", properties: {}, geometry }
+          : { type: "FeatureCollection", features: [] },
+      );
+    };
+
+    const walkLabel = (m: number, s: number) => {
+      const dist =
+        m < 950 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+      return `${dist} · ${Math.max(1, Math.round(s / 60))} min walk`;
+    };
+
+    const showRoute = async (id: string, to: [number, number]) => {
+      let data = routeCache.get(id);
+
+      if (data === undefined) {
+        try {
+          const [flng, flat] = DEMO_POS;
+          const url =
+            `https://api.mapbox.com/directions/v5/mapbox/walking/` +
+            `${flng},${flat};${to[0]},${to[1]}` +
+            `?geometries=geojson&overview=full&access_token=${mapboxgl.accessToken}`;
+          const res = await fetch(url);
+          const json = await res.json();
+          const r = json?.routes?.[0];
+          data = r
+            ? { geometry: r.geometry, distance: r.distance, duration: r.duration }
+            : null;
+        } catch {
+          data = null;
+        }
+        routeCache.set(id, data);
+      }
+
+      // A slower fetch must not overwrite a stop the visitor has since left.
+      if (openId !== id || !data) return;
+
+      setRoute(data.geometry);
+      const host = document.querySelector(
+        ".walk-popup .stop-walk",
+      ) as HTMLElement | null;
+      if (host) {
+        const text = host.querySelector(".stop-walk-text");
+        if (text) text.textContent = walkLabel(data.distance, data.duration);
+        host.hidden = false;
+      }
+    };
+
+    let openId = "";
+
     const openStop = (
       pin: HTMLButtonElement,
       at: [number, number],
@@ -931,6 +1265,8 @@ const staticMapUrl =
       popup?.remove();
       clearPins();
       pin.setAttribute("aria-expanded", "true");
+      openId = pin.dataset.stop || "";
+      setRoute(null);
 
       const content = card.cloneNode(true) as HTMLElement;
       content.removeAttribute("id");
@@ -943,34 +1279,59 @@ const staticMapUrl =
           slot.replaceChildren(content);
           // No recentring here: the card is below the map, so moving the map
           // only pushes the other four pins out of a small viewport.
+          showRoute(openId, at);
           window.dispatchEvent(new CustomEvent("curio:pin-opened"));
           return;
         }
       }
 
-      popup = new mapboxgl.Popup({
-        className: "walk-popup",
-        offset: 92, // clears the photo pin, which is ~86px tall with its label
-        maxWidth: "320px",
-        focusAfterOpen: false,
-        closeOnMove: false,
-        /* Must be false: the marker click bubbles to the map, and with the
-         * default `true` Mapbox closes the popup with the very click that
-         * opened it. Closing is handled by the ✕, by opening another pin,
-         * and by the map-click handler registered below. */
-        closeOnClick: false,
-      })
-        .setLngLat(at)
-        .setDOMContent(content)
-        .addTo(map);
+      const show = () => {
+        popup = new mapboxgl.Popup({
+          className: "walk-popup",
+          /* Pinned anchor, not auto: left to itself Mapbox re-evaluates the
+           * anchor as the map moves, opening below the pin and flipping back
+           * once it settles — the "appears up top, then drops" jitter. */
+          anchor: "bottom",
+          offset: 92, // clears the photo pin (~86px tall with its label)
+          maxWidth: "320px",
+          focusAfterOpen: false,
+          closeOnMove: false,
+          /* Must be false: the marker click bubbles to the map, and with the
+           * default `true` Mapbox closes the popup with the very click that
+           * opened it. Closing is handled by the ✕, by opening another pin,
+           * and by the map-click handler registered below. */
+          closeOnClick: false,
+        })
+          .setLngLat(at)
+          .setDOMContent(content)
+          .addTo(map);
 
-      popup.on("close", clearPins);
-      openedAt = Date.now();
+        popup.on("close", () => {
+          clearPins();
+          setRoute(null);
+          openId = "";
+        });
+        openedAt = Date.now();
+        showRoute(openId, at);
+        window.dispatchEvent(new CustomEvent("curio:pin-opened"));
+      };
 
-      // Nudge the map so the popup has room above the pin.
-      if (ease) map.easeTo({ center: at, duration: 900, offset: [0, 90] });
-      window.dispatchEvent(new CustomEvent("curio:pin-opened"));
+      if (!ease) {
+        show();
+        return;
+      }
+
+      /* Fly first, open second. The offset drops the pin into the lower half
+       * so the card always has room above it. `seq` guards against a fast
+       * second click: only the newest request may open a popup. */
+      const mine = ++seq;
+      map.easeTo({ center: at, duration: 620, offset: [0, 90] });
+      map.once("moveend", () => {
+        if (mine === seq) show();
+      });
     };
+
+    let seq = 0;
 
     /* Tapping bare map closes the story. Guarded by a timestamp because the
      * opening click reaches the map a tick later and would close it again. */
