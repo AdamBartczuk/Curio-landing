@@ -434,6 +434,20 @@ to curio.guide + localhost in the Mapbox dashboard**. Pins remain real
 cards are labelled sample stops, **no fake audio** — the only real clip stays
 in the hero. `curio:pin-opened` mirrors the existing analytics pattern.
 
+*Camera and card height (revised 2026-08-16).* The map is **top-down
+(`pitch: 0`)**: the tilted camera read as a game view and the 3D extrusions
+fought the flat paper palette. Pitch and bearing must be repeated inside
+`fitBounds`, which computes a fresh camera and drops them.
+
+Story cards are **never scrolled** — a card is read in one piece. Because
+teasers differ by ~150px, the script measures the card off-screen at the
+popup's width *before* flying, then eases with an offset that drops the pin
+far enough down the frame for the whole card to clear the top edge. Only a
+map too short for even the most generous framing gets a scrollbar. Two traps
+that cost real debugging: `jumpTo` silently ignores `offset` (it is an
+animation option — use `easeTo` with `duration: 0`), and measuring *after*
+opening needs a second animation, which never runs in a throttled tab.
+
 *Demo mode + mobile carousel (decided 2026-08-16, Adam's pick "B + C" over
 desktop scrollytelling).* The section should read as **the app in use**, so:
 

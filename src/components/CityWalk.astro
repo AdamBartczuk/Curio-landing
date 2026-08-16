@@ -698,12 +698,11 @@ const staticMapUrl =
     padding: 0 0 1.15rem;
   }
 
-  /* The card has to fit between the pin and the map edge, minus the 92px
-     offset — on a 709px map that is ~350px, so 424px overflowed whichever
-     side Mapbox chose. Capped here; long teasers scroll inside the card. */
+  /* No height cap here on purpose: the card should be read in one piece,
+     not scrolled. The script measures it after opening and pushes the pin
+     far enough down the frame that it fits, only clamping in the rare case
+     where even the whole map is too short. */
   :global(.walk-popup .mapboxgl-popup-content) {
-    max-height: min(330px, 42vh);
-    overflow-y: auto;
     overscroll-behavior: contain;
   }
 
@@ -961,9 +960,9 @@ const staticMapUrl =
       style: "mapbox://styles/mapbox/standard",
       center,
       zoom: Number(mapEl.dataset.zoom) || 14.8,
-      // Moderate pitch: still cinematic, but 3D buildings stop swallowing
-      // whole streets (and the markers standing on them).
-      pitch: desktop ? 40 : 25,
+      // Straight down. The tilted view read as a game camera and the 3D
+      // extrusions fought the flat paper palette; top-down looks like a map.
+      pitch: 0,
       bearing: -12,
       // Default control replaced below by the compact one — attribution is
       // required by Mapbox's ToS and OSM's ODbL, so it can't be removed,
@@ -1030,10 +1029,11 @@ const staticMapUrl =
           : { left: 44, right: 44, top: 92, bottom: 64 },
         maxZoom: 15.9,
         duration: 0,
-        /* Pitch and bearing MUST be repeated here. fitBounds computes a fresh
-         * camera and drops whatever the map was constructed with, which is
-         * why the view had silently flattened to straight-down. */
-        pitch: wide ? 42 : 30,
+        /* Pitch and bearing MUST be repeated here — fitBounds computes a
+         * fresh camera and drops whatever the map was constructed with.
+         * Both are deliberate: straight down (0), slight rotation so the
+         * grid isn't dead square to the frame. */
+        pitch: 0,
         bearing: -12,
       });
     };
@@ -1478,16 +1478,50 @@ const staticMapUrl =
         // Only a human counts as intent — demo-mode advances stay out of
         // the pin_opened metric or it becomes meaningless.
         if (user) window.dispatchEvent(new CustomEvent("curio:pin-opened"));
+
       };
 
+      /* Cards are read in one piece, not scrolled — so the map must make
+       * room for THIS card, whose height varies by ~150px between stops.
+       * Measure it off-screen at the popup's own width before flying, so a
+       * single movement lands the pin low enough for the whole card to clear
+       * the top edge. (Measuring after opening needed a second animation,
+       * which is fragile: rAF is suspended in throttled tabs.) */
+      content.style.cssText =
+        "position:absolute;visibility:hidden;left:-9999px;top:0;width:320px";
+      document.body.appendChild(content);
+      const cardH = content.offsetHeight;
+      content.removeAttribute("style");
+      content.remove();
+
+      const mapH = mapEl.clientHeight;
+      const maxDy = mapH / 2 - 70; // keep the pin clear of the bottom edge
+      const dy = Math.min(Math.max(cardH + 92 + 14 - mapH / 2, 0), maxDy);
+
+      // Only when even the most generous framing can't fit it (very short
+      // maps) does the card get a scrollbar.
+      const room = mapH / 2 + maxDy - 92 - 14;
+      if (cardH > room) {
+        const box = content.querySelector(
+          ".stop-card",
+        ) as HTMLElement | null;
+        if (box) {
+          box.style.maxHeight = `${Math.round(room)}px`;
+          box.style.overflowY = "auto";
+        }
+      }
+
       if (!ease) {
+        // easeTo with duration 0, NOT jumpTo: `offset` is an animation
+        // option and jumpTo silently ignores it, which left the very first
+        // card hanging off the top of the map.
+        map.easeTo({ center: at, offset: [0, dy], duration: 0 });
         show();
         return;
       }
 
-      /* Fly first, open second. The offset drops the pin into the lower half
-       * so the card always has room above it. `seq` guards against a fast
-       * second click: only the newest request may open a popup. */
+      /* Fly first, open second. `seq` guards against a fast second click:
+       * only the newest request may open a popup. */
       const mine = ++seq;
       let opened = false;
       const openOnce = () => {
@@ -1496,9 +1530,11 @@ const staticMapUrl =
         show();
       };
 
-      // +150px drops the pin into the lower third, reserving the space the
-      // card needs above it whatever the map height.
-      map.easeTo({ center: at, duration: 620, offset: [0, 150] });
+      map.easeTo({
+        center: at,
+        duration: reducedMotion ? 0 : 620,
+        offset: [0, dy],
+      });
       map.once("moveend", openOnce);
       /* Belt and braces: `easeTo` animates on requestAnimationFrame, so a
        * throttled tab — or a camera that was already exactly there — can mean
