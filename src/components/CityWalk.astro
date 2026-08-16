@@ -1272,9 +1272,12 @@ const staticMapUrl =
       if (openId !== id || !data) return;
 
       setRoute(data.geometry);
-      const host = document.querySelector(
-        ".walk-popup .stop-walk",
-      ) as HTMLElement | null;
+      /* Ask the mounted card directly. A bare `.walk-popup .stop-walk` also
+       * matches the mobile slot (which borrows that class for styling and is
+       * display:none on desktop), so the distance would land in an invisible
+       * element. */
+      const mount = popup?.getElement() ?? document.getElementById("stop-slot");
+      const host = mount?.querySelector(".stop-walk") as HTMLElement | null;
       if (host) {
         const text = host.querySelector(".stop-walk-text");
         if (text) text.textContent = walkLabel(data.distance, data.duration);
