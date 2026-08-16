@@ -254,9 +254,20 @@ Yanaka the good places are small and rank 3–5, so a strict rank cut removes
 exactly what we came for; `class` does the filtering, with
 `arts_and_entertainment` narrowed by `maki` so cinemas and nightlife stay
 out. The basemap is repainted in brand tones via the Standard style's
-`color*` config properties (warm espresso ground, sand roads, terracotta
-motorways, cream labels) — mid-tone values on purpose, since the dusk preset
-darkens whatever it's given. Copy + the story card sit in a frosted espresso panel **overlaid
+`color*` config properties.
+
+*Palette revision — "espresso ink" (2026-08-16).* Adam rejected the dusk
+look as non-monochromatic (grey landuse patches, harsh dark-block /
+light-street contrast) and asked for tonal browns plus genuinely green
+parks. A four-variant lab (rendered side by side from real GL) established
+that **the dusk light preset's cool ambient crushes every warm brown to
+purple-grey — warm palettes need `lightPreset: "day"`**. The shipped
+palette: one espresso-brown family for ground/buildings/landuse (all four
+landuse tints pinned — unset they render grey), cream street network, green
+`colorGreenspace` (parks matter to sightseers), terracotta reserved for
+story pins and the district boundary. Values in `CityWalk.astro` are the
+exact approved lab inputs — the style tone-maps them zoom-dependently, so
+change them as a set against a live render, never individually by eye. Copy + the story card sit in a frosted espresso panel **overlaid
 left**; the five pins (gate, sakura tree, old building, corner izakaya,
 bridge) are geo-anchored markers **on the right**. Tap a pin → teaser card in
 brand voice with a `2 min listen` chip and a waitlist link; the map eases to

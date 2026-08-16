@@ -67,9 +67,10 @@ const stops = [
   },
 ];
 
-// Instant-paint fallback while GL boots (and the no-JS view).
+// Instant-paint fallback while GL boots (and the no-JS view). light-v11 so
+// the flash matches the espresso-ink map that replaces it.
 const staticMapUrl =
-  `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/` +
+  `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/` +
   `${MAP_CENTER[0]},${MAP_CENTER[1]},${MAP_ZOOM - 0.6},0/1280x720@2x` +
   `?access_token=${MAPBOX_TOKEN}&logo=false`;
 ---
@@ -403,9 +404,12 @@ const staticMapUrl =
       const cfg = (k: string, v: unknown) =>
         map.setConfigProperty("basemap", k, v);
 
-      // Dusk = the brand's golden hour.
-      cfg("lightPreset", "dusk");
-      // "faded" calms the stock hues so our palette below reads cleanly.
+      /* "Espresso ink" (picked by Adam from the palette lab, 2026-08-16):
+       * cream paper, bold espresso street network, green parks — a printed
+       * map in the four brand colours. Day light on purpose: the dusk
+       * preset's cool ambient crushes every warm brown to purple-grey (both
+       * dusk lab variants proved it), while day renders colours true. */
+      cfg("lightPreset", "day");
       cfg("theme", "faded");
 
       /* Curation, not cartography. The stock basemap labels every
@@ -418,18 +422,26 @@ const staticMapUrl =
       cfg("showRoadLabels", false);
       cfg("showPlaceLabels", true);
 
-      /* Palette. Mid-tones on purpose — the dusk preset darkens everything
-       * it touches, so picking final values here would come out muddy. */
-      cfg("colorLand", "#57381C"); // warm ground, reads espresso at dusk
-      cfg("colorBuildings", "#6E4A2A");
-      cfg("colorGreenspace", "#55552C"); // parks: warm olive, not lawn green
-      cfg("colorWater", "#2B3238");
-      cfg("colorRoads", "#9C7A56"); // sand
-      cfg("colorMotorways", "#B5623F"); // terracotta-leaning
-      cfg("colorTrunks", "#A9603E");
-      cfg("colorPlaceLabels", "#FEF0E3"); // cream
-      cfg("colorAdminBoundaries", "#8A6A4C");
-      cfg("roadsBrightness", 0.55);
+      /* Exact values from the winning lab variant (public/map-lab.html, D).
+       * The style's own tone-mapping does the final grading — these inputs
+       * are what produced the approved render, so change them together or
+       * not at all. Landuse tints (commercial/education/medical/industrial)
+       * are pinned to the ground family: unset, they render as the "weird
+       * grey stuff" Adam flagged. */
+      cfg("colorLand", "#3E2812");
+      cfg("colorBuildings", "#4A3118");
+      cfg("colorCommercial", "#443014");
+      cfg("colorEducation", "#443014");
+      cfg("colorMedical", "#443014");
+      cfg("colorIndustrial", "#443014");
+      cfg("colorRoads", "#6E5231");
+      cfg("roadsBrightness", 0.35);
+      cfg("colorMotorways", "#7E5C36");
+      cfg("colorTrunks", "#785834");
+      cfg("colorGreenspace", "#4F6B35"); // parks matter to sightseers — green
+      cfg("colorWater", "#241A0C");
+      cfg("colorPlaceLabels", "#FEF0E3");
+      cfg("colorAdminBoundaries", "#6B4E2E");
 
       // Approximate Yanaka highlight. Swap `coordinates` for a precise
       // boundary GeoJSON if one is ever provided.
@@ -459,7 +471,8 @@ const staticMapUrl =
         type: "fill",
         source: "district",
         slot: "middle",
-        paint: { "fill-color": "#CA5137", "fill-opacity": 0.08 },
+        // Terracotta reads much stronger on the light ground — keep it faint.
+        paint: { "fill-color": "#CA5137", "fill-opacity": 0.05 },
       });
       map.addLayer({
         id: "district-line",
@@ -537,10 +550,11 @@ const staticMapUrl =
           "icon-allow-overlap": false,
         },
         paint: {
-          "text-color": "#EAB894", // sand
-          "text-halo-color": "#2A1708",
-          "text-halo-width": 1.4,
-          "text-opacity": 0.9,
+          // Espresso-soft on the cream ground, cream halo for legibility.
+          "text-color": "#5F452A",
+          "text-halo-color": "#FEF0E3",
+          "text-halo-width": 1.3,
+          "text-opacity": 0.95,
         },
       });
 
@@ -555,12 +569,13 @@ const staticMapUrl =
           minzoom: 13,
           filter: landmarkFilter,
           paint: {
+            // Quieter than the terracotta story pins on purpose.
             "circle-radius": 3,
-            "circle-color": "#EAB894",
-            "circle-opacity": 0.75,
+            "circle-color": "#6B4A2F",
+            "circle-opacity": 0.8,
             "circle-stroke-width": 1.5,
-            "circle-stroke-color": "#2A1708",
-            "circle-stroke-opacity": 0.6,
+            "circle-stroke-color": "#FEF0E3",
+            "circle-stroke-opacity": 0.8,
           },
         },
         "landmark-labels",
