@@ -516,7 +516,7 @@ static, meter absent).
   hydrate as JS (`client:visible` / `client:load`).
 - Tailwind as a real build dependency, not the CDN script.
 - Fonts self-hosted or properly preloaded; no runtime `esm.sh`.
-- Existing GitHub Pages workflow kept; build output path adjusted.
+- Existing GitHub Pages workflow kept; build output stays a static `dist/`.
 
 **SEO**
 - ~800–1200 words of genuine content in the static HTML.
