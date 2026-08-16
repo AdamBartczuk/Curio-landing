@@ -1,8 +1,8 @@
 # Curio Landing Page — Spec
 
-**Status:** built — conversion & rhythm pass applied after first review
+**Status:** built — content review + copy pass applied (§5.1), pin facts checked (§5.2)
 **Branch:** `feature/astro-rebuild-tokyo`
-**Last updated:** 2026-08-14
+**Last updated:** 2026-08-16
 **Brand source:** `Curio_SSS_13_07.pdf` (Style Guide, 18pp, 2026)
 
 ---
@@ -145,12 +145,13 @@ culture.`
 a route — i.e. the single-point behaviour. **Use that term**, don't invent one.
 
 **Hero**
-- Badge: `Launching in Tokyo · cherry blossom 2027`
+- Badge: `Tokyo first · cherry blossom 2027`
 - H1: `See something? Hear its story.`
 - Sub: `Curio is an audio guide for people without a plan. Tap whatever is in
-  front of you and hear a two-minute story about it — written by someone who
-  actually lives there. No itinerary, no research, no phone in your face.`
-- Chips: `Audio-first` · `No plan needed` · `Works offline`
+  front of you and hear a short story about it, written by someone who actually
+  lives there. No route to plan, nothing to look up. Put the phone away and
+  walk.`
+- Chips: `Audio-first` · `Just walk` · `Works offline`
 - CTA: `Get early access`
 
 `Get curious, get lost on purpose.` is the official tagline and is retained —
@@ -163,8 +164,7 @@ explain the product to someone who has never heard of Curio.
 > guidebook, not the same five facts you'd find in a search result. The person
 > who tells you about the bar on the corner has probably been thrown out of it.
 
-**Why Curio** — benefit 5, replacing nothing, added after the brand book:
-- `Written by locals` — real people, real opinions, from the city itself
+*(Superseded by §5.1 below — kept for the reasoning, not the wording.)*
 
 **The moment**
 > You are somewhere in Tokyo without a plan. A gate at the end of a side street.
@@ -175,13 +175,102 @@ explain the product to someone who has never heard of Curio.
 >
 > With Curio you tap it, and someone tells you.
 
-**Why Curio** (4, in traveller language)
-- `Made for wandering` — no route to follow, no schedule to keep up with
-- `Ears, not eyes` — put the phone in your pocket and actually look at the city
-- `Follows what you like` — architecture, food, dark history, or just the vibe
-- `Works with no signal` — download before you go out, roam nothing
+**Why Curio** — see §5.1; five benefit cards plus a sixth tagline tile ship.
 
 **Tokyo / sakura** — to be written once launch scope is confirmed.
+
+## 5.1 Copy pass (decided 2026-08-16)
+
+A content review of the built page found three patterns repeating rather than
+individual bad lines, and two consistency defects that cost conversion. Recorded
+here because the reasoning matters more than the diff.
+
+**What was wrong**
+
+1. *Negation-by-triad.* Three literal `no X, no Y, no Z` constructions in the
+   first two screens, plus ~9 more negative framings. Each line was fine; the
+   pattern read as a template.
+2. *~17 em dashes*, nearly all in the same position (statement, dash, kicker).
+3. *Manufactured punchlines* — almost every paragraph ended on a quotable
+   closer. Some paragraphs should just stop.
+4. The primary CTA had two names (`Get early access` ×5, `Join the waitlist` ×1).
+5. The signup incentive was worded differently in the two places it appeared.
+
+**Decisions**
+
+| Decision | Answer |
+|---|---|
+| CTA label | **`Get early access`** everywhere. One repeated action gets learned; two names for it break that. |
+| Incentive | "Free premium weekend" is real and committed. One identical sentence under both forms: `A free premium weekend in your first city. We email about the launch and nothing else.` (Closes the §7 open item.) |
+| Story length | Say **"short"** in marketing copy, not "two-minute". The exact figure stays only in the FAQ, where the reader actually asked, and on the mock player chip. Specs belong where they're requested, not inside promises. |
+| Reader | European travellers, **many reading English as a second language**. Idiom that carries voice stays ("thrown out of it"); idiom that blocks comprehension goes ("visitor SIMs and metro basements don't always agree", "a thread to pull", "work out how"). |
+| Casing | Sentence case throughout. Capitals only for `Curio`, place names, and `Explore mode` (brand book's term, §5.0). |
+| Self-quote | The `More like a walking podcast than a guided tour.` line is ours. It was set in quote marks inside a `<blockquote>` with an attribution footer, which reads as a testimonial at a glance — the exact pattern "Anna K." was removed to avoid (§3.4). Same words, no quote costume: kicker above, no quotation marks, plain `<div>`. |
+
+**Why Curio — the five shipped benefits** (four bodies rewritten; two were pure
+negation stacks, one had a doubled-word tic, one used idiom)
+
+- `Made for wandering` — Walk wherever you feel like. Curio keeps up.
+- `Ears, not eyes` — Put the phone in your pocket and actually look at the city
+  you came for. *(unchanged)*
+- `Written by locals` — People with strong opinions about the streets they live on.
+- `Follows what you like` — Architecture, food, dark history, or just the
+  atmosphere. You choose.
+- `Works with no signal` — Download the city before you head out. It keeps
+  working in the metro, and your roaming bill doesn't move.
+
+Plus a sixth terracotta tile carrying the tagline `Get curious, get lost on
+purpose.` / `Every place gets a story.`
+
+**Not changed, deliberately:** the H1, `Not a map. A narrator.`, the Yanaka pin
+teasers' voice, `You're in. We'll be in touch before Tokyo blooms.`, and the
+footer easter egg. They work.
+
+## 5.2 Map pin facts (fact-checked 2026-08-16)
+
+Naming real venues means every claim needs a source. All five were checked; one
+was wrong and one was unsupportable.
+
+- **Nezu Shrine — corrected.** "Founded in 1705" was false. 1705 is when
+  Tokugawa Tsunayoshi *relocated* the shrine to this site; the buildings date
+  from **1706**; the shrine itself is by legend ~1,900 years old. Three dates
+  collapsed into one wrong claim.
+- **Daimyo Clock Museum — year removed.** Sources split between April 1972
+  (Wikipedia) and April 1974 (others). Now "the early 1970s". The founder's
+  name checks out: Sakujiro "Guro" Kamiguchi, 1892–1970, who died before it
+  opened.
+- **Yanaka Cemetery — verified, and improved.** 10 ha, ~7,000 graves, Tokugawa
+  Yoshinobu, pagoda destroyed July 1957, never rebuilt. The sourced detail worth
+  having: two lovers set it alight and died inside it.
+- **Asakura Museum — verified, and improved.** Asakura 1883–1964, museum 1967.
+  Sourced: he kept ten cats at once and planned a hundred-sculpture cat show he
+  never finished.
+- **Yanaka Ginza — verified.** Yuyake Dandan does mean "sunset steps".
+
+Sources are listed per stop in ASSETS.md. **Do not add colour to these teasers
+that isn't in a source** — the page's whole claim is that someone who knows the
+place wrote it.
+
+## 5.3 Translation (planned, not built)
+
+Target locales: **EN (default) · ES · DE · PL**. Two stages, deliberately split:
+
+- **Extract first.** All copy moves into a typed dictionary under `src/i18n/`,
+  following the pattern `src/data/faq.ts` already proves (one source, page and
+  JSON-LD both read it). `lng`/`lat`/`photo` stay out of the dictionary; only
+  `name`, `kind` and `teaser` are translatable. The three React islands need a
+  `strings` prop instead of hardcoded English.
+- **Then translate.** Astro 5 has i18n routing built in — `/`, `/es/`, `/de/`,
+  `/pl/`, plus hreflang with `x-default` and a per-locale `<html lang>`. Store
+  the signup's locale in Supabase so launch mail goes out in the right language.
+
+**Translation is a human job, not a machine one.** This page's value is idiom.
+"Has probably been thrown out of it" and "get lost on purpose" do not survive
+machine translation, and a flat German version would undercut the thing the page
+is selling. Polish: Adam writes it. Spanish and German: native speakers, budgeted.
+Check the brand book for approved tagline translations before inventing any.
+**Do not start until the English copy is locked** — moving copy costs 4× once
+locales exist.
 
 ## 5.5 Design system (from brand book)
 
@@ -321,10 +410,13 @@ tone-maps them zoom-dependently, so change them as a set against a live
 render, never individually by eye. Two page-level adaptations the lab
 couldn't show: the pin pulse ring is terracotta (a cream ring is invisible
 on a cream ground, and the pulse is the "tap me" affordance), and the
-floating `Explore` chip is espresso rather than sand, for contrast. Copy + the story card sit in a frosted espresso panel **overlaid
-left**; the five pins (gate, sakura tree, old building, corner izakaya,
-bridge) are geo-anchored markers **on the right**. Tap a pin → teaser card in
-brand voice with a `2 min listen` chip and a waitlist link; the map eases to
+floating `Explore` chip is espresso rather than sand, for contrast.
+
+*Layout and interaction.* Copy + the story card sit in a frosted espresso panel
+**overlaid left**; the five pins (Nezu Shrine, Yanaka Ginza, Yanaka Cemetery,
+Asakura Museum, Daimyo Clock Museum) are geo-anchored markers **on the right**.
+Tap a pin → teaser card in brand voice with an inert `2:00` bar labelled
+`Narration arrives with launch`, plus a waitlist link; the map eases to
 the pin. Calm rules: no scroll-zoom, no rotate, cooperative gestures on
 touch; GL lazy-loads near the viewport (its ~520KB gzip chunk never blocks
 first paint) over a Static-Images-API frame that also serves no-JS visitors.
@@ -395,9 +487,25 @@ static, meter absent).
       interactive city map (§5.6a); no video needed there anymore.
 - [ ] Brand photography — warm street/headphone shots per the p.18 moodboard.
       Placeholder Unsplash until then, but it must be replaced before launch.
-- [ ] Privacy and Terms page content — currently dead links.
+- [ ] **Privacy and Terms page content** — still dead links, and now the most
+      urgent item on the list. The page collects EU email addresses and runs an
+      analytics consent banner with no privacy notice behind either. Needs real
+      policy text from Adam (not drafted here — legal copy shouldn't be invented).
+      Once it exists: `src/pages/privacy.astro` + `terms.astro` on `Base.astro`,
+      plus a consent line linking to it under both forms.
+- [ ] **What language are the stories in?** Blocks the last FAQ entry. §4 lists
+      languages as an FAQ job and it is still unanswered — for a European
+      traveller heading to Japan it's a top-three question. Needs a product
+      answer, not a guess.
 - [ ] Confirm Supabase `waitlist` RLS is insert-only.
-- [ ] Confirm the early-access incentive wording ("free premium weekend"?).
+- [ ] Verify `hello@curio.guide` actually receives mail — it's published in the
+      FAQ and the footer, and a dead address on a page asking for trust is worse
+      than no address.
+- [x] ~~Confirm the early-access incentive wording~~ — confirmed real and
+      committed 2026-08-16; wording unified across both forms (§5.1).
+- [x] ~~Stale README~~ — the Google AI Studio scaffold (with `GEMINI_API_KEY`
+      instructions, on a repo whose rule #1 is never to sell this as AI) was
+      replaced 2026-08-16.
 - [ ] Known local quirk: a stale dev server may hold port 4321; Astro then
       picks the next free port. Kill old `node` listeners before demoing.
 
@@ -406,4 +514,5 @@ static, meter absent).
 - Higgsfield integration for video / image-driven narration. Noted as direction;
   the static page ships first and must not be architected around it.
 - City pages beyond the Tokyo stub.
-- Japanese-language version.
+- Japanese-language version. (ES/DE/PL *are* in scope — see §5.3 — but only
+  after the English copy is locked.)
