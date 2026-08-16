@@ -33,6 +33,15 @@ const MAP_ZOOM = 14.8;
  * once the pin names a real one. Do not add colour to these that isn't in
  * the source; ASSETS.md lists what each claim rests on.
  *
+ * Two dates that have already been wrong once (fact-check 2026-08-16, SPEC
+ * §5.2) — don't "correct" them back:
+ *   - Nezu is NOT "founded in 1705". 1705 is when Tsunayoshi moved the shrine
+ *     here; the buildings are 1706; the shrine itself is legendarily ~1,900
+ *     years old. Three different dates, easy to collapse into one wrong one.
+ *   - The Daimyo Clock Museum's opening year is disputed (1972 per Wikipedia,
+ *     1974 per several others), so the teaser says "the early 1970s". Don't
+ *     pick a side we can't support.
+ *
  * Photos are CC images of the same real places (credited in ASSETS.md),
  * still placeholders for Curio's own photography.
  */
@@ -45,7 +54,7 @@ const stops = [
     lng: 139.76069,
     lat: 35.72021,
     teaser:
-      "Founded in 1705, and the buildings you're looking at are the originals — Important Cultural Properties that outlived the fires, earthquakes and bombing that erased most of Edo Tokyo. Come between early April and early May and the grounds are solid azalea.",
+      "The shrine moved to this spot in 1705, and the buildings you're looking at went up the year after — Important Cultural Properties that outlived the fires, earthquakes and bombing that erased most of Edo Tokyo. Come between early April and early May and the grounds are solid azalea.",
   },
   {
     id: "ginza",
@@ -85,7 +94,7 @@ const stops = [
     lng: 139.7662,
     lat: 35.72128,
     teaser:
-      "One man, Sakujiro Kamiguchi, spent a lifetime collecting Edo-period clocks, and this small museum opened in 1972 to hold them. Those clocks kept seasonal hours — daylight was always six hours, so an hour stretched in summer and shrank in winter.",
+      "One man, Sakujiro Kamiguchi, spent a lifetime collecting Edo-period clocks, and the small museum that holds them opened in the early 1970s, after he died. Those clocks kept seasonal hours — daylight was always six hours, so an hour stretched in summer and shrank in winter.",
   },
 ];
 
@@ -455,10 +464,16 @@ const staticMapUrl =
     z-index: 1;
     /* Self-contained SVG turbulence: no external asset, no extra request,
        and it tiles seamlessly via stitchTiles. */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.62'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23m)' opacity='0.34'/%3E%3C/svg%3E");
+    /* Two grains: a fine tooth plus a coarse cloudy one, which is what makes
+       it read as pressed paper rather than TV static. */
+    background-size:
+      180px 180px,
+      420px 420px;
     mix-blend-mode: multiply;
-    opacity: 0.5;
+    opacity: 0.82;
   }
 
   /* Warm vignette + a faint fibre wash, so it reads as paper rather than
