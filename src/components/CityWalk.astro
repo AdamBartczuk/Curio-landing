@@ -278,7 +278,7 @@ const staticMapUrl =
             itself. Kept for screen readers, and the caption under the map
             still states in words that the position is an example, so the
             dot never passes as real geolocation. */}
-        <span class="sr-only">Example position — not your real location</span>
+        <span class="sr-only">Example position, not your real location</span>
       </div>
 
       <!-- Pins: server-rendered here, adopted as geo-anchored map markers by
@@ -296,7 +296,7 @@ const staticMapUrl =
               aria-expanded="false"
               aria-controls={`stop-card-${s.id}`}
             >
-              <span class="sr-only">{s.name} — show story teaser</span>
+              <span class="sr-only">{s.name}, show story teaser</span>
               <span class="pin-label" aria-hidden="true">{s.name}</span>
               <span class="pin-photo" aria-hidden="true">
                 <img src={s.photo} alt="" width="168" height="168" loading="lazy" />
@@ -485,13 +485,13 @@ const staticMapUrl =
     background:
       radial-gradient(
         118% 92% at 50% 45%,
-        rgba(53, 29, 6, 0) 48%,
-        rgba(53, 29, 6, 0.22) 100%
+        rgba(53, 29, 6, 0) 52%,
+        rgba(53, 29, 6, 0.14) 100%
       ),
       repeating-linear-gradient(
         102deg,
-        rgba(53, 29, 6, 0.04) 0px,
-        rgba(53, 29, 6, 0.04) 1px,
+        rgba(53, 29, 6, 0.025) 0px,
+        rgba(53, 29, 6, 0.025) 1px,
         rgba(53, 29, 6, 0) 1px,
         rgba(53, 29, 6, 0) 4px
       );
@@ -654,12 +654,17 @@ const staticMapUrl =
 
   /* The tip is coloured per-anchor by mapbox-gl.css, which loads after this
      component's styles — so a plain `.walk-popup .mapboxgl-popup-tip` rule
-     loses and the arrow stays white. Matching the anchor class outranks it. */
-  :global(.walk-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip) {
+     loses and the arrow stays white. Matching the anchor class outranks it.
+     All eight anchors are covered because the anchor is automatic. */
+  :global(.walk-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip),
+  :global(.walk-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip),
+  :global(.walk-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip) {
     border-top-color: var(--color-espresso);
   }
 
-  :global(.walk-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip) {
+  :global(.walk-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip),
+  :global(.walk-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip),
+  :global(.walk-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip) {
     border-bottom-color: var(--color-espresso);
   }
 
@@ -688,6 +693,14 @@ const staticMapUrl =
   /* Hero bleeds to the card edges, so padding moves onto the children. */
   :global(.walk-popup .stop-card) {
     padding: 0 0 1.15rem;
+  }
+
+  /* A card taller than the map can never be placed inside it, whichever
+     anchor Mapbox picks — so cap it and let the long teasers scroll. */
+  :global(.walk-popup .mapboxgl-popup-content) {
+    max-height: min(420px, 52vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   :global(.walk-popup .stop-hero) {
@@ -1305,10 +1318,10 @@ const staticMapUrl =
       const show = () => {
         popup = new mapboxgl.Popup({
           className: "walk-popup",
-          /* Pinned anchor, not auto: left to itself Mapbox re-evaluates the
-           * anchor as the map moves, opening below the pin and flipping back
-           * once it settles — the "appears up top, then drops" jitter. */
-          anchor: "bottom",
+          /* Anchor left on auto so Mapbox flips the card to whichever side
+           * has room — above, below or beside the pin — instead of running
+           * off the map. The old jitter came from opening mid-flight; now we
+           * only open after `moveend`, so it picks once and stays. */
           offset: 92, // clears the photo pin (~86px tall with its label)
           maxWidth: "320px",
           focusAfterOpen: false,

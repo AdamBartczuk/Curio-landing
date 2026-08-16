@@ -67,7 +67,7 @@ export default function CookieBanner() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-relaxed text-cream/85">
           We'd like to count visits so we know which stories land. Analytics
-          only — nothing sold, nobody tracked across the web.
+          only. Nothing sold, and nobody tracked across the web.
         </p>
         <div className="flex shrink-0 gap-2">
           <button
