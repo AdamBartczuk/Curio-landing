@@ -13,9 +13,9 @@
  * The access token below is a Mapbox PUBLIC token (pk.) — designed to ship in
  * client code. Restrict it to curio.guide + localhost in the Mapbox dashboard.
  *
- * Honesty rules still apply: pins are "sample stops" and say so — archetypal
- * teasers, no invented facts about real venues, no fake audio (the one real
- * clip stays in the hero player).
+ * Honesty rules still apply: pins are "sample stops" and say so, every teaser
+ * claim is sourced (the stops are real venues now, not archetypes), and there
+ * is no fake audio — the one real clip stays in the hero player.
  */
 const MAPBOX_TOKEN =
   import.meta.env.PUBLIC_MAPBOX_TOKEN ?? "";
@@ -465,8 +465,8 @@ const staticMapUrl =
     /* Self-contained SVG turbulence: no external asset, no extra request,
        and it tiles seamlessly via stitchTiles. */
     background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.62'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23m)' opacity='0.34'/%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23m)' opacity='0.22'/%3E%3C/svg%3E");
     /* Two grains: a fine tooth plus a coarse cloudy one, which is what makes
        it read as pressed paper rather than TV static. */
     background-size:
